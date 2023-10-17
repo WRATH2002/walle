@@ -166,8 +166,8 @@ const Body = () => {
     } else {
       dispatch(addMessage({ user: input, id: id, assistant: tempInput }));
     }
-    // const res = await sendMessageToOpenAI(input);
-    const res = "Hello world my name is himadri purkait";
+    const res = await sendMessageToOpenAI(input);
+    // const res = "Hello world my name is himadri purkait";
     console.log(res);
     setResult(res);
     console.log(result);
