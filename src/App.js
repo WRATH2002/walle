@@ -5,6 +5,11 @@ import Body from "./components/Body";
 import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import store from "./utils/store";
+import Login from "./components/auth/Login";
+import Signup from "./components/auth/Signup";
+import LogU from "./components/auth/LogU";
+import LogI from "./components/auth/LogI";
+import AuthDetails from "./components/AuthDetails";
 
 // const response = await openai.listEngines();
 
@@ -22,7 +27,12 @@ function App() {
   return (
     <>
       <Provider store={store}>
-        <Body />
+        {/* <Body /> */}
+        {/* <Login /> */}
+        {/* <Signup /> */}
+        {/* <LogU />
+        <LogI /> */}
+        <AuthDetails />
       </Provider>
       {/* <div className="">hello</div> */}
       {/* <button onClick={handleSend}>Click Me</button> */}

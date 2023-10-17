@@ -8,6 +8,8 @@ import { MdDarkMode } from "react-icons/md";
 import { MdAccountCircle } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { IoMdArrowDropup } from "react-icons/io";
+import { BsGithub } from "react-icons/bs";
+import { BsLinkedin } from "react-icons/bs";
 
 import ai from "../assets/img/gpt.jpg";
 import logo from "../assets/img/logo.png";
@@ -37,6 +39,15 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 
 import { API_KEY } from "../utils/constants";
+
+import { auth } from "../firebase";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { toggleDarkMode, toggleStateMode } from "../utils/chatSlice";
+// import { auth } from "../firebase";
+// import { onAuthStateChanged, signOut } from "firebase/auth";
+// import(onAuthStateChanged);
+// import { toggleStateMode, toggleDarkMode } from "../../utils/chatSlice";
+// import { useDispatch, useSelector } from "react-redux";
 // import "dotenv/config";
 // require("dotenv").config({ path: "../../.env" });
 
@@ -61,9 +72,24 @@ const Body = () => {
   const [tempInput, setTempInput] = useState("");
   const [result, setResult] = useState("");
   const [avatar, setAvatar] = useState(false);
-  const [selectAvatar, setSelectAvatar] = useState(one);
+  const [selectAvatar, setSelectAvatar] = useState(six);
+  // const [authUser, setAuthUser] = useState(null);
 
-  const [toggleMode, setToggleMode] = useState(true);
+  const darkmode = useSelector((store) => store.chat.darkMode);
+  const [toggleMode, setToggleMode] = useState(darkmode);
+  const dispatch = useDispatch();
+  console.log(darkmode);
+  useEffect(() => {
+    setToggleMode(darkmode);
+  }, [darkmode]);
+
+  function changeDarkModeThree() {
+    if (darkmode === 1) {
+      dispatch(toggleDarkMode(2));
+    } else if (darkmode === 2) {
+      dispatch(toggleDarkMode(1));
+    }
+  }
 
   const [id, setId] = useState(2);
 
@@ -89,10 +115,21 @@ const Body = () => {
 
   const [isSidebar, setIsSidebar] = useState(true);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   //   const [liveChat, setLiveChat] = useState([]);
   const chatMessage = useSelector((store) => store.chat.messages);
   console.log(chatMessage);
+
+  // useEffect(() => {
+  //   const listen = onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       setAuthUser(user);
+  //     } else setAuthUser(null);
+  //   });
+  //   return () => {
+  //     listen();
+  //   };
+  // }, []);
 
   useEffect(() => {
     setAns();
@@ -145,16 +182,26 @@ const Body = () => {
     changeId = changeId + 1;
     setId(changeId);
   }
+
+  const userSignOut = () => {
+    signOut(auth)
+      .then(() => console.log("Signed Out Successfully"))
+      .catch((error) => console.log(error));
+  };
+
   return (
     <>
-      {toggleMode === true ? (
+      {toggleMode === 2 ? (
         <>
-          <div className="w-full h-[100%] bg-[#141627] flex ">
+          <div
+            className="w-full h-[100%] bg-[#141627] flex "
+            style={{ transition: ".5s" }}
+          >
             {isSidebar === true ? (
               <>
                 <div
-                  className="bg-[#141627] h-[100vh] w-[25%] border-r-[1px] border-[#32365b] flex flex-col justify-between items-center"
-                  style={{ transition: ".5s" }}
+                  className="bg-[#141627] h-[100vh] w-[75%] lg:w-[20%] md:w-[20%] border-r-[1px] border-[#32365b] flex flex-col justify-between items-center fixed lg:relative md:relative"
+                  style={{ transition: ".5s", zIndex: "4" }}
                 >
                   <div
                     className="w-full h-[70px]   p-[10px] flex justify-center items-center "
@@ -173,7 +220,7 @@ const Body = () => {
                       <FiSidebar className="text-white text-[18px]" />
                     </div>
                   </div>
-                  <div
+                  {/* <div
                     onClick={() => setAvatar(!avatar)}
                     className="text-white cursor-pointer font-[nunitosans] "
                   >
@@ -206,7 +253,7 @@ const Body = () => {
                                       className=" rounded-lg border[2px] border-white "
                                       style={{ transition: ".5s" }}
                                     ></img>
-                                    {/* {imgid.id} */}
+                                  
                                   </div>
                                 </>
                               ) : selectAvatar === imgid.id ? (
@@ -227,7 +274,7 @@ const Body = () => {
                                       className=" rounded-lg border[2px] border-white "
                                       style={{ transition: ".5s" }}
                                     ></img>
-                                    {/* {imgid.id} */}
+                                    
                                   </div>
                                 </>
                               ) : (
@@ -248,7 +295,7 @@ const Body = () => {
                                       className=" rounded-lg border[2px] border-white opacity-[.3] hover:opacity-100"
                                       style={{ transition: ".5s" }}
                                     ></img>
-                                    {/* {imgid.id} */}
+                                   
                                   </div>
                                 </>
                               )}
@@ -264,19 +311,17 @@ const Body = () => {
                         style={{ transition: ".5s" }}
                       ></div>
                     </>
-                  )}
-                  <div className="w-[calc(100%-20px)] h-[200px]  mx-[10px] py-[10px] flex flex-col justify-center items-center  border-t-[2px] border-[#5841d9]">
-                    <div className="w-full  h-[40px] mb-[10px]  rounded-xl  px-[4px] flex justify-start items-center cursor-pointer ">
+                  )} */}
+                  <div
+                    className="w-[calc(100%-20px)] h-[200px]  mx-[10px] py-[10px] flex flex-col justify-center items-center  border-t-[2px] border-[#32365b]"
+                    style={{ transition: ".5s" }}
+                  >
+                    {/* <div className="w-full  h-[40px] mb-[10px]  rounded-xl  px-[4px] flex justify-start items-center cursor-pointer ">
                       {selectAvatar === undefined ? (
                         <>
-                          <div
-                            // src={selectAvatar}
-                            className="rounded-full h-full w-[40px] bg-[#5841d9]"
-                            // loading="lazy"
-                          >
+                          <div className="rounded-full h-full w-[40px] bg-[#5841d9]">
                             <MdAccountCircle className="text-[#aaaaaa] text-[40px] h-full" />
                           </div>
-                          {/* <MdAccountCircle className="text-[white] text-[60px] h-full" /> */}
                         </>
                       ) : (
                         <>
@@ -291,7 +336,7 @@ const Body = () => {
                       <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] ">
                         Himadri Purkait
                       </span>
-                    </div>
+                    </div> */}
                     <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer ">
                       <IoSettingsOutline className="text-white text-[18px]" />
 
@@ -307,11 +352,11 @@ const Body = () => {
                           Dark Mode
                         </span>
                       </div>
-                      {toggleMode === true ? (
+                      {toggleMode === 2 ? (
                         <>
                           <div
                             className="w-[40px] h-[24px] flex  items-center rounded-full bg-[#252a43]"
-                            onClick={() => setToggleMode(!toggleMode)}
+                            onClick={() => changeDarkModeThree()}
                           >
                             <div
                               className="w-[16px] h-[16px] ml-[20px] bg-[#5841d9] rounded-full"
@@ -323,7 +368,7 @@ const Body = () => {
                         <>
                           <div
                             className="w-[40px] h-[24px] flex  items-center rounded-full bg-[#e4e6ec]"
-                            onClick={() => setToggleMode(!toggleMode)}
+                            onClick={() => changeDarkModeThree()}
                           >
                             <div
                               className="w-[16px] h-[16px] ml-[4px] bg-[white] rounded-full"
@@ -337,19 +382,27 @@ const Body = () => {
                     <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer ">
                       <FiLogOut className="text-white text-[18px]" />
 
-                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                      <span
+                        className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] "
+                        onClick={userSignOut}
+                      >
                         Logout
                       </span>
                     </div>
                   </div>
                 </div>
                 <div
-                  className=" h-[100vh] w-[75%] flex items-center flex-col"
+                  className=" h-[100vh] w-full lg:w-[80%] md:w-[80%] flex items-center flex-col"
                   style={{ transition: ".5s" }}
                 >
-                  <div className="h-[70px] w-full bg-[#141627] text-white flex justify-center items-center  font-semibold">
+                  <div
+                    className="h-[70px] pr-[0] lg:pr-[60px] md:pr-[60px]  w-full bg-[#141627] text-white flex justify-center items-center  font-semibold"
+                    style={{ transition: ".5s" }}
+                  >
                     <img src={logo} className="h-[40px]"></img>
-                    <span className="ml-[15px] text-[25px]">WALLE</span>
+                    <span className="ml-[15px] text-[25px] font-[nunitosans]">
+                      WALLE
+                    </span>
                   </div>
                   <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
                     <div className="w-full h-[calc(100%-80px)]  mb-[20px] overflow-y-scroll">
@@ -357,7 +410,10 @@ const Body = () => {
                         return (
                           <>
                             <div className="w-full flex flex-col ">
-                              <span className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-white ">
+                              <span
+                                className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-white "
+                                style={{ transition: ".5s" }}
+                              >
                                 <div className="  w-full flex p-[20px] border-[1px] border-[#32365b]  rounded-lg">
                                   <div className="w-[40px] h-[40px] rounded-sm bg-slate-500">
                                     <img
@@ -371,16 +427,22 @@ const Body = () => {
                                   </span>
                                 </div>
                               </span>
-                              <span className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-white ">
+                              <span
+                                className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-white "
+                                // style={{ transition: ".5s" }}
+                              >
                                 <div
                                   className="bg-[#1c1f37]  w-full flex p-[19px] border-l-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
-                                  style={{ transition: ".3s" }}
+                                  style={{ transition: ".5s" }}
                                 >
                                   <img
                                     src={ai}
                                     className="w-[40px] h-[40px] rounded-sm bg-slate-500"
                                   ></img>
-                                  <pre className="w-[calc(100%-65px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap ">
+                                  <pre
+                                    className="w-[calc(100%-65px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap "
+                                    // style={{ transition: ".5s" }}
+                                  >
                                     {mssg.assistant.length === 0 ? (
                                       <>
                                         <div className="lds-facebook mt-[50px]">
@@ -430,6 +492,7 @@ const Body = () => {
                       <input
                         placeholder="Ask Anything"
                         className="w-full h-full px-[20px] pl-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                        style={{ transition: ".5s" }}
                         value={input}
                         onKeyDown={(e) => {
                           console.log(e);
@@ -461,7 +524,7 @@ const Body = () => {
             ) : (
               <>
                 <div
-                  className="bg-[#141627] h-[100vh] w-[0] border-r-[1px] border-[#32365b] flex flex-col justify-between items-center"
+                  className="bg-[#141627] h-[100vh] w-[0]  border-r-[1px] border-[#32365b] flex flex-col justify-between items-center fixed lg:relative md:relative"
                   style={{ transition: ".5s" }}
                 >
                   <div
@@ -475,13 +538,13 @@ const Body = () => {
                       </span>
                     </div>
                     <div
-                      className="w-[50px] h-full  rounded-xl  flex justify-center items-center cursor-pointer "
+                      className="w-[0] h-full  rounded-xl  flex justify-center items-center cursor-pointer "
                       onClick={() => setIsSidebar(!isSidebar)}
                     >
                       <FiSidebar className="text-white text-[18px]" />
                     </div>
                   </div>
-                  <div
+                  {/* <div
                     onClick={() => setAvatar(!avatar)}
                     className="text-white cursor-pointer font-[nunitosans] "
                   >
@@ -514,7 +577,7 @@ const Body = () => {
                                       className=" rounded-xl border[2px] border-white "
                                       style={{ transition: ".5s" }}
                                     ></img>
-                                    {/* {imgid.id} */}
+                                    
                                   </div>
                                 </>
                               ) : selectAvatar === imgid.id ? (
@@ -535,7 +598,7 @@ const Body = () => {
                                       className=" rounded-xl border[2px] border-white "
                                       style={{ transition: ".5s" }}
                                     ></img>
-                                    {/* {imgid.id} */}
+                                
                                   </div>
                                 </>
                               ) : (
@@ -556,7 +619,7 @@ const Body = () => {
                                       className=" rounded-xl border[2px] border-white opacity-[.3] hover:opacity-100"
                                       style={{ transition: ".5s" }}
                                     ></img>
-                                    {/* {imgid.id} */}
+                                  
                                   </div>
                                 </>
                               )}
@@ -572,10 +635,10 @@ const Body = () => {
                         style={{ transition: ".5s" }}
                       ></div>
                     </>
-                  )}
-                  <div className="w-[calc(100%-20px)] h-[200px]  mx-[10px] py-[10px] flex flex-col justify-center items-center  border-t-[2px] border-[#5841d9]">
+                  )} */}
+                  <div className="w-[calc(100%-20px)] h-[200px]  mx-[10px] py-[10px] flex flex-col justify-center items-center  border-t-[2px] border-[#32365b]">
                     <div className="w-full  h-[40px] mb-[10px]  rounded-xl  px-[4px] flex justify-start items-center cursor-pointer ">
-                      <img
+                      {/* <img
                         src={selectAvatar}
                         className="rounded-full h-full"
                         loading="lazy"
@@ -583,7 +646,7 @@ const Body = () => {
 
                       <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] ">
                         Himadri Purkait
-                      </span>
+                      </span> */}
                     </div>
                     <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer ">
                       <IoSettingsOutline className="text-white text-[18px]" />
@@ -615,13 +678,13 @@ const Body = () => {
                   <div className="h-[70px] w-full bg-[#141627] text-white flex justify-center items-center font-[wakanda] font-semibold">
                     <div
                       className="w-[50px] h-[50px] ml-[10px] rounded-xl  flex justify-center items-center cursor-pointer"
-                      style={{ transition: ".5s" }}
+                      style={{ transition: ".5s", zIndex: "4" }}
                       onClick={() => setIsSidebar(!isSidebar)}
                     >
                       <FiSidebar className="text-white text-[18px]" />
                     </div>
 
-                    <div className="h-[70px] w-full bg-[#141627] text-white flex justify-center items-center  font-semibold">
+                    <div className="h-[70px] ml-[-60px] w-full bg-[#141627] text-white flex justify-center items-center  font-semibold">
                       <img src={logo} className="h-[40px]"></img>
                       <span className="ml-[15px] text-[25px] font-[nunitosans]">
                         WALLE
@@ -746,7 +809,7 @@ const Body = () => {
             {isSidebar === true ? (
               <>
                 <div
-                  className="bg-[#ffffff] h-[100vh] w-[250px] lg:w-[25%] md:w-[25%] border-r-[1px] border-[#e7e9ee] flex flex-col justify-between items-center fixed lg:relative md:relative"
+                  className="bg-[#ffffff] h-[100vh] w-[75%] lg:w-[20%] md:w-[20%] border-r-[1px] border-[#e7e9ee] flex flex-col justify-between items-center fixed lg:relative md:relative"
                   style={{ transition: ".5s", zIndex: "4" }}
                 >
                   <div
@@ -769,13 +832,13 @@ const Body = () => {
                       <FiSidebar className="text-black text-[18px] drop-shadow-lg" />
                     </div>
                   </div>
-                  <div
+                  {/* <div
                     onClick={() => setAvatar(!avatar)}
                     style={{ transition: ".5s" }}
                     className="w-full  p-[25px]  text-black cursor-pointer font-[nunitosans] flex items-center
                     "
                   >
-                    <span>Select Avatar</span>
+                    <span className="w-full">Select Avatar</span>
                     {avatar === true ? (
                       <IoMdArrowDropup className="text-black text-[24px] drop-shadow-lg w-[30px]  flex justify-end" />
                     ) : (
@@ -809,7 +872,7 @@ const Body = () => {
                                       className=" rounded-lg border[2px] border-white "
                                       style={{ transition: ".5s" }}
                                     ></img>
-                                    {/* {imgid.id} */}
+                                  
                                   </div>
                                 </>
                               ) : selectAvatar === imgid.id ? (
@@ -830,7 +893,7 @@ const Body = () => {
                                       className=" rounded-lg border[2px] border-white "
                                       style={{ transition: ".5s" }}
                                     ></img>
-                                    {/* {imgid.id} */}
+                       
                                   </div>
                                 </>
                               ) : (
@@ -851,7 +914,7 @@ const Body = () => {
                                       className=" rounded-lg border[2px] border-white opacity-[.3] hover:opacity-100"
                                       style={{ transition: ".5s" }}
                                     ></img>
-                                    {/* {imgid.id} */}
+                              
                                   </div>
                                 </>
                               )}
@@ -867,9 +930,12 @@ const Body = () => {
                         style={{ transition: ".5s" }}
                       ></div>
                     </>
-                  )}
-                  <div className="w-[calc(100%-20px)] h-[200px]  mx-[10px] py-[10px] flex flex-col justify-center items-center  border-t-[2px] border-[#eff1f4]">
-                    <div className="w-full  h-[40px] mb-[10px]  rounded-xl  px-[4px] flex justify-start items-center cursor-pointer ">
+                  )} */}
+                  <div
+                    className="w-[calc(100%-20px)] h-[200px]  mx-[10px] py-[10px] flex flex-col justify-center items-center  border-t-[2px] border-[#eff1f4]"
+                    style={{ transition: ".5s" }}
+                  >
+                    {/* <div className="w-full  h-[40px] mb-[10px]  rounded-xl  px-[4px] flex justify-start items-center cursor-pointer ">
                       {selectAvatar === undefined ? (
                         <>
                           <div
@@ -879,7 +945,7 @@ const Body = () => {
                           >
                             <MdAccountCircle className="text-[#aaaaaa] text-[40px] h-full" />
                           </div>
-                          {/* <MdAccountCircle className="text-[white] text-[60px] h-full" /> */}
+                         
                         </>
                       ) : (
                         <>
@@ -892,9 +958,9 @@ const Body = () => {
                       )}
 
                       <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] drop-shadow-lg ">
-                        Himadri Purkait
+                        ${authUser.email}
                       </span>
-                    </div>
+                    </div> */}
                     <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer ">
                       <IoSettingsOutline className="text-[#5841d9] text-[18px] drop-shadow-lg" />
 
@@ -910,11 +976,11 @@ const Body = () => {
                           Dark Mode
                         </span>
                       </div>
-                      {toggleMode === true ? (
+                      {toggleMode === 2 ? (
                         <>
                           <div
                             className="w-[40px] h-[24px] flex  items-center rounded-full bg-[#252a43] "
-                            onClick={() => setToggleMode(!toggleMode)}
+                            onClick={() => changeDarkModeThree()}
                           >
                             <div
                               className="w-[16px] h-[16px] ml-[20px] bg-[#5841d9] rounded-full drop-shadow-lg"
@@ -926,7 +992,7 @@ const Body = () => {
                         <>
                           <div
                             className="w-[40px] h-[24px] flex  items-center rounded-full bg-[#e4e6ec] "
-                            onClick={() => setToggleMode(!toggleMode)}
+                            onClick={() => changeDarkModeThree()}
                           >
                             <div
                               className="w-[16px] h-[16px] ml-[4px] bg-[white] rounded-full drop-shadow-lg"
@@ -937,25 +1003,34 @@ const Body = () => {
                         </>
                       )}
                     </div>
+
                     <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer ">
                       <FiLogOut className="text-[#5841d9] text-[18px] drop-shadow-lg" />
 
-                      <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] drop-shadow-lg ">
+                      <span
+                        className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] drop-shadow-lg "
+                        onClick={userSignOut}
+                      >
                         Logout
                       </span>
                     </div>
+                    {/* <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start mt-[15px] items-center cursor-pointer ">
+                      <BsLinkedin className="text-[#5841d9] text-[18px] drop-shadow-lg" />{" "}
+                      <BsGithub className="text-[#5841d9] ml-[20px] text-[18px] drop-shadow-lg" />
+                    </div> */}
                   </div>
                 </div>
                 <div
-                  className=" h-[100vh] w-[100%] lg:w-[75%] md:w-[75%] flex items-center flex-col"
+                  className=" h-[100vh] w-[100%] lg:w-[80%] md:w-[80%] flex items-center flex-col"
                   style={{ transition: ".5s" }}
                 >
                   <div
-                    className="h-[70px] w-full bg-[white] text-black flex justify-center items-center  font-semibold"
+                    className="h-[70px] pr-[0] lg:pr-[60px] md:pr-[60px]  w-full bg-[white] text-black flex justify-center items-center  font-semibold"
                     style={{ transition: ".5s" }}
+                    // style={{ transition: ".5s" }}
                   >
                     <img src={logo} className="h-[40px] drop-shadow-lg"></img>
-                    <span className="ml-[15px] text-[25px] drop-shadow-lg">
+                    <span className="ml-[15px]  text-[25px] font-[nunitosans] drop-shadow-lg">
                       WALLE
                     </span>
                   </div>
@@ -968,7 +1043,7 @@ const Body = () => {
                               <span className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-black ">
                                 <div
                                   className="  w-full flex p-[20px] border-[1px] border-[#e7e9ee]  rounded-lg"
-                                  // style={{ transition: ".5s" }}
+                                  style={{ transition: ".5s" }}
                                 >
                                   <div className="w-[40px] h-[40px] rounded-sm bg-slate-500">
                                     <img
@@ -985,8 +1060,8 @@ const Body = () => {
                               <span className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-black ">
                                 <div
                                   className="bg-[white]  w-full flex p-[19px] border-l-[2px] border-[white] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
-                                  // style={{ transition: ".5s" }}
-                                  style={{ transition: ".3s" }}
+                                  style={{ transition: ".5s" }}
+                                  // style={{ transition: ".3s" }}
                                 >
                                   <img
                                     src={ai}
@@ -1042,6 +1117,7 @@ const Body = () => {
                       <input
                         placeholder="Ask Anything"
                         className="w-full h-full px-[20px] pl-[60px] rounded-lg outline-none bg-[white] text-[black] flex justify-center items-center font-[nunitosans] "
+                        style={{ transition: ".5s" }}
                         value={input}
                         onKeyDown={(e) => {
                           console.log(e);
@@ -1093,13 +1169,13 @@ const Body = () => {
                       <FiSidebar className="text-black text-[18px] " />
                     </div>
                   </div>
-                  <div
+                  {/* <div
                     onClick={() => setAvatar(!avatar)}
                     style={{ transition: ".5s" }}
                     className="w-0  p-[0]  text-black cursor-pointer overflow-hidden font-[nunitosans] flex justify-start items-center
                     "
                   >
-                    <span>Select Avatar</span>
+                    <span className="w-0 overflow-hidden">Select Avatar</span>
                     {avatar === true ? (
                       <IoMdArrowDropup className="text-black text-[24px] drop-shadow-lg w-[30px]  flex justify-end" />
                     ) : (
@@ -1133,7 +1209,7 @@ const Body = () => {
                                       className=" rounded-xl border[2px] border-white "
                                       style={{ transition: ".5s" }}
                                     ></img>
-                                    {/* {imgid.id} */}
+                              
                                   </div>
                                 </>
                               ) : selectAvatar === imgid.id ? (
@@ -1154,7 +1230,7 @@ const Body = () => {
                                       className=" rounded-xl border[2px] border-white "
                                       style={{ transition: ".5s" }}
                                     ></img>
-                                    {/* {imgid.id} */}
+                                
                                   </div>
                                 </>
                               ) : (
@@ -1175,7 +1251,7 @@ const Body = () => {
                                       className=" rounded-xl border[2px] border-white opacity-[.3] hover:opacity-100"
                                       style={{ transition: ".5s" }}
                                     ></img>
-                                    {/* {imgid.id} */}
+                                 
                                   </div>
                                 </>
                               )}
@@ -1191,10 +1267,10 @@ const Body = () => {
                         style={{ transition: ".5s" }}
                       ></div>
                     </>
-                  )}
+                  )} */}
                   <div className="w-[calc(100%-20px)] h-[200px]  mx-[10px] py-[10px] flex flex-col justify-center items-center  border-t-[2px] border-[#eff1f4]">
                     <div className="w-full  h-[40px] mb-[10px]  rounded-xl  px-[4px] flex justify-start items-center cursor-pointer ">
-                      <img
+                      {/* <img
                         src={selectAvatar}
                         className="rounded-full h-full"
                         loading="lazy"
@@ -1202,7 +1278,7 @@ const Body = () => {
 
                       <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] ">
                         Himadri Purkait
-                      </span>
+                      </span> */}
                     </div>
                     <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer ">
                       <IoSettingsOutline className="text-[#5841d9] drop-shadow-lg text-[18px]" />
