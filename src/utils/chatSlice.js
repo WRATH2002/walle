@@ -43,6 +43,11 @@ const chatSlice = createSlice({
   reducers: {
     addMessage: (state, action) => {
       state.messages.push(action.payload);
+      console.log("slice");
+      console.log(state.messages);
+    },
+    addMessageNew: (state, action) => {
+      state.messages = [];
     },
     addAnswer: (state, action) => {
       const temp = action.payload;
@@ -71,7 +76,12 @@ const chatSlice = createSlice({
   },
 });
 
-export const { addMessage, addAnswer, toggleStateMode, toggleDarkMode } =
-  chatSlice.actions;
+export const {
+  addMessage,
+  addMessageNew,
+  addAnswer,
+  toggleStateMode,
+  toggleDarkMode,
+} = chatSlice.actions;
 
 export default chatSlice.reducer;

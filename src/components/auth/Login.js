@@ -8,20 +8,30 @@ import { AiOutlineEye } from "react-icons/ai";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
 import { toggleStateMode, toggleDarkMode } from "../../utils/chatSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { db } from "../../firebase";
+import { addMessage } from "../../utils/chatSlice";
 
 const Login = () => {
   const [email, setEmail] = useState("");
 
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch();
   const darkmode = useSelector((store) => store.chat.darkMode);
   const [toggleMode, setToggleMode] = useState(darkmode);
+
+  const [prevChat, setPrevChat] = useState([]);
+  const [userId, serUserId] = useState("");
   // setToggleMode(darkmode);
   console.log(darkmode);
   useEffect(() => {
     setToggleMode(darkmode);
   }, [darkmode]);
+
+  useEffect(() => {
+    console.log(prevChat);
+  }, []);
 
   function changeDarkMode() {
     if (darkmode === 1) {
@@ -44,17 +54,92 @@ const Login = () => {
     }
   }
 
+  function storePrevChat() {
+    prevChat.map((chat, index) => {
+      // const user = chat.user;
+      // const assistant = chat.assistant;
+      console.log(chat[index].user);
+      dispatch(
+        addMessage({ user: chat[index].user, assistant: chat[index].assistant })
+      );
+    });
+  }
+
+  async function getUserChatHistoy(user) {
+    const userInfoSnap = await db
+      .collection("users")
+      .doc(user.uid)
+      .get()
+      .then((userInfoSnap) => {
+        // .then((user) => {
+        //   // if (user.length > 0) {
+        //   //   // console.log(doc.data());
+        //   //   // console.log(doc);
+        //   //   // setPrevChat(doc.data());
+        //   //   user.forEach((doc) => {
+        //   //     setPrevChat((prev) => {
+        //   //       return [...prev, doc.data()];
+        //   //     });
+        //   //   });
+        //   // }
+        //   console.log(user);
+        // });
+        // console.log(prevChat);
+        const userInfo = userInfoSnap.data();
+        if (userInfo) {
+          console.log(userInfoSnap);
+          console.log(userInfo.uid);
+
+          setPrevChat(userInfo.uid[0]);
+          console.log(userInfo.uid[0]);
+          console.log(userInfo.uid[0].user);
+          console.log(userInfo.uid[1].user);
+          serUserId(userInfo.uid[0].user);
+          console.log(userId);
+          console.log(prevChat);
+        }
+      });
+    // userInfo.map((chat, index) => {
+    //   // const user = chat.user;
+    //   // const assistant = chat.assistant;
+    //   console.log(chat[index].user);
+    //   dispatch(
+    //     addMessage({ user: chat[index].user, assistant: chat[index].assistant })
+    //   );
+    // });
+    // setPrevChat(userInfo);
+  }
+
   const signIn = (e) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(userCredential);
+        // userCredential.user.forEach((us) => {
+        //   serUserId((prev) => {
+        //     return [prev.uid];
+        //   });
+        // });
+        // -------------------
+        // serUserId(userCredential.user.uid);
+        // console.log("id");
+        // console.log(userCredential.user.uid);
+        // console.log(userId);
+        // getUserChatHistoy(userCredential.user);
+
+        // storePrevChat();
+        // console.log("prevchat");
+        // console.log(prevChat);
       })
       .catch((error) => {
         document.getElementById("signinErrorWhite").innerHTML =
           "Invalid login credentials";
       });
   };
+
+  const chatMessage = useSelector((store) => store.chat.messages);
+  console.log("storechat");
+  console.log(chatMessage);
 
   return (
     <>
@@ -126,10 +211,21 @@ const Login = () => {
               ></input>
               <div
                 className="text-black mr-[10px] ml-[-30px] w-[20px]"
-                onClick={() => myFunction()}
+                onClick={() => {
+                  myFunction();
+                  setShowPassword(!showPassword);
+                }}
                 style={{ zIndex: "4" }}
               >
-                <AiOutlineEyeInvisible className=" text-[19px]" />
+                {showPassword === true ? (
+                  <>
+                    <AiOutlineEyeInvisible className=" text-[19px] text-[#5841d9]" />
+                  </>
+                ) : (
+                  <>
+                    <AiOutlineEye className=" text-[19px] text-[#5841d9]" />
+                  </>
+                )}
               </div>
             </div>
             <span
@@ -220,10 +316,21 @@ const Login = () => {
               ></input>
               <div
                 className="text-black mr-[10px] ml-[-30px] w-[20px]"
-                onClick={() => myFunction()}
+                onClick={() => {
+                  myFunction();
+                  setShowPassword(!showPassword);
+                }}
                 style={{ zIndex: "4" }}
               >
-                <AiOutlineEyeInvisible className=" text-[19px]" />
+                {showPassword === true ? (
+                  <>
+                    <AiOutlineEyeInvisible className=" text-[19px] text-[#5841d9]" />
+                  </>
+                ) : (
+                  <>
+                    <AiOutlineEye className=" text-[19px] text-[#5841d9]" />
+                  </>
+                )}
               </div>
             </div>
             <span

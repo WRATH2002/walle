@@ -10,11 +10,15 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 
 import { toggleStateMode, toggleDarkMode } from "../../utils/chatSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { db } from "../../firebase";
+// import { createUserCollection } from "../../firebase";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [lastName, setLastName] = useState("");
   const [firstName, setFirstName] = useState("");
+  const [user, setUser] = useState("");
 
   const [password, setPassword] = useState("");
 
@@ -49,11 +53,37 @@ const Signup = () => {
     }
   }
 
+  function createUserCollection(user) {
+    db.collection("users")
+      .doc(user.uid)
+      .set({
+        // id: user.uid,
+        // // name: user,
+        // email: user.email,
+        uid: [
+          { user: "hello 1", assistant: "how are you 1" },
+          { user: "hello 2", assistant: "how are you 2" },
+          { user: "hello 3", assistant: "how are you 3" },
+        ],
+        // message: "smdvsdk",
+      });
+    console.log("done");
+  }
+
   const signUp = (e) => {
     e.preventDefault();
-    createUserWithEmailAndPassword(auth, email, password)
+    createUserWithEmailAndPassword(auth, email, password, user)
       .then((userCredential) => {
+        console.log(userCredential.user.uid);
+        console.log(userCredential.user.email);
         console.log(userCredential);
+        createUserCollection(userCredential.user);
+        // db.collection("users")
+        //   .doc(userCredential.user.uid)
+        //   .set({
+        //     email: userCredential.user.email,
+        //     chats: ["hello"],
+        //   });
       })
       .catch(
         (error) => {
@@ -152,6 +182,18 @@ const Signup = () => {
                 onChange={(e) => setLastName(e.target.value)}
               ></input>
             </div> */}
+            {/* <input
+              placeholder="Enter email"
+              className="outline-none mt-[30px]    w-full h-[40px] my-[10px] rounded-md px-[15px] font-normal text-[14px] text-black"
+              type="text"
+              value={user}
+              // onFocus={checkEmail()}
+              onChange={(e) => {
+                // checkEmail();
+                setUser(e.target.value);
+                // checkEmail();
+              }}
+            ></input> */}
             <input
               placeholder="Enter email"
               className="outline-none mt-[30px]    w-full h-[40px] my-[10px] rounded-md px-[15px] font-normal text-[14px] text-black"
@@ -176,10 +218,21 @@ const Signup = () => {
               ></input>
               <div
                 className="text-black mr-[10px] ml-[-30px] w-[20px]"
-                onClick={() => toggle()}
+                onClick={() => {
+                  toggle();
+                  setShowPassword(!showPassword);
+                }}
                 style={{ zIndex: "4" }}
               >
-                <AiOutlineEyeInvisible className=" text-[19px]" />
+                {showPassword === true ? (
+                  <>
+                    <AiOutlineEyeInvisible className=" text-[19px] text-[#5841d9]" />
+                  </>
+                ) : (
+                  <>
+                    <AiOutlineEye className=" text-[19px] text-[#5841d9]" />
+                  </>
+                )}
               </div>
             </div>
             <span
@@ -291,11 +344,22 @@ const Signup = () => {
                 id="passtwo"
               ></input>
               <div
-                className="text-black  drop-shadow-md  mr-[10px] ml-[-30px] w-[20px]"
-                onClick={() => toggle()}
+                className="text-black mr-[10px] ml-[-30px] w-[20px]"
+                onClick={() => {
+                  toggle();
+                  setShowPassword(!showPassword);
+                }}
                 style={{ zIndex: "4" }}
               >
-                <AiOutlineEyeInvisible className=" text-[19px]" />
+                {showPassword === true ? (
+                  <>
+                    <AiOutlineEyeInvisible className=" text-[19px] text-[#5841d9]" />
+                  </>
+                ) : (
+                  <>
+                    <AiOutlineEye className=" text-[19px] text-[#5841d9]" />
+                  </>
+                )}
               </div>
             </div>
             <span

@@ -31,7 +31,7 @@ import thirteen from "../assets/img/13.jpg";
 import { messageges } from "../utils/constants";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addMessage, addAnswer } from "../utils/chatSlice";
+import { addMessage, addAnswer, addMessageNew } from "../utils/chatSlice";
 import { sendMessageToOpenAI } from "./Openai";
 // import { IMG_ID } from "../utils/constants";
 import SpeechRecognition, {
@@ -43,13 +43,8 @@ import { API_KEY } from "../utils/constants";
 import { auth } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { toggleDarkMode, toggleStateMode } from "../utils/chatSlice";
-// import { auth } from "../firebase";
-// import { onAuthStateChanged, signOut } from "firebase/auth";
-// import(onAuthStateChanged);
-// import { toggleStateMode, toggleDarkMode } from "../../utils/chatSlice";
-// import { useDispatch, useSelector } from "react-redux";
-// import "dotenv/config";
-// require("dotenv").config({ path: "../../.env" });
+import { db } from "../firebase";
+import firebase from "../firebase";
 
 const IMG_ID = [
   { id: one },
@@ -78,10 +73,51 @@ const Body = () => {
   const darkmode = useSelector((store) => store.chat.darkMode);
   const [toggleMode, setToggleMode] = useState(darkmode);
   const dispatch = useDispatch();
-  console.log(darkmode);
+  const [chatHistory, setChatHistory] = useState([]);
+
+  const [id, setId] = useState(1);
+
+  // --------------------------------------------------------------------
+  useEffect(() => {
+    const user = firebase.auth().currentUser;
+    console.log(user);
+    if (user) {
+      const userDoc = db.collection("users").doc(user.uid);
+      console.log("userdoc");
+      console.log(userDoc);
+
+      const unsubscribe = userDoc.onSnapshot((doc) => {
+        if (doc.exists) {
+          console.log("doc");
+          console.log(doc.data().uid[0].user);
+          setChatHistory(doc.data().uid);
+          console.log("chathistory");
+          console.log(chatHistory);
+        }
+      });
+
+      return unsubscribe;
+    }
+  }, []);
+  // ----------------------------------------------------------------------
+  useEffect(() => {
+    console.log("again chathistory");
+    console.log(chatHistory);
+    dispatch(addMessageNew());
+    chatHistory.map((chat) => {
+      dispatch(
+        addMessage({ user: chat.user, assistant: chat.assistant, id: chat.id })
+      );
+    });
+    // dispatch(addMessage({}))
+  }, [chatHistory]);
+
+  // --------------------------------------------------------------------
   useEffect(() => {
     setToggleMode(darkmode);
   }, [darkmode]);
+
+  // --------------------------------------------------------------------
 
   function changeDarkModeThree() {
     if (darkmode === 1) {
@@ -90,8 +126,6 @@ const Body = () => {
       dispatch(toggleDarkMode(1));
     }
   }
-
-  const [id, setId] = useState(2);
 
   const scrollToLast = useRef(null);
 
@@ -102,66 +136,62 @@ const Body = () => {
     browserSupportsSpeechRecognition,
   } = useSpeechRecognition();
 
-  // console.log(process.env);
-
-  // const [store, setStore] = useState({
-  //   tempInput: "message",
-  //   message: "hello world",
-  // });
-
-  // console.log(store);
-
-  // console.log(store);
-
   const [isSidebar, setIsSidebar] = useState(true);
 
-  // const dispatch = useDispatch();
-  //   const [liveChat, setLiveChat] = useState([]);
   const chatMessage = useSelector((store) => store.chat.messages);
   console.log(chatMessage);
 
-  // useEffect(() => {
-  //   const listen = onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       setAuthUser(user);
-  //     } else setAuthUser(null);
-  //   });
-  //   return () => {
-  //     listen();
-  //   };
-  // }, []);
+  function storeToFirestore() {
+    console.log(" storefunction");
 
+    console.log(chatMessage);
+
+    if (chatMessage.length != 0) {
+      const user = firebase.auth().currentUser;
+      if (user) {
+        const userDoc = db.collection("users").doc(user.uid);
+        userDoc.update({
+          uid: firebase.firestore.FieldValue.arrayUnion({
+            user: chatMessage[chatMessage.length - 1].user,
+            assistant: chatMessage[chatMessage.length - 1].assistant,
+            id: chatMessage[chatMessage.length - 1].id,
+          }),
+        });
+      }
+    }
+  }
+  // --------------------------------------------------------------------
   useEffect(() => {
     setAns();
+    // storeToFirestore();
     // setResult("");
     setInput("");
   }, [result]);
-
+  // --------------------------------------------------------------------
   useEffect(() => {
     scrollToLast.current?.scrollIntoView();
   }, [input, result]);
-
+  // --------------------------------------------------------------------
   useEffect(() => {
     setInput(transcript);
   }, [transcript]);
-
-  // function storeMessage() {
-  //   // setId(id + 1);
-  //   // setStore(store + { tempInput: "2nd", message: "2nd message" });
-  //   // if (input === "") {
-  //   // } else {
-  //   // setTempInput(input);
-  //   // setInput("");
-  //   dispatch(addMessage({ user: input, id: id, assistant: tempInput }));
-  //   // setInput("");
-  //   dispatch(addAnswer({ id, input }));
-
-  //   // }
-  // }
+  // --------------------------------------------------------------------
+  useEffect(() => {
+    // FetchLatestdata();
+    storeToFirestore();
+  }, [id]);
+  // --------------------------------------------------------------------
+  const FetchLatestdata = () => {
+    // const chatMessage = useSelector((store) => store.chat.messages);
+    // console.log(chatMessage);
+    storeToFirestore();
+  };
 
   const handleSend = async () => {
     // var hello = tempInput;
     // sendMessageToOpenAI(hello);
+    const tempId = chatMessage[chatMessage.length - 1].id;
+    setId(parseInt(tempId) + 1);
     if (input === "") {
     } else {
       dispatch(addMessage({ user: input, id: id, assistant: tempInput }));
@@ -491,7 +521,7 @@ const Body = () => {
                       </button>
                       <input
                         placeholder="Ask Anything"
-                        className="w-full h-full px-[20px] pl-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                        className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
                         style={{ transition: ".5s" }}
                         value={input}
                         onKeyDown={(e) => {
@@ -769,7 +799,7 @@ const Body = () => {
                       </button>
                       <input
                         placeholder="Ask Anything"
-                        className="w-full h-full px-[20px] pl-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                        className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
                         value={input}
                         onKeyDown={(e) => {
                           if (e.nativeEvent.key === "Enter") {
@@ -1116,7 +1146,7 @@ const Body = () => {
                       </button>
                       <input
                         placeholder="Ask Anything"
-                        className="w-full h-full px-[20px] pl-[60px] rounded-lg outline-none bg-[white] text-[black] flex justify-center items-center font-[nunitosans] "
+                        className="w-full h-full px-[60px] rounded-lg outline-none bg-[white] text-[black] flex justify-center items-center font-[nunitosans] "
                         style={{ transition: ".5s" }}
                         value={input}
                         onKeyDown={(e) => {
@@ -1401,7 +1431,7 @@ const Body = () => {
                       </button>
                       <input
                         placeholder="Ask Anything"
-                        className="w-full h-full px-[20px] pl-[60px] rounded-lg outline-none bg-[white] text-[black] flex justify-center items-center font-[nunitosans] "
+                        className="w-full h-full px-[60px] rounded-lg outline-none bg-[white] text-[black] flex justify-center items-center font-[nunitosans] "
                         value={input}
                         onKeyDown={(e) => {
                           if (e.nativeEvent.key === "Enter") {

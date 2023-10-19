@@ -7,8 +7,6 @@ import { Provider } from "react-redux";
 import store from "./utils/store";
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
-import LogU from "./components/auth/LogU";
-import LogI from "./components/auth/LogI";
 import AuthDetails from "./components/AuthDetails";
 
 // const response = await openai.listEngines();
