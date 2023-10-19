@@ -60,11 +60,7 @@ const Signup = () => {
         // id: user.uid,
         // // name: user,
         // email: user.email,
-        uid: [
-          { user: "hello 1", assistant: "how are you 1" },
-          { user: "hello 2", assistant: "how are you 2" },
-          { user: "hello 3", assistant: "how are you 3" },
-        ],
+        uid: [{ user: "Question", assistant: "Answer", id: 1 }],
         // message: "smdvsdk",
       });
     console.log("done");

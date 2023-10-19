@@ -104,10 +104,19 @@ const Body = () => {
     console.log("again chathistory");
     console.log(chatHistory);
     dispatch(addMessageNew());
-    chatHistory.map((chat) => {
-      dispatch(
-        addMessage({ user: chat.user, assistant: chat.assistant, id: chat.id })
-      );
+    chatHistory.map((chat, index) => {
+      if (index == 0) {
+        console.log("index 0");
+      } else {
+        console.log("index not 0");
+        dispatch(
+          addMessage({
+            user: chat.user,
+            assistant: chat.assistant,
+            id: chat.id,
+          })
+        );
+      }
     });
     // dispatch(addMessage({}))
   }, [chatHistory]);
