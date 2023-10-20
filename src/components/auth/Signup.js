@@ -53,18 +53,18 @@ const Signup = () => {
     }
   }
 
-  function createUserCollection(user) {
-    db.collection("users")
-      .doc(user.uid)
-      .set({
-        // id: user.uid,
-        // // name: user,
-        // email: user.email,
-        uid: [{ user: "Question", assistant: "Answer", id: 1 }],
-        // message: "smdvsdk",
-      });
-    console.log("done");
-  }
+  // function createUserCollection(user) {
+  //   db.collection("users")
+  //     .doc(user.uid)
+  //     .set({
+  //       // id: user.uid,
+  //       // // name: user,
+  //       // email: user.email,
+  //       uid: [{ user: "Question", assistant: "Answer", id: 1 }],
+  //       // message: "smdvsdk",
+  //     });
+  //   console.log("done");
+  // }
 
   const signUp = (e) => {
     e.preventDefault();
@@ -73,7 +73,7 @@ const Signup = () => {
         console.log(userCredential.user.uid);
         console.log(userCredential.user.email);
         console.log(userCredential);
-        createUserCollection(userCredential.user);
+        // createUserCollection(userCredential.user);
         // db.collection("users")
         //   .doc(userCredential.user.uid)
         //   .set({

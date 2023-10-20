@@ -1,3 +1,4 @@
+// -------------------------------------------------------Icons Import-----
 import { IoMdSend } from "react-icons/io";
 import { FiSidebar } from "react-icons/fi";
 import { BiPlus } from "react-icons/bi";
@@ -10,10 +11,10 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import { IoMdArrowDropup } from "react-icons/io";
 import { BsGithub } from "react-icons/bs";
 import { BsLinkedin } from "react-icons/bs";
-
+// -------------------------------------------------------Logo Import-----
 import ai from "../assets/img/gpt.jpg";
 import logo from "../assets/img/logo.png";
-
+// -------------------------------------------------------Avatar Image Import------
 import eight from "../assets/img/8.jpg";
 import one from "../assets/img/1.jpg";
 import two from "../assets/img/2.jpg";
@@ -27,25 +28,24 @@ import nine from "../assets/img/9.jpg";
 import eleven from "../assets/img/11.jpg";
 import twelve from "../assets/img/12.jpg";
 import thirteen from "../assets/img/13.jpg";
-
+// -------------------------------------------------------Other Imports-----
 import { messageges } from "../utils/constants";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addMessage, addAnswer, addMessageNew } from "../utils/chatSlice";
 import { sendMessageToOpenAI } from "./Openai";
-// import { IMG_ID } from "../utils/constants";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
-
+import { toggleDarkMode, toggleStateMode } from "../utils/chatSlice";
+// -------------------------------------------------------API Key Import-----
 import { API_KEY } from "../utils/constants";
-
+// -------------------------------------------------------Firebase Import-------
 import { auth } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { toggleDarkMode, toggleStateMode } from "../utils/chatSlice";
 import { db } from "../firebase";
 import firebase from "../firebase";
-
+// -------------------------------------------------------Avatar Image Id Array-----
 const IMG_ID = [
   { id: one },
   { id: two },
@@ -68,47 +68,121 @@ const Body = () => {
   const [result, setResult] = useState("");
   const [avatar, setAvatar] = useState(false);
   const [selectAvatar, setSelectAvatar] = useState(six);
-  // const [authUser, setAuthUser] = useState(null);
-
   const darkmode = useSelector((store) => store.chat.darkMode);
   const [toggleMode, setToggleMode] = useState(darkmode);
   const dispatch = useDispatch();
   const [chatHistory, setChatHistory] = useState([]);
-
   const [id, setId] = useState(1);
+  const [isSidebar, setIsSidebar] = useState(true);
+  const [tempResult, setTempResult] = useState("");
+  // -------------------------------------------------------Transcript Initialization------
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
 
-  // --------------------------------------------------------------------
+  // -------------------------------------------------------
+  var chatMessage = useSelector((store) => store.chat.messages);
+  console.log("chatMessage");
+  console.log(chatMessage);
+
+  // -------------------------------------------------------Toggle DarkMode------
   useEffect(() => {
+    setToggleMode(darkmode);
+  }, [darkmode]);
+
+  // -------------------------------------------------------Add Answer in The React Store After Generating Answer------
+  useEffect(() => {
+    setAns();
+    setInput("");
+    // setResult("");
+    // setTempResult("");
+  }, [tempResult]);
+  // -------------------------------------------------------Scroll To Latest Message-------
+  useEffect(() => {
+    scrollToLast.current?.scrollIntoView();
+  }, [input, tempResult]);
+  // -------------------------------------------------------To Set Input as The Transcript-------
+  useEffect(() => {
+    setInput(transcript);
+  }, [transcript]);
+  // -------------------------------------------------------To Store Data in Firestore-------
+  useEffect(() => {
+    // FetchLatestdata();
+    storeToFirestore();
+    getChatHistoryFromFirestore();
+    AddFetchedChatHistoryToReactStore();
+  }, [id]);
+  // ------------------------------------------------------- -------
+  useEffect(() => {
+    getChatHistoryFromFirestore();
+  }, []);
+  // ------------------------------------------------------- -------
+  useEffect(() => {
+    console.log("chatHistory");
+    console.log(chatHistory);
+    AddFetchedChatHistoryToReactStore();
+  }, [chatHistory]);
+
+  // useEffect(() => {
+  //   // storeToFirestore();
+  //   // storeToFirestore();
+  //   getChatHistoryFromFirestore();
+  //   // AddFetchedChatHistoryToReactStore();
+  // }, [chatMessage]);
+  // useEffect(() => {
+  //   // storeToFirestore();
+  //   // storeToFirestore();
+  //   // getChatHistoryFromFirestore();
+  //   AddFetchedChatHistoryToReactStore();
+  // }, [chatMessage]);
+  // ------------------------------------------------------- -------
+  // useEffect(() => {
+  //   storeToFirestore();
+  // });
+  // -------------------------------------------------------Functiomn to Toggle DarkMode-------
+  function changeDarkModeThree() {
+    if (darkmode === 1) {
+      dispatch(toggleDarkMode(2));
+    } else if (darkmode === 2) {
+      dispatch(toggleDarkMode(1));
+    }
+  }
+  // -------------------------------------------------------
+
+  const scrollToLast = useRef(null);
+
+  // -------------------------------------------------------Function to Fetch chat History from Firestore-----
+  function getChatHistoryFromFirestore() {
     const user = firebase.auth().currentUser;
-    console.log(user);
+    // console.log(user);
     if (user) {
       const userDoc = db.collection("users").doc(user.uid);
-      console.log("userdoc");
-      console.log(userDoc);
-
       const unsubscribe = userDoc.onSnapshot((doc) => {
         if (doc.exists) {
-          console.log("doc");
-          console.log(doc.data().uid[0].user);
+          // console.log("doc");
+          console.log(doc.data().uid);
           setChatHistory(doc.data().uid);
-          console.log("chathistory");
-          console.log(chatHistory);
+          // console.log("chathistory");
+          // console.log(chatHistory);
         }
       });
 
       return unsubscribe;
     }
-  }, []);
-  // ----------------------------------------------------------------------
-  useEffect(() => {
-    console.log("again chathistory");
+  }
+  // -------------------------------------------------------Function to Dispatch Chat History from Firestore to react Store------
+  function AddFetchedChatHistoryToReactStore() {
+    console.log("chathistory in add function");
     console.log(chatHistory);
     dispatch(addMessageNew());
     chatHistory.map((chat, index) => {
       if (index == 0) {
-        console.log("index 0");
+        // console.log("index 0");
       } else {
-        console.log("index not 0");
+        // console.log("index not 0");
         dispatch(
           addMessage({
             user: chat.user,
@@ -118,38 +192,8 @@ const Body = () => {
         );
       }
     });
-    // dispatch(addMessage({}))
-  }, [chatHistory]);
-
-  // --------------------------------------------------------------------
-  useEffect(() => {
-    setToggleMode(darkmode);
-  }, [darkmode]);
-
-  // --------------------------------------------------------------------
-
-  function changeDarkModeThree() {
-    if (darkmode === 1) {
-      dispatch(toggleDarkMode(2));
-    } else if (darkmode === 2) {
-      dispatch(toggleDarkMode(1));
-    }
   }
-
-  const scrollToLast = useRef(null);
-
-  const {
-    transcript,
-    listening,
-    resetTranscript,
-    browserSupportsSpeechRecognition,
-  } = useSpeechRecognition();
-
-  const [isSidebar, setIsSidebar] = useState(true);
-
-  const chatMessage = useSelector((store) => store.chat.messages);
-  console.log(chatMessage);
-
+  // -------------------------------------------------------Function to Store ChatHistory to Firestore-------
   function storeToFirestore() {
     console.log(" storefunction");
 
@@ -159,6 +203,19 @@ const Body = () => {
       const user = firebase.auth().currentUser;
       if (user) {
         const userDoc = db.collection("users").doc(user.uid);
+        userDoc.get().then((doc) => {
+          if (doc.exists) {
+            console.log("Document available");
+          } else {
+            db.collection("users")
+              .doc(user.uid)
+              .set({
+                uid: [{ user: "Question", assistant: "Answer", id: 1 }],
+              });
+            // doc.data() will be undefined in this case
+            console.log("No such document");
+          }
+        });
         userDoc.update({
           uid: firebase.firestore.FieldValue.arrayUnion({
             user: chatMessage[chatMessage.length - 1].user,
@@ -166,41 +223,34 @@ const Body = () => {
             id: chatMessage[chatMessage.length - 1].id,
           }),
         });
+        // function createUserCollection(user) {
+        // db.collection("users")
+        //   .doc(user.uid)
+        //   .set({
+        //     // id: user.uid,
+        //     // // name: user,
+        //     // email: user.email,
+        //     uid: [{ user: "Question", assistant: "Answer", id: 1 }],
+        //     // message: "smdvsdk",
+        //   });
+        // console.log("done");
+        // }
       }
     }
   }
-  // --------------------------------------------------------------------
-  useEffect(() => {
-    setAns();
-    // storeToFirestore();
-    // setResult("");
-    setInput("");
-  }, [result]);
-  // --------------------------------------------------------------------
-  useEffect(() => {
-    scrollToLast.current?.scrollIntoView();
-  }, [input, result]);
-  // --------------------------------------------------------------------
-  useEffect(() => {
-    setInput(transcript);
-  }, [transcript]);
-  // --------------------------------------------------------------------
-  useEffect(() => {
-    // FetchLatestdata();
-    storeToFirestore();
-  }, [id]);
-  // --------------------------------------------------------------------
-  const FetchLatestdata = () => {
-    // const chatMessage = useSelector((store) => store.chat.messages);
-    // console.log(chatMessage);
-    storeToFirestore();
-  };
+  // -------------------------------------------------------
 
+  // const FetchLatestdata = () => {
+  //   // const chatMessage = useSelector((store) => store.chat.messages);
+  //   // console.log(chatMessage);
+  //   storeToFirestore();
+  // };
+  // -------------------------------------------------------Function to Generate answer to Given Query-----
   const handleSend = async () => {
     // var hello = tempInput;
     // sendMessageToOpenAI(hello);
-    const tempId = chatMessage[chatMessage.length - 1].id;
-    setId(parseInt(tempId) + 1);
+    // const tempId = chatMessage[chatMessage.length - 1].id;
+    // setId(parseInt(tempId) + 1);
     if (input === "") {
     } else {
       dispatch(addMessage({ user: input, id: id, assistant: tempInput }));
@@ -209,24 +259,27 @@ const Body = () => {
     // const res = "Hello world my name is himadri purkait";
     console.log(res);
     setResult(res);
-    console.log(result);
+    setTempResult(res);
+
+    // console.log(result);
 
     // dispatch(addMessage({ user: input, id: id, assistant: input }));
     // while (result.length == 0) {}
   };
-
+  // -------------------------------------------------------Function to Add Generated Answer to React Store
   function setAns() {
     dispatch(addAnswer({ id, result }));
     var changeId = parseInt(id);
     changeId = changeId + 1;
     setId(changeId);
   }
-
+  // -------------------------------------------------------Function to Sign Out
   const userSignOut = () => {
     signOut(auth)
       .then(() => console.log("Signed Out Successfully"))
       .catch((error) => console.log(error));
   };
+  // -------------------------------------------------------
 
   return (
     <>
@@ -534,9 +587,9 @@ const Body = () => {
                         style={{ transition: ".5s" }}
                         value={input}
                         onKeyDown={(e) => {
-                          console.log(e);
+                          // console.log(e);
                           if (e.nativeEvent.key === "Enter") {
-                            console.log("enter");
+                            // console.log("enter");
                             handleSend();
                             setInput("");
                           }
@@ -812,7 +865,7 @@ const Body = () => {
                         value={input}
                         onKeyDown={(e) => {
                           if (e.nativeEvent.key === "Enter") {
-                            console.log("enter");
+                            // console.log("enter");
                             handleSend();
                             setInput("");
                           }
@@ -1159,9 +1212,9 @@ const Body = () => {
                         style={{ transition: ".5s" }}
                         value={input}
                         onKeyDown={(e) => {
-                          console.log(e);
+                          // console.log(e);
                           if (e.nativeEvent.key === "Enter") {
-                            console.log("enter");
+                            // console.log("enter");
                             handleSend();
                             setInput("");
                           }
@@ -1444,7 +1497,7 @@ const Body = () => {
                         value={input}
                         onKeyDown={(e) => {
                           if (e.nativeEvent.key === "Enter") {
-                            console.log("enter");
+                            // console.log("enter");
                             handleSend();
                             setInput("");
                           }
