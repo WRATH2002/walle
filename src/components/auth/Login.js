@@ -6,7 +6,11 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 
 import { AiOutlineEye } from "react-icons/ai";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
-import { toggleStateMode, toggleDarkMode } from "../../utils/chatSlice";
+import {
+  toggleStateMode,
+  toggleDarkMode,
+  addMessageNew,
+} from "../../utils/chatSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { db } from "../../firebase";
 import { addMessage } from "../../utils/chatSlice";
@@ -112,6 +116,8 @@ const Login = () => {
 
   const signIn = (e) => {
     e.preventDefault();
+
+    dispatch(addMessageNew());
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(userCredential);
@@ -136,10 +142,6 @@ const Login = () => {
           "Invalid login credentials";
       });
   };
-
-  const chatMessage = useSelector((store) => store.chat.messages);
-  console.log("storechat");
-  console.log(chatMessage);
 
   return (
     <>

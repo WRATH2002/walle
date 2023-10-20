@@ -84,7 +84,8 @@ const Body = () => {
   } = useSpeechRecognition();
 
   // -------------------------------------------------------
-  var chatMessage = useSelector((store) => store.chat.messages);
+  var chatMessage = null;
+  chatMessage = useSelector((store) => store.chat.messages);
   console.log("chatMessage");
   console.log(chatMessage);
 
@@ -108,17 +109,21 @@ const Body = () => {
   useEffect(() => {
     setInput(transcript);
   }, [transcript]);
+  // ------------------------------------------------------- -------
+  useEffect(() => {
+    dispatch(addMessageNew());
+  }, []);
   // -------------------------------------------------------To Store Data in Firestore-------
   useEffect(() => {
     // FetchLatestdata();
     storeToFirestore();
+
+    setTempResult("");
     getChatHistoryFromFirestore();
     AddFetchedChatHistoryToReactStore();
+    chatMessage = "";
   }, [id]);
-  // ------------------------------------------------------- -------
-  useEffect(() => {
-    getChatHistoryFromFirestore();
-  }, []);
+
   // ------------------------------------------------------- -------
   useEffect(() => {
     console.log("chatHistory");
