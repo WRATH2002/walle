@@ -10,6 +10,8 @@ import { MdAccountCircle } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { IoMdArrowDropup } from "react-icons/io";
 import { BsGithub } from "react-icons/bs";
+import { HiOutlineClipboard } from "react-icons/hi2";
+import { BsChatSquareText } from "react-icons/bs";
 import { BsLinkedin } from "react-icons/bs";
 // -------------------------------------------------------Logo Import-----
 import ai from "../assets/img/gpt.jpg";
@@ -45,6 +47,7 @@ import { auth } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { db } from "../firebase";
 import firebase from "../firebase";
+import toast, { Toaster } from "react-hot-toast";
 // -------------------------------------------------------Avatar Image Id Array-----
 const IMG_ID = [
   { id: one },
@@ -244,6 +247,77 @@ const Body = () => {
     }
   }
   // -------------------------------------------------------
+  function DeleteChatHistoryFromFirebase() {
+    const user = firebase.auth().currentUser;
+    // const userDoc = db.collection("users").doc(user.uid);
+    // userDoc.onSnapshot((doc) => {
+    //   if (doc.exists) {
+    //     doc.data().delete()
+    //     // console.log("doc");
+    //     // console.log(doc.data().uid);
+    //     // setChatHistory(doc.data().uid);
+    //     // console.log("chathistory");
+    //     // console.log(chatHistory);
+    //   }
+    // });
+
+    if (user) {
+      db.collection("users")
+        .doc(user.uid)
+        .set({
+          uid: [{ user: "Question", assistant: "Answer", id: 1 }],
+        });
+    }
+  }
+
+  function deleteSingleChat(index) {
+    const user = firebase.auth().currentUser;
+    // console.log(user);
+    // db.collection("users")
+    //   .doc(user.uid[index + 1])
+    //   .delete();
+    if (user) {
+      // db.collection("users").doc(user.uid);
+      const userDoc = db.collection("users").doc(user.uid);
+      const unsubscribe = userDoc.onSnapshot((doc) => {
+        if (doc.exists) {
+          // console.log("doc");
+          console.log(doc.data().uid[index + 1]);
+          // const del = doc.data().uid[index + 1];
+          // del.user : firebase.firestore.FieldValue.delete();
+          // doc.data().uid[index + 1]: db.FieldValue.delete();
+          // doc.data().uid[index].;
+          // console.log("chathistory");
+          // console.log(chatHistory);
+        }
+      });
+
+      return unsubscribe;
+    }
+  }
+
+  function checkChatlength() {
+    const user = firebase.auth().currentUser;
+    // console.log(user);
+    if (user) {
+      const userDoc = db.collection("users").doc(user.uid);
+      const unsubscribe = userDoc.onSnapshot((doc) => {
+        if (doc.data().uid.length > 1) {
+          // console.log("doc");
+          // console.log("Data Available");
+          // toast.success("Success");
+          // setChatHistory(doc.data().uid);
+          // console.log("chathistory");
+          // console.log(chatHistory);
+        } else {
+          // toast.error("error");
+          // console.log("No data");
+        }
+      });
+
+      return unsubscribe;
+    }
+  }
 
   // const FetchLatestdata = () => {
   //   // const chatMessage = useSelector((store) => store.chat.messages);
@@ -260,8 +334,8 @@ const Body = () => {
     } else {
       dispatch(addMessage({ user: input, id: id, assistant: tempInput }));
     }
-    const res = await sendMessageToOpenAI(input);
-    // const res = "Hello world my name is himadri purkait";
+    // const res = await sendMessageToOpenAI(input);
+    const res = "Hello world my name is himadri purkait";
     console.log(res);
     setResult(res);
     setTempResult(res);
@@ -271,25 +345,44 @@ const Body = () => {
     // dispatch(addMessage({ user: input, id: id, assistant: input }));
     // while (result.length == 0) {}
   };
-  // -------------------------------------------------------Function to Add Generated Answer to React Store
+  // -------------------------------------------------------Function to Add Generated Answer to React Store------
   function setAns() {
     dispatch(addAnswer({ id, result }));
     var changeId = parseInt(id);
     changeId = changeId + 1;
     setId(changeId);
   }
-  // -------------------------------------------------------Function to Sign Out
+  // -------------------------------------------------------Function to Sign Out------
   const userSignOut = () => {
     signOut(auth)
-      .then(() => console.log("Signed Out Successfully"))
-      .catch((error) => console.log(error));
+      .then(() => console.log("Sign out Successful"))
+      .catch((error) => console.log("Sign out not successful"));
   };
-  // -------------------------------------------------------
+  // -------------------------------------------------------Function to Copy to Clipboard------
+  function CopyToClipboard(index) {
+    // Get the text field
+    var copyText = document.getElementById("2");
+    console.log(copyText);
+
+    // Select the text field
+    // copyText.select();
+    // For mobile devices
+    const area = document.createElement("textarea");
+    area.value = copyText.innerText;
+    area.setSelectionRange(0, 99999);
+    // area.select();
+    // Copy the text inside the text field
+    navigator.clipboard.writeText(area.value);
+
+    // Alert the copied text
+    // alert("Copied the text: " + copyText.value);
+  }
 
   return (
     <>
       {toggleMode === 2 ? (
         <>
+          <Toaster position="bottom-center" reverseOrder={false} />
           <div
             className="w-full h-[100%] bg-[#141627] flex "
             style={{ transition: ".5s" }}
@@ -434,14 +527,14 @@ const Body = () => {
                         Himadri Purkait
                       </span>
                     </div> */}
-                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer ">
+                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] ">
                       <IoSettingsOutline className="text-white text-[18px]" />
 
                       <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
                         Settings
                       </span>
                     </div>
-                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer ">
+                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer  my-[4px]">
                       <div className="w-[calc(100%-40px)] flex">
                         <MdDarkMode className="text-white text-[18px]" />
 
@@ -476,14 +569,35 @@ const Body = () => {
                         </>
                       )}
                     </div>
-                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer ">
+                    <div
+                      className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] "
+                      onClick={userSignOut}
+                    >
                       <FiLogOut className="text-white text-[18px]" />
 
-                      <span
-                        className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] "
-                        onClick={userSignOut}
-                      >
+                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
                         Logout
+                      </span>
+                    </div>
+                    <div
+                      className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] "
+                      onClick={() => {
+                        if (chatMessage.length > 0) {
+                          toast.success("Chats Deleted Successfully");
+                        } else {
+                          toast.error("No Chats to Delete");
+                        }
+                        checkChatlength();
+                        DeleteChatHistoryFromFirebase();
+
+                        getChatHistoryFromFirestore();
+                        AddFetchedChatHistoryToReactStore();
+                      }}
+                    >
+                      <BsChatSquareText className="text-white text-[18px]" />
+
+                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                        Delete Chats
                       </span>
                     </div>
                   </div>
@@ -503,7 +617,7 @@ const Body = () => {
                   </div>
                   <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
                     <div className="w-full h-[calc(100%-80px)]  mb-[20px] overflow-y-scroll">
-                      {chatMessage.map((mssg) => {
+                      {chatMessage.map((mssg, index) => {
                         return (
                           <>
                             <div className="w-full flex flex-col ">
@@ -525,7 +639,7 @@ const Body = () => {
                                 </div>
                               </span>
                               <span
-                                className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-white "
+                                className="group px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-white "
                                 // style={{ transition: ".5s" }}
                               >
                                 <div
@@ -537,7 +651,7 @@ const Body = () => {
                                     className="w-[40px] h-[40px] rounded-sm bg-slate-500"
                                   ></img>
                                   <pre
-                                    className="w-[calc(100%-65px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap "
+                                    className="w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap "
                                     // style={{ transition: ".5s" }}
                                   >
                                     {mssg.assistant.length === 0 ? (
@@ -550,7 +664,7 @@ const Body = () => {
                                       </>
                                     ) : (
                                       <>
-                                        <span className="">
+                                        <span id={index} className="">
                                           {mssg.assistant.substr(
                                             2,
                                             mssg.assistant.length - 1
@@ -559,6 +673,23 @@ const Body = () => {
                                       </>
                                     )}
                                   </pre>
+                                  <div
+                                    className="w-[30px] h-[40px]   rounded-sm opacity-0 flex justify-end items-center group-hover:opacity-100 transition-opacity duration-300"
+                                    // style={{ transition: ".3s" }}
+                                    onClick={() => {
+                                      // CopyToClipboard(index);
+                                      navigator.clipboard.writeText(
+                                        mssg.assistant.substr(
+                                          2,
+                                          mssg.assistant.length - 1
+                                        )
+                                      );
+                                      toast.success("Copied to Clipboard");
+                                      // deleteSingleChat(index);
+                                    }}
+                                  >
+                                    <HiOutlineClipboard className="text-[20px]" />
+                                  </div>
                                   <div ref={scrollToLast}></div>
                                 </div>
                               </span>

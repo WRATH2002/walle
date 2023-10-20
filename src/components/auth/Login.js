@@ -14,6 +14,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { db } from "../../firebase";
 import { addMessage } from "../../utils/chatSlice";
+import toast, { Toaster } from "react-hot-toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -136,8 +137,10 @@ const Login = () => {
         // storePrevChat();
         // console.log("prevchat");
         // console.log(prevChat);
+        // toast.success("Successfully Loged In");
       })
       .catch((error) => {
+        toast.error("Invalid Login Credentials");
         document.getElementById("signinErrorWhite").innerHTML =
           "Invalid login credentials";
       });
@@ -150,6 +153,7 @@ const Login = () => {
           className="walpaper w-full h-[100vh] bg-[#141627] flex justify-center items-center"
           style={{ transition: ".5s" }}
         >
+          <Toaster position="bottom-center" reverseOrder={false} />
           <div
             className="w-[300px] lg:w-[350px] md:w-[350px] h-[70%] rounded-lg bg-[#1c1f37] text-white font-semibold font-[nunitosans] p-[30px] flex flex-col justify-center"
             style={{ transition: ".5s" }}

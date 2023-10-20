@@ -11,6 +11,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { toggleStateMode, toggleDarkMode } from "../../utils/chatSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { db } from "../../firebase";
+import toast, { Toaster } from "react-hot-toast";
 // import { createUserCollection } from "../../firebase";
 
 const Signup = () => {
@@ -73,6 +74,7 @@ const Signup = () => {
         console.log(userCredential.user.uid);
         console.log(userCredential.user.email);
         console.log(userCredential);
+        // toast.success("Sign Up Successful");
         // createUserCollection(userCredential.user);
         // db.collection("users")
         //   .doc(userCredential.user.uid)
@@ -84,6 +86,7 @@ const Signup = () => {
       .catch(
         (error) => {
           console.log(error.message);
+          toast.error("Failed to Sign Up");
         }
         // document.getElementById("signupError").innerHTML = error}
       );
@@ -116,6 +119,7 @@ const Signup = () => {
           className="walpaper w-full h-[100vh] bg-[#141627] flex justify-center items-center"
           style={{ transition: ".5s" }}
         >
+          <Toaster position="bottom-center" reverseOrder={false} />
           <div
             className="w-[300px] lg:w-[350px] md:w-[350px] rounded-lg h-[70%] bg-[#1c1f37] text-white font-semibold font-[nunitosans] p-[30px] flex flex-col justify-center"
             style={{ transition: ".5s" }}
