@@ -334,8 +334,8 @@ const Body = () => {
     } else {
       dispatch(addMessage({ user: input, id: id, assistant: tempInput }));
     }
-    // const res = await sendMessageToOpenAI(input);
-    const res = "Hello world my name is himadri purkait";
+    const res = await sendMessageToOpenAI(input);
+    // const res = "Hello world my name is himadri purkait";
     console.log(res);
     setResult(res);
     setTempResult(res);
@@ -876,21 +876,21 @@ const Body = () => {
                         Himadri Purkait
                       </span> */}
                     </div>
-                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer ">
+                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] ">
                       <IoSettingsOutline className="text-white text-[18px]" />
 
                       <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
                         Settings
                       </span>
                     </div>
-                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer ">
+                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] ">
                       <MdDarkMode className="text-white text-[18px]" />
 
                       <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
                         Dark Mode
                       </span>
                     </div>
-                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer ">
+                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] ">
                       <FiLogOut className="text-white text-[18px]" />
 
                       <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
@@ -1228,14 +1228,14 @@ const Body = () => {
                         ${authUser.email}
                       </span>
                     </div> */}
-                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer ">
+                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] ">
                       <IoSettingsOutline className="text-[#5841d9] text-[18px] drop-shadow-lg" />
 
                       <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] drop-shadow-lg ">
                         Settings
                       </span>
                     </div>
-                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer ">
+                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] ">
                       <div className="w-[calc(100%-40px)] flex">
                         <MdDarkMode className="text-[#5841d9] text-[18px] drop-shadow-lg" />
 
@@ -1271,7 +1271,7 @@ const Body = () => {
                       )}
                     </div>
 
-                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer ">
+                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] ">
                       <FiLogOut className="text-[#5841d9] text-[18px] drop-shadow-lg" />
 
                       <span
@@ -1585,21 +1585,21 @@ const Body = () => {
                         Himadri Purkait
                       </span> */}
                     </div>
-                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer ">
+                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer  my-[4px] ">
                       <IoSettingsOutline className="text-[#5841d9] drop-shadow-lg text-[18px]" />
 
                       <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
                         Settings
                       </span>
                     </div>
-                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer ">
+                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px]  ">
                       <MdDarkMode className="text-[#5841d9] drop-shadow-lg text-[18px]" />
 
                       <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
                         Dark Mode
                       </span>
                     </div>
-                    <div className="w-full h-[40px]    rounded-xl  px-[15px] flex justify-start items-center cursor-pointer ">
+                    <div className="w-full h-[40px]    rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px]  ">
                       <FiLogOut className="text-[#5841d9] drop-shadow-lg text-[18px]" />
 
                       <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
