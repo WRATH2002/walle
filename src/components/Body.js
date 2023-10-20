@@ -897,6 +897,27 @@ const Body = () => {
                         Logout
                       </span>
                     </div>
+                    <div
+                      className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] "
+                      onClick={() => {
+                        if (chatMessage.length > 0) {
+                          toast.success("Chats Deleted Successfully");
+                        } else {
+                          toast.error("No Chats to Delete");
+                        }
+                        checkChatlength();
+                        DeleteChatHistoryFromFirebase();
+
+                        getChatHistoryFromFirestore();
+                        AddFetchedChatHistoryToReactStore();
+                      }}
+                    >
+                      <BsChatSquareText className="text-white text-[18px]" />
+
+                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                        Delete Chats
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div
@@ -939,7 +960,7 @@ const Body = () => {
                                   </span>
                                 </div>
                               </span>
-                              <span className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-white ">
+                              <span className="group px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-white ">
                                 <div
                                   className="bg-[#1c1f37]  w-full flex p-[19px] border-l-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
                                   style={{ transition: ".3s" }}
@@ -948,7 +969,7 @@ const Body = () => {
                                     src={ai}
                                     className="w-[40px] h-[40px] rounded-sm bg-slate-500"
                                   ></img>
-                                  <pre className="w-[calc(100%-65px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap ">
+                                  <pre className="w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap ">
                                     {mssg.assistant.length === 0 ? (
                                       <>
                                         <div className="lds-facebook mt-[50px]">
@@ -968,6 +989,23 @@ const Body = () => {
                                       </>
                                     )}
                                   </pre>
+                                  <div
+                                    className="w-[30px] h-[40px]   rounded-sm opacity-0 flex justify-end items-center group-hover:opacity-100 transition-opacity duration-300"
+                                    // style={{ transition: ".3s" }}
+                                    onClick={() => {
+                                      // CopyToClipboard(index);
+                                      navigator.clipboard.writeText(
+                                        mssg.assistant.substr(
+                                          2,
+                                          mssg.assistant.length - 1
+                                        )
+                                      );
+                                      toast.success("Copied to Clipboard");
+                                      // deleteSingleChat(index);
+                                    }}
+                                  >
+                                    <HiOutlineClipboard className="text-[20px]" />
+                                  </div>
                                   <div ref={scrollToLast}></div>
                                 </div>
                               </span>
@@ -1030,6 +1068,7 @@ const Body = () => {
         </>
       ) : (
         <>
+          <Toaster position="bottom-center" reverseOrder={false} />
           <div
             className="w-full h-[100%] bg-[#f8fafc] flex "
             style={{ transition: ".5s" }}
@@ -1242,6 +1281,27 @@ const Body = () => {
                         Logout
                       </span>
                     </div>
+                    <div
+                      className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] "
+                      onClick={() => {
+                        if (chatMessage.length > 0) {
+                          toast.success("Chats Deleted Successfully");
+                        } else {
+                          toast.error("No Chats to Delete");
+                        }
+                        checkChatlength();
+                        DeleteChatHistoryFromFirebase();
+
+                        getChatHistoryFromFirestore();
+                        AddFetchedChatHistoryToReactStore();
+                      }}
+                    >
+                      <BsChatSquareText className="text-[#5841d9] text-[18px]" />
+
+                      <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                        Delete Chats
+                      </span>
+                    </div>
                     {/* <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start mt-[15px] items-center cursor-pointer ">
                       <BsLinkedin className="text-[#5841d9] text-[18px] drop-shadow-lg" />{" "}
                       <BsGithub className="text-[#5841d9] ml-[20px] text-[18px] drop-shadow-lg" />
@@ -1285,7 +1345,7 @@ const Body = () => {
                                   </span>
                                 </div>
                               </span>
-                              <span className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-black ">
+                              <span className="group px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-black ">
                                 <div
                                   className="bg-[white]  w-full flex p-[19px] border-l-[2px] border-[white] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
                                   style={{ transition: ".5s" }}
@@ -1295,7 +1355,7 @@ const Body = () => {
                                     src={ai}
                                     className="w-[40px] h-[40px] rounded-sm bg-slate-500"
                                   ></img>
-                                  <pre className="w-[calc(100%-65px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap drop-shadow-lg ">
+                                  <pre className="w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap drop-shadow-lg ">
                                     {mssg.assistant.length === 0 ? (
                                       <>
                                         <div className="lds-facebook mt-[50px]">
@@ -1315,6 +1375,23 @@ const Body = () => {
                                       </>
                                     )}
                                   </pre>
+                                  <div
+                                    className="w-[30px] h-[40px]   rounded-sm opacity-0 flex justify-end items-center group-hover:opacity-100 transition-opacity duration-300"
+                                    // style={{ transition: ".3s" }}
+                                    onClick={() => {
+                                      // CopyToClipboard(index);
+                                      navigator.clipboard.writeText(
+                                        mssg.assistant.substr(
+                                          2,
+                                          mssg.assistant.length - 1
+                                        )
+                                      );
+                                      toast.success("Copied to Clipboard");
+                                      // deleteSingleChat(index);
+                                    }}
+                                  >
+                                    <HiOutlineClipboard className="text-[20px]" />
+                                  </div>
                                   <div ref={scrollToLast}></div>
                                 </div>
                               </span>
@@ -1522,11 +1599,32 @@ const Body = () => {
                         Dark Mode
                       </span>
                     </div>
-                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer ">
+                    <div className="w-full h-[40px]    rounded-xl  px-[15px] flex justify-start items-center cursor-pointer ">
                       <FiLogOut className="text-[#5841d9] drop-shadow-lg text-[18px]" />
 
                       <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
                         Logout
+                      </span>
+                    </div>
+                    <div
+                      className="w-full h-[40px] text-black  rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] "
+                      onClick={() => {
+                        if (chatMessage.length > 0) {
+                          toast.success("Chats Deleted Successfully");
+                        } else {
+                          toast.error("No Chats to Delete");
+                        }
+                        checkChatlength();
+                        DeleteChatHistoryFromFirebase();
+
+                        getChatHistoryFromFirestore();
+                        AddFetchedChatHistoryToReactStore();
+                      }}
+                    >
+                      <BsChatSquareText className="text-[#5841d9] text-[18px]" />
+
+                      <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                        Delete Chats
                       </span>
                     </div>
                   </div>
@@ -1571,7 +1669,7 @@ const Body = () => {
                                   </span>
                                 </div>
                               </span>
-                              <span className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-black ">
+                              <span className="group px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-black ">
                                 <div
                                   className="bg-[white]  w-full flex p-[19px] border-l-[2px] border-[white] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
                                   style={{ transition: ".3s" }}
@@ -1580,7 +1678,7 @@ const Body = () => {
                                     src={ai}
                                     className="w-[40px] h-[40px] rounded-sm bg-slate-500"
                                   ></img>
-                                  <pre className="w-[calc(100%-65px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap  drop-shadow-lg">
+                                  <pre className="w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap  drop-shadow-lg">
                                     {mssg.assistant.length === 0 ? (
                                       <>
                                         <div className="lds-facebook mt-[50px]">
@@ -1600,6 +1698,23 @@ const Body = () => {
                                       </>
                                     )}
                                   </pre>
+                                  <div
+                                    className="w-[30px] h-[40px]   rounded-sm opacity-0 flex justify-end items-center group-hover:opacity-100 transition-opacity duration-300"
+                                    // style={{ transition: ".3s" }}
+                                    onClick={() => {
+                                      // CopyToClipboard(index);
+                                      navigator.clipboard.writeText(
+                                        mssg.assistant.substr(
+                                          2,
+                                          mssg.assistant.length - 1
+                                        )
+                                      );
+                                      toast.success("Copied to Clipboard");
+                                      // deleteSingleChat(index);
+                                    }}
+                                  >
+                                    <HiOutlineClipboard className="text-[20px]" />
+                                  </div>
                                   <div ref={scrollToLast}></div>
                                 </div>
                               </span>
