@@ -54,18 +54,18 @@ const Signup = () => {
     }
   }
 
-  // function createUserCollection(user) {
-  //   db.collection("users")
-  //     .doc(user.uid)
-  //     .set({
-  //       // id: user.uid,
-  //       // // name: user,
-  //       // email: user.email,
-  //       uid: [{ user: "Question", assistant: "Answer", id: 1 }],
-  //       // message: "smdvsdk",
-  //     });
-  //   console.log("done");
-  // }
+  function createUserCollection(user) {
+    db.collection("users")
+      .doc(user.uid)
+      .set({
+        // id: user.uid,
+        // // name: user,
+        // email: user.email,
+        uid: [{ user: "Question", assistant: "Answer", id: 1 }],
+        // message: "smdvsdk",
+      });
+    console.log("done");
+  }
 
   const signUp = (e) => {
     e.preventDefault();
@@ -76,12 +76,12 @@ const Signup = () => {
         console.log(userCredential);
         // toast.success("Sign Up Successful");
         // createUserCollection(userCredential.user);
-        // db.collection("users")
-        //   .doc(userCredential.user.uid)
-        //   .set({
-        //     email: userCredential.user.email,
-        //     chats: ["hello"],
-        //   });
+        // .db.collection("users")
+        // .doc(userCredential.user.uid)
+        // .set({
+        //   email: userCredential.user.email,
+        //   chats: ["hello"],
+        // });
       })
       .catch(
         (error) => {
@@ -260,6 +260,7 @@ const Signup = () => {
           className="walpaper w-full h-[100vh] bg-[white] flex justify-center items-center"
           style={{ transition: ".5s" }}
         >
+          <Toaster position="bottom-center" reverseOrder={false} />
           <div
             className="w-[300px]  rounded-lg lg:w-[350px] md:w-[350px] h-[70%] bg-[#f8fafc] text-black font-semibold font-[nunitosans] p-[30px] flex flex-col justify-center"
             style={{ transition: ".5s" }}

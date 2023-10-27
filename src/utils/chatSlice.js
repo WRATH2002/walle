@@ -37,14 +37,21 @@ const chatSlice = createSlice({
       //     "Lorem ipsume Lorem ipsume Lorem ipsume Lorem ipsume Lorem ipsume Lorem ipsume Lorem ipsume Lorem ipsume Lorem ipsume Lorem ipsume Lorem ipsume Lorem ipsume Lorem ipsume ",
       // },
     ],
+    chatSegment: [{ chatId: "hello" }],
     signingMode: 1,
     darkMode: 1,
   },
   reducers: {
+    addChatSegment: (state, action) => {
+      state.chatSegment.push(action.payload);
+      console.log(state.chatSegment);
+    },
+    clearChatSegment: (state, action) => {
+      state.chatSegment = [];
+    },
     addMessage: (state, action) => {
       state.messages.push(action.payload);
-      console.log("slice");
-      console.log(state.messages);
+      // console.log(state.messages);
     },
     addMessageNew: (state, action) => {
       state.messages = [];
@@ -77,11 +84,13 @@ const chatSlice = createSlice({
 });
 
 export const {
+  addChatSegment,
   addMessage,
   addMessageNew,
   addAnswer,
   toggleStateMode,
   toggleDarkMode,
+  clearChatSegment,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

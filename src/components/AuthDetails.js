@@ -7,6 +7,32 @@ import { toggleStateMode } from "../utils/chatSlice";
 import Login from "./auth/Login";
 import { useDispatch, useSelector } from "react-redux";
 import Signup from "./auth/Signup";
+import Loader from "./Loader";
+
+const Loading = (props) => {
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    // Creating a timeout within the useEffect hook
+    const timer = setTimeout(() => {
+      // setData("Welcome to gfg!");
+      setIsLoading(false);
+      return () => clearTimeout(timer);
+    }, 2500);
+  }, []);
+  return (
+    <>
+      {isLoading === true ? (
+        <>
+          <Loader />
+        </>
+      ) : (
+        <>
+          <Body />
+        </>
+      )}
+    </>
+  );
+};
 
 const AuthDetails = () => {
   const [authUser, setAuthUser] = useState(null);
@@ -34,7 +60,7 @@ const AuthDetails = () => {
     <>
       {authUser ? (
         <>
-          <Body />
+          <Loading />
         </>
       ) : (
         <>{mode === 1 ? <Login /> : <Signup />}</>

@@ -256,6 +256,7 @@ const Login = () => {
           className="walpaper w-full h-[100vh] bg-[white] flex justify-center items-center"
           style={{ transition: ".5s" }}
         >
+          <Toaster position="bottom-center" reverseOrder={false} />
           <div
             className="w-[300px] lg:w-[350px] md:w-[350px] h-[70%] rounded-lg drop-shadow-sm bg-[#f8fafc] text-black font-semibold font-[nunitosans] p-[30px] flex flex-col justify-center"
             style={{ transition: ".5s" }}

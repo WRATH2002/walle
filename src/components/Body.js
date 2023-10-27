@@ -13,6 +13,13 @@ import { BsGithub } from "react-icons/bs";
 import { HiOutlineClipboard } from "react-icons/hi2";
 import { BsChatSquareText } from "react-icons/bs";
 import { BsLinkedin } from "react-icons/bs";
+import { MdDelete } from "react-icons/md";
+import { RxCross2 } from "react-icons/rx";
+
+//
+import { PiChatCenteredThin } from "react-icons/pi";
+import { HiOutlineChatBubbleBottomCenter } from "react-icons/hi2";
+
 // -------------------------------------------------------Logo Import-----
 import ai from "../assets/img/gpt.jpg";
 import logo from "../assets/img/logo.png";
@@ -34,7 +41,13 @@ import thirteen from "../assets/img/13.jpg";
 import { messageges } from "../utils/constants";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addMessage, addAnswer, addMessageNew } from "../utils/chatSlice";
+import {
+  addMessage,
+  addAnswer,
+  addMessageNew,
+  addChatSegment,
+  clearChatSegment,
+} from "../utils/chatSlice";
 import { sendMessageToOpenAI } from "./Openai";
 import SpeechRecognition, {
   useSpeechRecognition,
@@ -167,7 +180,11 @@ const Body = () => {
     const user = firebase.auth().currentUser;
     // console.log(user);
     if (user) {
-      const userDoc = db.collection("users").doc(user.uid);
+      const userDoc = db
+        .collection("users")
+        .doc(user.uid)
+        .collection("Chat Segment")
+        .doc(toggleCreateNewChatInput);
       const unsubscribe = userDoc.onSnapshot((doc) => {
         if (doc.exists) {
           // console.log("doc");
@@ -210,20 +227,30 @@ const Body = () => {
     if (chatMessage.length != 0) {
       const user = firebase.auth().currentUser;
       if (user) {
-        const userDoc = db.collection("users").doc(user.uid);
+        const userDoc = db
+          .collection("users")
+          .doc(user.uid)
+          .collection("Chat Segment")
+          .doc(toggleCreateNewChatInput);
+
+        console.log("userDoc");
+        console.log(userDoc);
         userDoc.get().then((doc) => {
           if (doc.exists) {
             console.log("Document available");
           } else {
-            db.collection("users")
-              .doc(user.uid)
-              .set({
-                uid: [{ user: "Question", assistant: "Answer", id: 1 }],
-              });
+            // db.collection("users")
+            //   .doc(user.uid)
+            //   .collection("Chat Segment")
+            //   .doc("test 1")
+            //   .set({
+            //     uid: [{ user: "Question", assistant: "Answer", id: 1 }],
+            //   });
             // doc.data() will be undefined in this case
             console.log("No such document");
           }
         });
+
         userDoc.update({
           uid: firebase.firestore.FieldValue.arrayUnion({
             user: chatMessage[chatMessage.length - 1].user,
@@ -231,23 +258,47 @@ const Body = () => {
             id: chatMessage[chatMessage.length - 1].id,
           }),
         });
-        // function createUserCollection(user) {
-        // db.collection("users")
-        //   .doc(user.uid)
-        //   .set({
-        //     // id: user.uid,
-        //     // // name: user,
-        //     // email: user.email,
-        //     uid: [{ user: "Question", assistant: "Answer", id: 1 }],
-        //     // message: "smdvsdk",
-        //   });
-        // console.log("done");
-        // }
       }
     }
   }
+
+  function fetchChatSegment() {
+    const user = firebase.auth().currentUser;
+    const userRef = db
+      .collection("users")
+      .doc(user.uid)
+      .collection("Chat Segment");
+    userRef.get().then((snapshot) => {
+      console.log(snapshot);
+      dispatch(clearChatSegment());
+      snapshot.forEach((doc) => {
+        console.log(doc.id);
+        // setChatSegmentName(doc.id);
+
+        dispatch(addChatSegment({ chatId: doc.id }));
+      });
+    });
+    console.log(chatSegmentName);
+  }
+  const [toggleCreateNewChat, setToggleCreateNewChat] = useState(false);
+  const [toggleCreateNewChatInput, setToggleCreateNewChatInput] =
+    useState("agf");
+
+  useEffect(() => {
+    fetchChatSegment();
+  }, []);
+
+  useEffect(() => {
+    getChatHistoryFromFirestore();
+    AddFetchedChatHistoryToReactStore();
+  }, [toggleCreateNewChatInput]);
+
+  const [chatSegmentName, setChatSegmentName] = useState([]);
+  const temp = useSelector((store) => store.chat.chatSegment);
   // -------------------------------------------------------
   function DeleteChatHistoryFromFirebase() {
+    console.log("temp");
+    console.log(temp);
     const user = firebase.auth().currentUser;
     // const userDoc = db.collection("users").doc(user.uid);
     // userDoc.onSnapshot((doc) => {
@@ -264,6 +315,8 @@ const Body = () => {
     if (user) {
       db.collection("users")
         .doc(user.uid)
+        .collection("Chat Segment")
+        .doc(toggleCreateNewChatInput)
         .set({
           uid: [{ user: "Question", assistant: "Answer", id: 1 }],
         });
@@ -334,8 +387,8 @@ const Body = () => {
     } else {
       dispatch(addMessage({ user: input, id: id, assistant: tempInput }));
     }
-    const res = await sendMessageToOpenAI(input);
-    // const res = "Hello world my name is himadri purkait";
+    // const res = await sendMessageToOpenAI(input);
+    const res = "Hello world my name is himadri purkait";
     console.log(res);
     setResult(res);
     setTempResult(res);
@@ -378,6 +431,114 @@ const Body = () => {
     // alert("Copied the text: " + copyText.value);
   }
 
+  function createNewFirestoreChatDocument() {
+    const user = firebase.auth().currentUser;
+    const useRef = db
+      .collection("users")
+      .doc(user.uid)
+      .collection("Chat Segment")
+      .doc(toggleCreateNewChatInput);
+
+    useRef.get().then((doc) => {
+      if (doc.exists) {
+        toast.error("Same Already Exists");
+        console.log("already created");
+      } else {
+        toast.success("Created Succesfully");
+        console.log("Not Created");
+        db.collection("users")
+          .doc(user.uid)
+          .collection("Chat Segment")
+          .doc(toggleCreateNewChatInput)
+          .set({
+            uid: [
+              {
+                user: "New Chat Question",
+                assistant: "New Chat Answer",
+                id: 1,
+              },
+            ],
+          });
+
+        const userDoc = db
+          .collection("users")
+          .doc(user.uid)
+          .collection("Chat Segment");
+        console.log(userDoc);
+        userDoc.get().then((doc) => {
+          if (doc.exists) {
+            console.log(doc);
+          }
+        });
+      }
+    });
+
+    // if (user) {
+    //   const userDoc = db.collection("users").doc(user.uid);
+    //   userDoc.get().then((doc) => {
+    //     if (doc.exists) {
+    //       console.log("Document available");
+    //     } else {
+
+    //       // doc.data() will be undefined in this case
+    //       console.log("No such document");
+    //     }
+    //   });
+    //   userDoc.update({
+    //     uid: firebase.firestore.FieldValue.arrayUnion({
+    //       user: chatMessage[chatMessage.length - 1].user,
+    //       assistant: chatMessage[chatMessage.length - 1].assistant,
+    //       id: chatMessage[chatMessage.length - 1].id,
+    //     }),
+    //   });
+    // }
+  }
+
+  function deleteSegment(segmentId) {
+    toast.success("Deleted Successfully");
+    const user = firebase.auth().currentUser;
+    const useRef = db
+      .collection("users")
+      .doc(user.uid)
+      .collection("Chat Segment")
+      .doc(segmentId);
+    useRef.delete();
+  }
+
+  function deleteSpecificChat(SingleChatId) {
+    const id = SingleChatId;
+    const user = firebase.auth().currentUser;
+    if (user) {
+      const userDoc = db
+        .collection("users")
+        .doc(user.uid)
+        .collection("Chat Segment")
+        .doc(toggleCreateNewChatInput);
+
+      userDoc.get().then((doc) => {
+        const tel = doc.data().uid;
+        console.log("tel");
+        console.log(tel);
+        const ff = tel.filter((del, index) => del.id !== id);
+        console.log("ff");
+        console.log(ff);
+        if (chatMessage.length != 0) {
+          const user = firebase.auth().currentUser;
+          if (user) {
+            const userDoc = db
+              .collection("users")
+              .doc(user.uid)
+              .collection("Chat Segment")
+              .doc(toggleCreateNewChatInput)
+              .set({
+                uid: ff,
+              });
+          }
+        }
+      });
+    }
+  }
+
   return (
     <>
       {toggleMode === 2 ? (
@@ -397,11 +558,44 @@ const Body = () => {
                     className="w-full h-[70px]   p-[10px] flex justify-center items-center "
                     style={{ transition: ".5s" }}
                   >
-                    <div className="w-[calc(100%-60px)] mr-[10px] h-full   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer">
-                      <BiPlus className="text-white text-[20px]" />
-                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] ">
-                        New Chat
-                      </span>
+                    <div className="w-[calc(100%-60px)] mr-[10px] h-full   rounded-xl  flex justify-start items-center cursor-pointer">
+                      {toggleCreateNewChat === false ? (
+                        <>
+                          <BiPlus className="  mx-[15px] text-white text-[20px]" />
+                          <span
+                            className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] "
+                            onClick={() => {
+                              setToggleCreateNewChat(!toggleCreateNewChat);
+                            }}
+                          >
+                            New Chat
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <input
+                            onClick={() =>
+                              setToggleCreateNewChat(!toggleCreateNewChat)
+                            }
+                            value={toggleCreateNewChatInput}
+                            onChange={(e) =>
+                              setToggleCreateNewChatInput(e.target.value)
+                            }
+                            className="ml-[15px] w-full text-[white] bg-[#1c1f37] rounded-lg h-[50px] overflow-hidden whitespace-nowrap font-[nunitosans] outline-none px-[15px]"
+                            autoFocus
+                          ></input>
+                          <div className="w-[30px] flex justify-center items-center ml-[-30px] h-[50px]">
+                            <RxCross2
+                              className="text-white  text-[20px] bg-[#1c1f37] "
+                              onClick={() => {
+                                // setToggleCreateNewChat(!toggleCreateNewChat);
+                                fetchChatSegment();
+                                createNewFirestoreChatDocument();
+                              }}
+                            />
+                          </div>
+                        </>
+                      )}
                     </div>
                     <div
                       className="w-[50px] h-full  rounded-xl  flex justify-center items-center cursor-pointer "
@@ -502,6 +696,99 @@ const Body = () => {
                       ></div>
                     </>
                   )} */}
+                  <div className="w-[calc(100%-20px)] px-[15px] h-[calc(100vh-270px)] py-[10px] overflow-y-scroll text-[white]">
+                    {temp.map((segment) => {
+                      return (
+                        <>
+                          {segment.chatId === toggleCreateNewChatInput ? (
+                            <>
+                              <div className="group w-full flex justify-center items-center my-[15px]">
+                                <div
+                                  className="px-[15px] rounded-lg cursor-pointer  bg-[#5841d9]  whitespace-nowrap w-full h-[50px]  flex justify-start items-center"
+                                  style={{ transition: ".3s" }}
+                                >
+                                  {segment.chatId}
+                                </div>
+                                <div
+                                  className="ml-[-30px] h-[30px]  flex justify-center items-center w-[30px] opacity-100 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer text-white hover:text-[#8976f2]"
+                                  onClick={() => {
+                                    deleteSegment(segment.chatId);
+                                    fetchChatSegment();
+                                    // setToggleCreateNewChatInput(temp[0].chatId);
+                                    // getChatHistoryFromFirestore();
+                                    // AddFetchedChatHistoryToReactStore();
+                                  }}
+                                >
+                                  <MdDelete className="text-[20px]  " />
+                                </div>
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <div className="group w-full flex justify-center items-center my-[15px]">
+                                <div
+                                  className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2]  whitespace-nowrap w-[100%] h-[50px] flex justify-start items-center"
+                                  style={{ transition: ".3s" }}
+                                  onClick={() => {
+                                    fetchChatSegment();
+                                    setToggleCreateNewChatInput(segment.chatId);
+                                    setChatHistory([]);
+                                    getChatHistoryFromFirestore();
+                                    AddFetchedChatHistoryToReactStore();
+                                  }}
+                                >
+                                  {segment.chatId}
+                                </div>
+                                <div
+                                  className="ml-[-30px] h-[30px]  flex justify-center items-center w-[30px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer text-white hover:text-[#8976f2]"
+                                  onClick={() => {
+                                    deleteSegment(segment.chatId);
+                                    fetchChatSegment();
+                                  }}
+                                >
+                                  <MdDelete className="text-[20px]  " />
+                                </div>
+                              </div>
+                            </>
+                          )}
+                        </>
+                      );
+                    })}
+                    {/* <div
+                      className="px-[15px] rounded-lg cursor-pointer  bg-[#5841d9] hover:bg-[#8976f2]  whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center"
+                      style={{ transition: ".3s" }}
+                    >
+                      Chat Gpt how to make fivh
+                    </div>
+                    <div
+                      className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center"
+                      style={{ transition: ".3s" }}
+                    >
+                      Best movies of all tie
+                    </div>
+                    <div
+                      className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center"
+                      style={{ transition: ".3s" }}
+                    >
+                      Who is the god
+                    </div>
+                    <div
+                      className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center"
+                      style={{ transition: ".3s" }}
+                    >
+                      Best multiplayer game
+                    </div>
+                    <div
+                      className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center"
+                      style={{ transition: ".3s" }}
+                    >
+                      Tets 2
+                    </div>
+                    <div
+                      className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center"
+                      style={{ transition: ".3s" }}
+                    ></div> */}
+                  </div>
                   <div
                     className="w-[calc(100%-20px)] h-[200px]  mx-[10px] py-[10px] flex flex-col justify-center items-center  border-t-[2px] border-[#32365b]"
                     style={{ transition: ".5s" }}
@@ -615,138 +902,207 @@ const Body = () => {
                       WALLE
                     </span>
                   </div>
-                  <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
-                    <div className="w-full h-[calc(100%-80px)]  mb-[20px] overflow-y-scroll">
-                      {chatMessage.map((mssg, index) => {
-                        return (
-                          <>
-                            <div className="w-full flex flex-col ">
-                              <span
-                                className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-white "
-                                style={{ transition: ".5s" }}
-                              >
-                                <div className="  w-full flex p-[20px] border-[1px] border-[#32365b]  rounded-lg">
-                                  <div className="w-[40px] h-[40px] rounded-sm bg-slate-500">
-                                    <img
-                                      src={selectAvatar}
-                                      className="rounded-sm"
-                                      loading="lazy"
-                                    ></img>
-                                  </div>
-                                  <span className="w-[calc(100%-65px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] ">
-                                    {mssg.user}
-                                  </span>
-                                </div>
-                              </span>
-                              <span
-                                className="group px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-white "
-                                // style={{ transition: ".5s" }}
-                              >
-                                <div
-                                  className="bg-[#1c1f37]  w-full flex p-[19px] border-l-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
-                                  style={{ transition: ".5s" }}
-                                >
-                                  <img
-                                    src={ai}
-                                    className="w-[40px] h-[40px] rounded-sm bg-slate-500"
-                                  ></img>
-                                  <pre
-                                    className="w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap "
-                                    // style={{ transition: ".5s" }}
-                                  >
-                                    {mssg.assistant.length === 0 ? (
-                                      <>
-                                        <div className="lds-facebook mt-[50px]">
-                                          <div></div>
-                                          <div></div>
-                                          <div></div>
-                                        </div>
-                                      </>
-                                    ) : (
-                                      <>
-                                        <span id={index} className="">
-                                          {mssg.assistant.substr(
-                                            2,
-                                            mssg.assistant.length - 1
-                                          )}
-                                        </span>
-                                      </>
-                                    )}
-                                  </pre>
-                                  <div
-                                    className="w-[30px] h-[40px]   rounded-sm opacity-0 flex justify-end items-center group-hover:opacity-100 transition-opacity duration-300"
-                                    // style={{ transition: ".3s" }}
-                                    onClick={() => {
-                                      // CopyToClipboard(index);
-                                      navigator.clipboard.writeText(
-                                        mssg.assistant.substr(
-                                          2,
-                                          mssg.assistant.length - 1
-                                        )
-                                      );
-                                      toast.success("Copied to Clipboard");
-                                      // deleteSingleChat(index);
-                                    }}
-                                  >
-                                    <HiOutlineClipboard className="text-[20px]" />
-                                  </div>
-                                  <div ref={scrollToLast}></div>
-                                </div>
-                              </span>
-                            </div>
-                          </>
-                        );
-                      })}
-                    </div>
-                    <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
-                      <button
-                        className="outline-none  h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
-                        style={{ zIndex: "3" }}
-                        onClick={SpeechRecognition.startListening}
-                      >
-                        {listening == true ? (
-                          <>
-                            <BiSolidMicrophone className="text-[#8976f2]" />
-                          </>
-                        ) : (
-                          <>
-                            <BiSolidMicrophone
-                              className="text-[white] hover:text-[#5841d9]"
-                              style={{ transition: ".3s" }}
-                            />
-                          </>
-                        )}
-                      </button>
-                      <input
-                        placeholder="Ask Anything"
-                        className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
-                        style={{ transition: ".5s" }}
-                        value={input}
-                        onKeyDown={(e) => {
-                          // console.log(e);
-                          if (e.nativeEvent.key === "Enter") {
-                            // console.log("enter");
+                  {/* <div className="text-white">Hello World</div>
+                   */}
+                  {chatMessage.length === 0 ? (
+                    // <div>No message</div>
+                    // <PiChatCenteredThin className="text-white text-[100px]" />
+                    <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
+                      <div className="w-full h-[calc(100%-80px)] flex justify-center items-center  mb-[20px] overflow-y-scroll">
+                        <img src={logo} className="h-[300px] opacity-5"></img>
+                      </div>
+                      <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
+                        <button
+                          className="outline-none  h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
+                          style={{ zIndex: "3" }}
+                          onClick={SpeechRecognition.startListening}
+                        >
+                          {listening == true ? (
+                            <>
+                              <BiSolidMicrophone className="text-[#8976f2]" />
+                            </>
+                          ) : (
+                            <>
+                              <BiSolidMicrophone
+                                className="text-[white] hover:text-[#5841d9]"
+                                style={{ transition: ".3s" }}
+                              />
+                            </>
+                          )}
+                        </button>
+                        <input
+                          placeholder="Ask Anything"
+                          className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                          style={{ transition: ".5s" }}
+                          value={input}
+                          onKeyDown={(e) => {
+                            // console.log(e);
+                            if (e.nativeEvent.key === "Enter") {
+                              // console.log("enter");
+                              handleSend();
+                              setInput("");
+                            }
+                          }}
+                          onChange={(e) => setInput(e.target.value)}
+                        ></input>
+
+                        <div
+                          className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg"
+                          onClick={() => {
                             handleSend();
                             setInput("");
-                          }
-                        }}
-                        onChange={(e) => setInput(e.target.value)}
-                      ></input>
-
-                      <div
-                        className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg"
-                        onClick={() => {
-                          handleSend();
-                          setInput("");
-                        }}
-                      >
-                        <IoMdSend
-                          className="text-[#5841d9] hover:text-[#8976f2]"
-                          style={{ transition: ".3s" }}
-                        />
+                          }}
+                        >
+                          <IoMdSend
+                            className="text-[white] hover:text-[#8976f2]"
+                            style={{ transition: ".3s" }}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
+                      <div className="w-full h-[calc(100%-80px)]  mb-[20px] overflow-y-scroll">
+                        {chatMessage.map((mssg, index) => {
+                          return (
+                            <>
+                              <div className="w-full flex flex-col ">
+                                <span
+                                  className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-white "
+                                  style={{ transition: ".5s" }}
+                                >
+                                  <div className="group  w-full flex p-[20px] border-[1px] border-[#32365b]  rounded-lg">
+                                    <div className="w-[40px] h-[40px] rounded-sm bg-slate-500">
+                                      <img
+                                        src={selectAvatar}
+                                        className="rounded-sm"
+                                        loading="lazy"
+                                      ></img>
+                                    </div>
+                                    <span className="w-[calc(100%-65px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] ">
+                                      {mssg.user}
+                                    </span>
+                                    <div
+                                      className="w-[30px] h-[40px]   rounded-sm opacity-0 flex justify-end items-center group-hover:opacity-100 transition-opacity duration-300 cursor-pointer"
+                                      onClick={() => {
+                                        deleteSpecificChat(mssg.id);
+                                        toast.success("Chat Deleted");
+                                      }}
+                                    >
+                                      <MdDelete className="text-[20px]" />
+                                    </div>
+                                  </div>
+                                </span>
+                                <span
+                                  className="group px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-white "
+                                  // style={{ transition: ".5s" }}
+                                >
+                                  <div
+                                    className="bg-[#1c1f37]  w-full flex p-[19px] border-l-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
+                                    style={{ transition: ".5s" }}
+                                  >
+                                    <img
+                                      src={ai}
+                                      className="w-[40px] h-[40px] rounded-sm bg-slate-500"
+                                    ></img>
+                                    <pre
+                                      className="w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap "
+                                      // style={{ transition: ".5s" }}
+                                    >
+                                      {mssg.assistant.length === 0 ? (
+                                        <>
+                                          <div className="lds-facebook mt-[50px]">
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                          </div>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <span id={index} className="">
+                                            {mssg.assistant.substr(
+                                              2,
+                                              mssg.assistant.length - 1
+                                            )}
+                                          </span>
+                                        </>
+                                      )}
+                                    </pre>
+                                    <div
+                                      className="w-[30px] h-[40px]   rounded-sm opacity-0 flex justify-end items-center group-hover:opacity-100 transition-opacity duration-300 cursor-pointer"
+                                      // style={{ transition: ".3s" }}
+                                      onClick={() => {
+                                        // CopyToClipboard(index);
+                                        navigator.clipboard.writeText(
+                                          mssg.assistant.substr(
+                                            2,
+                                            mssg.assistant.length - 1
+                                          )
+                                        );
+                                        toast.success("Copied to Clipboard");
+                                        // deleteSingleChat(index);
+                                      }}
+                                    >
+                                      <HiOutlineClipboard className="text-[20px]" />
+                                    </div>
+                                    <div ref={scrollToLast}></div>
+                                  </div>
+                                </span>
+                              </div>
+                            </>
+                          );
+                        })}
+                      </div>
+                      <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
+                        <button
+                          className="outline-none  h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
+                          style={{ zIndex: "3" }}
+                          onClick={SpeechRecognition.startListening}
+                        >
+                          {listening == true ? (
+                            <>
+                              <BiSolidMicrophone className="text-[#8976f2]" />
+                            </>
+                          ) : (
+                            <>
+                              <BiSolidMicrophone
+                                className="text-[white] hover:text-[#5841d9]"
+                                style={{ transition: ".3s" }}
+                              />
+                            </>
+                          )}
+                        </button>
+                        <input
+                          placeholder="Ask Anything"
+                          className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                          style={{ transition: ".5s" }}
+                          value={input}
+                          onKeyDown={(e) => {
+                            // console.log(e);
+                            if (e.nativeEvent.key === "Enter") {
+                              // console.log("enter");
+                              handleSend();
+                              setInput("");
+                            }
+                          }}
+                          onChange={(e) => setInput(e.target.value)}
+                        ></input>
+
+                        <div
+                          className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg"
+                          onClick={() => {
+                            handleSend();
+                            setInput("");
+                          }}
+                        >
+                          <IoMdSend
+                            className="text-[white]] hover:text-[#8976f2]"
+                            style={{ transition: ".3s" }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </>
             ) : (
@@ -759,7 +1115,7 @@ const Body = () => {
                     className="w-full h-[70px]   p-[10px] flex justify-center items-center "
                     style={{ transition: ".5s" }}
                   >
-                    <div className="w-[calc(100%-60px)] mr-[10px] h-full   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer">
+                    <div className="w-[calc(100%)] mr-[10px] h-full   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer">
                       <BiPlus className="text-white text-[20px]" />
                       <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] ">
                         New Chat
@@ -771,6 +1127,24 @@ const Body = () => {
                     >
                       <FiSidebar className="text-white text-[18px]" />
                     </div>
+                  </div>
+                  <div className="w-[calc(100%-20px)] h-[calc(100vh-270px)] py-[10px] overflow-y-scroll text-[white]">
+                    <div className="px-[15px] rounded-lg cursor-pointer  bg-[#5841d9] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center">
+                      Chat Gpt how to make
+                    </div>
+                    <div className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center">
+                      Best movies of all tie
+                    </div>
+                    <div className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center">
+                      Who is the god
+                    </div>
+                    <div className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center">
+                      Best multiplayer game
+                    </div>
+                    <div className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center">
+                      Tets 2
+                    </div>
+                    <div className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center"></div>
                   </div>
                   {/* <div
                     onClick={() => setAvatar(!avatar)}
@@ -865,8 +1239,8 @@ const Body = () => {
                     </>
                   )} */}
                   <div className="w-[calc(100%-20px)] h-[200px]  mx-[10px] py-[10px] flex flex-col justify-center items-center  border-t-[2px] border-[#32365b]">
-                    <div className="w-full  h-[40px] mb-[10px]  rounded-xl  px-[4px] flex justify-start items-center cursor-pointer ">
-                      {/* <img
+                    {/* <div className="w-full  h-[40px] mb-[10px]  rounded-xl  px-[4px] flex justify-start items-center cursor-pointer ">
+                      <img
                         src={selectAvatar}
                         className="rounded-full h-full"
                         loading="lazy"
@@ -874,8 +1248,8 @@ const Body = () => {
 
                       <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] ">
                         Himadri Purkait
-                      </span> */}
-                    </div>
+                      </span>
+                    </div> */}
                     <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] ">
                       <IoSettingsOutline className="text-white text-[18px]" />
 
