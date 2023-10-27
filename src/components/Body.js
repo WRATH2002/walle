@@ -493,9 +493,21 @@ const Body = () => {
     //   });
     // }
   }
-
+  const [h, setH] = useState(false);
+  function success() {
+    console.log("temp");
+    return true;
+  }
   function deleteSegment(segmentId) {
     toast.success("Deleted Successfully");
+    //     toast.promise(
+    //       success,
+    //    {
+    //      loading: 'Saving...',
+    //      success: "Settings saved!",
+    //      error: "Could not save",
+    //    }
+    //  );
     const user = firebase.auth().currentUser;
     const useRef = db
       .collection("users")
@@ -561,36 +573,43 @@ const Body = () => {
                     <div className="w-[calc(100%-60px)] mr-[10px] h-full   rounded-xl  flex justify-start items-center cursor-pointer">
                       {toggleCreateNewChat === false ? (
                         <>
-                          <BiPlus className="  mx-[15px] text-white text-[20px]" />
-                          <span
-                            className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] "
+                          <div
+                            className="w-full flex justify-start items-center"
                             onClick={() => {
                               setToggleCreateNewChat(!toggleCreateNewChat);
                             }}
                           >
-                            New Chat
-                          </span>
+                            <BiPlus className="  mx-[15px] text-white text-[20px]" />
+                            <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] ">
+                              New Chat
+                            </span>
+                          </div>
                         </>
                       ) : (
                         <>
                           <input
-                            onClick={() =>
-                              setToggleCreateNewChat(!toggleCreateNewChat)
-                            }
+                            // onClick={() =>
+                            //   setToggleCreateNewChat(!toggleCreateNewChat)
+                            // }
                             value={toggleCreateNewChatInput}
                             onChange={(e) =>
                               setToggleCreateNewChatInput(e.target.value)
                             }
-                            className="ml-[15px] w-full text-[white] bg-[#1c1f37] rounded-lg h-[50px] overflow-hidden whitespace-nowrap font-[nunitosans] outline-none px-[15px]"
+                            onKeyDown={(e) => {
+                              if (e.nativeEvent.key === "Enter") {
+                                console.log("Enter");
+                                fetchChatSegment();
+                                createNewFirestoreChatDocument();
+                              }
+                            }}
+                            className="ml-[15px] w-full text-[white] bg-[#1c1f37] rounded-lg h-[50px] overflow-hidden whitespace-nowrap font-[nunitosans] outline-none px-[15px] pr-[35px]"
                             autoFocus
                           ></input>
                           <div className="w-[30px] flex justify-center items-center ml-[-30px] h-[50px]">
                             <RxCross2
                               className="text-white  text-[20px] bg-[#1c1f37] "
                               onClick={() => {
-                                // setToggleCreateNewChat(!toggleCreateNewChat);
-                                fetchChatSegment();
-                                createNewFirestoreChatDocument();
+                                setToggleCreateNewChat(!toggleCreateNewChat);
                               }}
                             />
                           </div>
@@ -604,98 +623,7 @@ const Body = () => {
                       <FiSidebar className="text-white text-[18px]" />
                     </div>
                   </div>
-                  {/* <div
-                    onClick={() => setAvatar(!avatar)}
-                    className="text-white cursor-pointer font-[nunitosans] "
-                  >
-                    Select Avatar
-                  </div>
-                  {avatar === true ? (
-                    <>
-                      <div
-                        className="w-full py-[10px]  flex flex-wrap justify-center"
-                        style={{ transition: ".5s" }}
-                      >
-                        {IMG_ID.map((imgid) => {
-                          return (
-                            <>
-                              {selectAvatar === undefined ? (
-                                <>
-                                  <div
-                                    className="w-[50px] h-[50px]  m-[5px] rounded-full cursor-pointer border[5px] border-white"
-                                    onClick={() => {
-                                      if (selectAvatar === imgid.id) {
-                                        setSelectAvatar();
-                                      } else {
-                                        setSelectAvatar(imgid.id);
-                                      }
-                                    }}
-                                  >
-                                    <img
-                                      loading="lazy"
-                                      src={imgid.id}
-                                      className=" rounded-lg border[2px] border-white "
-                                      style={{ transition: ".5s" }}
-                                    ></img>
-                                  
-                                  </div>
-                                </>
-                              ) : selectAvatar === imgid.id ? (
-                                <>
-                                  <div
-                                    className="w-[50px] h-[50px]  m-[5px] rounded-full cursor-pointer border[5px] border-white"
-                                    onClick={() => {
-                                      if (selectAvatar === imgid.id) {
-                                        setSelectAvatar();
-                                      } else {
-                                        setSelectAvatar(imgid.id);
-                                      }
-                                    }}
-                                  >
-                                    <img
-                                      loading="lazy"
-                                      src={imgid.id}
-                                      className=" rounded-lg border[2px] border-white "
-                                      style={{ transition: ".5s" }}
-                                    ></img>
-                                    
-                                  </div>
-                                </>
-                              ) : (
-                                <>
-                                  <div
-                                    className="w-[50px] h-[50px]  m-[5px] rounded-full cursor-pointer border[5px] border-white"
-                                    onClick={() => {
-                                      if (selectAvatar === imgid.id) {
-                                        setSelectAvatar();
-                                      } else {
-                                        setSelectAvatar(imgid.id);
-                                      }
-                                    }}
-                                  >
-                                    <img
-                                      loading="lazy"
-                                      src={imgid.id}
-                                      className=" rounded-lg border[2px] border-white opacity-[.3] hover:opacity-100"
-                                      style={{ transition: ".5s" }}
-                                    ></img>
-                                   
-                                  </div>
-                                </>
-                              )}
-                            </>
-                          );
-                        })}
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div
-                        className="w-full h-[0] "
-                        style={{ transition: ".5s" }}
-                      ></div>
-                    </>
-                  )} */}
+                  {/* ------------------------------- Chat Segment ------------------------------- */}
                   <div className="w-[calc(100%-20px)] px-[15px] h-[calc(100vh-270px)] py-[10px] overflow-y-scroll text-[white]">
                     {temp.map((segment) => {
                       return (
@@ -754,41 +682,8 @@ const Body = () => {
                         </>
                       );
                     })}
-                    {/* <div
-                      className="px-[15px] rounded-lg cursor-pointer  bg-[#5841d9] hover:bg-[#8976f2]  whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center"
-                      style={{ transition: ".3s" }}
-                    >
-                      Chat Gpt how to make fivh
-                    </div>
-                    <div
-                      className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center"
-                      style={{ transition: ".3s" }}
-                    >
-                      Best movies of all tie
-                    </div>
-                    <div
-                      className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center"
-                      style={{ transition: ".3s" }}
-                    >
-                      Who is the god
-                    </div>
-                    <div
-                      className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center"
-                      style={{ transition: ".3s" }}
-                    >
-                      Best multiplayer game
-                    </div>
-                    <div
-                      className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center"
-                      style={{ transition: ".3s" }}
-                    >
-                      Tets 2
-                    </div>
-                    <div
-                      className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center"
-                      style={{ transition: ".3s" }}
-                    ></div> */}
                   </div>
+                  {/* ------------------------------- Bottom Part ------------------------------- */}
                   <div
                     className="w-[calc(100%-20px)] h-[200px]  mx-[10px] py-[10px] flex flex-col justify-center items-center  border-t-[2px] border-[#32365b]"
                     style={{ transition: ".5s" }}
@@ -905,61 +800,104 @@ const Body = () => {
                   {/* <div className="text-white">Hello World</div>
                    */}
                   {chatMessage.length === 0 ? (
-                    // <div>No message</div>
-                    // <PiChatCenteredThin className="text-white text-[100px]" />
-                    <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
-                      <div className="w-full h-[calc(100%-80px)] flex justify-center items-center  mb-[20px] overflow-y-scroll">
-                        <img src={logo} className="h-[300px] opacity-5"></img>
-                      </div>
-                      <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
-                        <button
-                          className="outline-none  h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
-                          style={{ zIndex: "3" }}
-                          onClick={SpeechRecognition.startListening}
-                        >
-                          {listening == true ? (
-                            <>
-                              <BiSolidMicrophone className="text-[#8976f2]" />
-                            </>
-                          ) : (
-                            <>
-                              <BiSolidMicrophone
-                                className="text-[white] hover:text-[#5841d9]"
-                                style={{ transition: ".3s" }}
-                              />
-                            </>
-                          )}
-                        </button>
-                        <input
-                          placeholder="Ask Anything"
-                          className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
-                          style={{ transition: ".5s" }}
-                          value={input}
-                          onKeyDown={(e) => {
-                            // console.log(e);
-                            if (e.nativeEvent.key === "Enter") {
-                              // console.log("enter");
-                              handleSend();
-                              setInput("");
-                            }
-                          }}
-                          onChange={(e) => setInput(e.target.value)}
-                        ></input>
+                    <>
+                      {temp.length === 0 ? (
+                        <>
+                          <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
+                            <div className="w-full h-[calc(100%-80px)] flex justify-center items-center  mb-[20px] overflow-y-scroll">
+                              <img
+                                src={logo}
+                                className="h-[300px] opacity-5"
+                              ></img>
+                            </div>
+                            <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
+                              <button
+                                className="outline-none  h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
+                                style={{ zIndex: "3" }}
+                                onClick={SpeechRecognition.startListening}
+                              >
+                                <BiSolidMicrophone
+                                  className="text-[white] "
+                                  style={{ transition: ".3s" }}
+                                />
+                              </button>
+                              <input
+                                placeholder="Create New Chat Segment First"
+                                className="placeholder:text-orange-400 w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                                style={{ transition: ".5s" }}
+                                value={""}
+                              ></input>
 
-                        <div
-                          className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg"
-                          onClick={() => {
-                            handleSend();
-                            setInput("");
-                          }}
-                        >
-                          <IoMdSend
-                            className="text-[white] hover:text-[#8976f2]"
-                            style={{ transition: ".3s" }}
-                          />
-                        </div>
-                      </div>
-                    </div>
+                              <div className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg">
+                                <IoMdSend
+                                  className="text-[white] "
+                                  style={{ transition: ".3s" }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
+                            <div className="w-full h-[calc(100%-80px)] flex justify-center items-center  mb-[20px] overflow-y-scroll">
+                              <img
+                                src={logo}
+                                className="h-[300px] opacity-5"
+                              ></img>
+                            </div>
+                            <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
+                              <button
+                                className="outline-none  h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
+                                style={{ zIndex: "3" }}
+                                onClick={SpeechRecognition.startListening}
+                              >
+                                {listening == true ? (
+                                  <>
+                                    <BiSolidMicrophone className="text-[#8976f2]" />
+                                  </>
+                                ) : (
+                                  <>
+                                    <BiSolidMicrophone
+                                      className="text-[white] hover:text-[#5841d9]"
+                                      style={{ transition: ".3s" }}
+                                    />
+                                  </>
+                                )}
+                              </button>
+                              <input
+                                placeholder="Ask Anything"
+                                className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                                style={{ transition: ".5s" }}
+                                value={input}
+                                onKeyDown={(e) => {
+                                  // console.log(e);
+                                  if (e.nativeEvent.key === "Enter") {
+                                    // console.log("enter");
+                                    handleSend();
+                                    setInput("");
+                                  }
+                                }}
+                                onChange={(e) => setInput(e.target.value)}
+                              ></input>
+
+                              <div
+                                className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg"
+                                onClick={() => {
+                                  handleSend();
+                                  setInput("");
+                                }}
+                              >
+                                <IoMdSend
+                                  className="text-[white] hover:text-[#8976f2]"
+                                  style={{ transition: ".3s" }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </>
                   ) : (
                     <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
                       <div className="w-full h-[calc(100%-80px)]  mb-[20px] overflow-y-scroll">
@@ -971,7 +909,7 @@ const Body = () => {
                                   className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-white "
                                   style={{ transition: ".5s" }}
                                 >
-                                  <div className="group  w-full flex p-[20px] border-[1px] border-[#32365b]  rounded-lg">
+                                  <div className="group  w-full flex p-[19px] border-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-l-[#5841d9]">
                                     <div className="w-[40px] h-[40px] rounded-sm bg-slate-500">
                                       <img
                                         src={selectAvatar}
@@ -979,11 +917,11 @@ const Body = () => {
                                         loading="lazy"
                                       ></img>
                                     </div>
-                                    <span className="w-[calc(100%-65px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] ">
+                                    <span className="w-[calc(100%-70px)]  overflow-x-hidden ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] ">
                                       {mssg.user}
                                     </span>
                                     <div
-                                      className="w-[30px] h-[40px]   rounded-sm opacity-0 flex justify-end items-center group-hover:opacity-100 transition-opacity duration-300 cursor-pointer"
+                                      className="w-[30px] h-[40px]   rounded-sm opacity-0 flex justify-end items-center group-hover:opacity-100 transition-opacity duration-300 cursor-pointer "
                                       onClick={() => {
                                         deleteSpecificChat(mssg.id);
                                         toast.success("Chat Deleted");
@@ -1006,7 +944,7 @@ const Body = () => {
                                       className="w-[40px] h-[40px] rounded-sm bg-slate-500"
                                     ></img>
                                     <pre
-                                      className="w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap "
+                                      className=" w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap "
                                       // style={{ transition: ".5s" }}
                                     >
                                       {mssg.assistant.length === 0 ? (
@@ -1029,7 +967,7 @@ const Body = () => {
                                       )}
                                     </pre>
                                     <div
-                                      className="w-[30px] h-[40px]   rounded-sm opacity-0 flex justify-end items-center group-hover:opacity-100 transition-opacity duration-300 cursor-pointer"
+                                      className="w-[30px] h-[40px]   rounded-sm opacity-0 flex justify-end items-center group-hover:opacity-100 transition-opacity duration-300 cursor-pointer "
                                       // style={{ transition: ".3s" }}
                                       onClick={() => {
                                         // CopyToClipboard(index);
@@ -1115,8 +1053,8 @@ const Body = () => {
                     className="w-full h-[70px]   p-[10px] flex justify-center items-center "
                     style={{ transition: ".5s" }}
                   >
-                    <div className="w-[calc(100%)] mr-[10px] h-full   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer">
-                      <BiPlus className="text-white text-[20px]" />
+                    <div className="w-[100%] mr-[10px] h-full   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer">
+                      <BiPlus className="text-white text-[20px] mr-[15px]" />
                       <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] ">
                         New Chat
                       </span>
@@ -1128,116 +1066,43 @@ const Body = () => {
                       <FiSidebar className="text-white text-[18px]" />
                     </div>
                   </div>
-                  <div className="w-[calc(100%-20px)] h-[calc(100vh-270px)] py-[10px] overflow-y-scroll text-[white]">
-                    <div className="px-[15px] rounded-lg cursor-pointer  bg-[#5841d9] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center">
-                      Chat Gpt how to make
-                    </div>
-                    <div className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center">
-                      Best movies of all tie
-                    </div>
-                    <div className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center">
-                      Who is the god
-                    </div>
-                    <div className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center">
-                      Best multiplayer game
-                    </div>
-                    <div className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center">
-                      Tets 2
-                    </div>
-                    <div className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2] whitespace-nowrap w-full h-[50px] my-[10px] flex justify-start items-center"></div>
-                  </div>
-                  {/* <div
-                    onClick={() => setAvatar(!avatar)}
-                    className="text-white cursor-pointer font-[nunitosans] "
+                  {/* ----------------------------- Chat Segment ---------------------------- */}
+                  <div
+                    className="w-[calc(100%-20px)] px-[0] h-[calc(100vh-270px)] py-[10px] overflow-y-scroll text-[white]"
+                    style={{ transition: ".5s" }}
                   >
-                    Select Avatar
-                  </div>
-                  {avatar === true ? (
-                    <>
-                      <div
-                        className="w-full py-[10px]  flex flex-wrap justify-center"
-                        style={{ transition: ".5s" }}
-                      >
-                        {IMG_ID.map((imgid) => {
-                          return (
+                    {temp.map((segment) => {
+                      return (
+                        <>
+                          {segment.chatId === toggleCreateNewChatInput ? (
                             <>
-                              {selectAvatar === undefined ? (
-                                <>
-                                  <div
-                                    className="w-[70px] h-[70px]  m-[10px] rounded-xl cursor-pointer border[5px] border-white"
-                                    onClick={() => {
-                                      if (selectAvatar === imgid.id) {
-                                        setSelectAvatar();
-                                      } else {
-                                        setSelectAvatar(imgid.id);
-                                      }
-                                    }}
-                                  >
-                                    <img
-                                      loading="lazy"
-                                      src={imgid.id}
-                                      className=" rounded-xl border[2px] border-white "
-                                      style={{ transition: ".5s" }}
-                                    ></img>
-                                    
-                                  </div>
-                                </>
-                              ) : selectAvatar === imgid.id ? (
-                                <>
-                                  <div
-                                    className="w-[70px] h-[70px]  m-[10px] rounded-xl cursor-pointer border[5px] border-white"
-                                    onClick={() => {
-                                      if (selectAvatar === imgid.id) {
-                                        setSelectAvatar();
-                                      } else {
-                                        setSelectAvatar(imgid.id);
-                                      }
-                                    }}
-                                  >
-                                    <img
-                                      loading="lazy"
-                                      src={imgid.id}
-                                      className=" rounded-xl border[2px] border-white "
-                                      style={{ transition: ".5s" }}
-                                    ></img>
-                                
-                                  </div>
-                                </>
-                              ) : (
-                                <>
-                                  <div
-                                    className="w-[70px] h-[70px]  m-[10px] rounded-xl cursor-pointer border[5px] border-white"
-                                    onClick={() => {
-                                      if (selectAvatar === imgid.id) {
-                                        setSelectAvatar();
-                                      } else {
-                                        setSelectAvatar(imgid.id);
-                                      }
-                                    }}
-                                  >
-                                    <img
-                                      loading="lazy"
-                                      src={imgid.id}
-                                      className=" rounded-xl border[2px] border-white opacity-[.3] hover:opacity-100"
-                                      style={{ transition: ".5s" }}
-                                    ></img>
-                                  
-                                  </div>
-                                </>
-                              )}
+                              <div className="group w-full flex justify-center items-center my-[15px]">
+                                <div
+                                  className="px-[15px] rounded-lg cursor-pointer  bg-[#5841d9]  whitespace-nowrap w-full h-[50px]  flex justify-start items-center"
+                                  style={{ transition: ".3s" }}
+                                >
+                                  {segment.chatId}
+                                </div>
+                              </div>
                             </>
-                          );
-                        })}
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div
-                        className="w-full h-[0] "
-                        style={{ transition: ".5s" }}
-                      ></div>
-                    </>
-                  )} */}
+                          ) : (
+                            <>
+                              <div className="group w-full flex justify-center items-center my-[15px]">
+                                <div
+                                  className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37]  whitespace-nowrap w-full h-[50px] flex justify-start items-center"
+                                  style={{ transition: ".3s" }}
+                                >
+                                  {segment.chatId}
+                                </div>
+                              </div>
+                            </>
+                          )}
+                        </>
+                      );
+                    })}
+                  </div>
+
+                  {/* ------------------------------------ Bottom Section ---------------------------------- */}
                   <div className="w-[calc(100%-20px)] h-[200px]  mx-[10px] py-[10px] flex flex-col justify-center items-center  border-t-[2px] border-[#32365b]">
                     {/* <div className="w-full  h-[40px] mb-[10px]  rounded-xl  px-[4px] flex justify-start items-center cursor-pointer ">
                       <img
@@ -1314,7 +1179,249 @@ const Body = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
+                  {chatMessage.length === 0 ? (
+                    <>
+                      {temp.length === 0 ? (
+                        <>
+                          <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
+                            <div className="w-full h-[calc(100%-80px)] flex justify-center items-center  mb-[20px] overflow-y-scroll">
+                              <img
+                                src={logo}
+                                className="h-[300px] opacity-5"
+                              ></img>
+                            </div>
+                            <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
+                              <button
+                                className="outline-none  h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
+                                style={{ zIndex: "3" }}
+                                onClick={SpeechRecognition.startListening}
+                              >
+                                <BiSolidMicrophone
+                                  className="text-[white] "
+                                  style={{ transition: ".3s" }}
+                                />
+                              </button>
+                              <input
+                                placeholder="Create New Chat Segment First"
+                                className="placeholder:text-orange-400 w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                                style={{ transition: ".5s" }}
+                                value={""}
+                              ></input>
+
+                              <div className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg">
+                                <IoMdSend
+                                  className="text-[white] "
+                                  style={{ transition: ".3s" }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
+                            <div className="w-full h-[calc(100%-80px)] flex justify-center items-center  mb-[20px] overflow-y-scroll">
+                              <img
+                                src={logo}
+                                className="h-[300px] opacity-5"
+                              ></img>
+                            </div>
+                            <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
+                              <button
+                                className="outline-none  h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
+                                style={{ zIndex: "3" }}
+                                onClick={SpeechRecognition.startListening}
+                              >
+                                {listening == true ? (
+                                  <>
+                                    <BiSolidMicrophone className="text-[#8976f2]" />
+                                  </>
+                                ) : (
+                                  <>
+                                    <BiSolidMicrophone
+                                      className="text-[white] hover:text-[#5841d9]"
+                                      style={{ transition: ".3s" }}
+                                    />
+                                  </>
+                                )}
+                              </button>
+                              <input
+                                placeholder="Ask Anything"
+                                className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                                style={{ transition: ".5s" }}
+                                value={input}
+                                onKeyDown={(e) => {
+                                  // console.log(e);
+                                  if (e.nativeEvent.key === "Enter") {
+                                    // console.log("enter");
+                                    handleSend();
+                                    setInput("");
+                                  }
+                                }}
+                                onChange={(e) => setInput(e.target.value)}
+                              ></input>
+
+                              <div
+                                className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg"
+                                onClick={() => {
+                                  handleSend();
+                                  setInput("");
+                                }}
+                              >
+                                <IoMdSend
+                                  className="text-[white] hover:text-[#8976f2]"
+                                  style={{ transition: ".3s" }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </>
+                  ) : (
+                    <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
+                      <div className="w-full h-[calc(100%-80px)]  mb-[20px] overflow-y-scroll">
+                        {chatMessage.map((mssg, index) => {
+                          return (
+                            <>
+                              <div className="w-full flex flex-col ">
+                                <span
+                                  className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-white "
+                                  style={{ transition: ".5s" }}
+                                >
+                                  <div className="group  w-full flex p-[19px] border-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-l-[#5841d9]">
+                                    <div className="w-[40px] h-[40px] rounded-sm bg-slate-500">
+                                      <img
+                                        src={selectAvatar}
+                                        className="rounded-sm"
+                                        loading="lazy"
+                                      ></img>
+                                    </div>
+                                    <span className="w-[calc(100%-70px)]  overflow-x-hidden ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] ">
+                                      {mssg.user}
+                                    </span>
+                                    <div
+                                      className="w-[30px] h-[40px]   rounded-sm opacity-0 flex justify-end items-center group-hover:opacity-100 transition-opacity duration-300 cursor-pointer "
+                                      onClick={() => {
+                                        deleteSpecificChat(mssg.id);
+                                        toast.success("Chat Deleted");
+                                      }}
+                                    >
+                                      <MdDelete className="text-[20px]" />
+                                    </div>
+                                  </div>
+                                </span>
+                                <span
+                                  className="group px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-white "
+                                  // style={{ transition: ".5s" }}
+                                >
+                                  <div
+                                    className="bg-[#1c1f37]  w-full flex p-[19px] border-l-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
+                                    style={{ transition: ".5s" }}
+                                  >
+                                    <img
+                                      src={ai}
+                                      className="w-[40px] h-[40px] rounded-sm bg-slate-500"
+                                    ></img>
+                                    <pre
+                                      className=" w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap "
+                                      // style={{ transition: ".5s" }}
+                                    >
+                                      {mssg.assistant.length === 0 ? (
+                                        <>
+                                          <div className="lds-facebook mt-[50px]">
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                          </div>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <span id={index} className="">
+                                            {mssg.assistant.substr(
+                                              2,
+                                              mssg.assistant.length - 1
+                                            )}
+                                          </span>
+                                        </>
+                                      )}
+                                    </pre>
+                                    <div
+                                      className="w-[30px] h-[40px]   rounded-sm opacity-0 flex justify-end items-center group-hover:opacity-100 transition-opacity duration-300 cursor-pointer "
+                                      // style={{ transition: ".3s" }}
+                                      onClick={() => {
+                                        // CopyToClipboard(index);
+                                        navigator.clipboard.writeText(
+                                          mssg.assistant.substr(
+                                            2,
+                                            mssg.assistant.length - 1
+                                          )
+                                        );
+                                        toast.success("Copied to Clipboard");
+                                        // deleteSingleChat(index);
+                                      }}
+                                    >
+                                      <HiOutlineClipboard className="text-[20px]" />
+                                    </div>
+                                    <div ref={scrollToLast}></div>
+                                  </div>
+                                </span>
+                              </div>
+                            </>
+                          );
+                        })}
+                      </div>
+                      <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
+                        <button
+                          className="outline-none  h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
+                          style={{ zIndex: "3" }}
+                          onClick={SpeechRecognition.startListening}
+                        >
+                          {listening == true ? (
+                            <>
+                              <BiSolidMicrophone className="text-[#8976f2]" />
+                            </>
+                          ) : (
+                            <>
+                              <BiSolidMicrophone
+                                className="text-[white] hover:text-[#5841d9]"
+                                style={{ transition: ".3s" }}
+                              />
+                            </>
+                          )}
+                        </button>
+                        <input
+                          placeholder="Ask Anything"
+                          className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                          style={{ transition: ".5s" }}
+                          value={input}
+                          onKeyDown={(e) => {
+                            // console.log(e);
+                            if (e.nativeEvent.key === "Enter") {
+                              // console.log("enter");
+                              handleSend();
+                              setInput("");
+                            }
+                          }}
+                          onChange={(e) => setInput(e.target.value)}
+                        ></input>
+
+                        <div
+                          className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg"
+                          onClick={() => {
+                            handleSend();
+                            setInput("");
+                          }}
+                        >
+                          <IoMdSend
+                            className="text-[white]] hover:text-[#8976f2]"
+                            style={{ transition: ".3s" }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {/* <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
                     <div className="w-full h-[calc(100%-80px)]  mb-[20px] overflow-y-scroll">
                       {chatMessage.map((mssg) => {
                         return (
@@ -1434,7 +1541,7 @@ const Body = () => {
                         />
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </>
             )}
@@ -1457,14 +1564,51 @@ const Body = () => {
                     className="w-full h-[70px]   p-[10px] flex justify-center items-center "
                     style={{ transition: ".5s" }}
                   >
-                    <div className="w-[calc(100%-60px)] mr-[10px] h-full   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer">
-                      <BiPlus className="text-black text-[20px] drop-shadow-lg" />
-                      <span
-                        className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] drop-shadow-lg "
-                        style={{ transition: ".5s" }}
-                      >
-                        New Chat
-                      </span>
+                    <div className="w-[calc(100%-60px)] mr-[10px] h-full   rounded-xl  flex justify-start items-center cursor-pointer">
+                      {toggleCreateNewChat === false ? (
+                        <>
+                          <div
+                            className="w-full flex justify-start items-center"
+                            onClick={() => {
+                              setToggleCreateNewChat(!toggleCreateNewChat);
+                            }}
+                          >
+                            <BiPlus className="  mx-[15px] text-black text-[20px]" />
+                            <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] ">
+                              New Chat
+                            </span>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <input
+                            // onClick={() =>
+                            //   setToggleCreateNewChat(!toggleCreateNewChat)
+                            // }
+                            value={toggleCreateNewChatInput}
+                            onChange={(e) =>
+                              setToggleCreateNewChatInput(e.target.value)
+                            }
+                            onKeyDown={(e) => {
+                              if (e.nativeEvent.key === "Enter") {
+                                console.log("Enter");
+                                fetchChatSegment();
+                                createNewFirestoreChatDocument();
+                              }
+                            }}
+                            className="ml-[15px] w-full text-[black] bg-[#f8fafc] rounded-lg h-[50px] overflow-hidden whitespace-nowrap font-[nunitosans] outline-none px-[15px] pr-[35px]"
+                            autoFocus
+                          ></input>
+                          <div className="w-[30px] flex justify-center items-center ml-[-30px] h-[50px]">
+                            <RxCross2
+                              className="text-black  text-[20px] bg-[#f8fafc] "
+                              onClick={() => {
+                                setToggleCreateNewChat(!toggleCreateNewChat);
+                              }}
+                            />
+                          </div>
+                        </>
+                      )}
                     </div>
                     <div
                       className="w-[50px] h-full  rounded-xl  flex justify-center items-center cursor-pointer "
@@ -1473,135 +1617,71 @@ const Body = () => {
                       <FiSidebar className="text-black text-[18px] drop-shadow-lg" />
                     </div>
                   </div>
-                  {/* <div
-                    onClick={() => setAvatar(!avatar)}
-                    style={{ transition: ".5s" }}
-                    className="w-full  p-[25px]  text-black cursor-pointer font-[nunitosans] flex items-center
-                    "
-                  >
-                    <span className="w-full">Select Avatar</span>
-                    {avatar === true ? (
-                      <IoMdArrowDropup className="text-black text-[24px] drop-shadow-lg w-[30px]  flex justify-end" />
-                    ) : (
-                      <IoMdArrowDropdown className="text-black text-[24px] drop-shadow-lg w-[30px]  flex justify-end" />
-                    )}
-                  </div>
-                  {avatar === true ? (
-                    <>
-                      <div
-                        className="w-full py-[10px]  flex flex-wrap justify-center"
-                        style={{ transition: ".5s" }}
-                      >
-                        {IMG_ID.map((imgid) => {
-                          return (
+                  {/* ------------------------------- Chat Segment ----------------------------- */}
+                  <div className="w-[calc(100%-20px)] px-[15px] h-[calc(100vh-270px)] py-[10px] overflow-y-scroll text-[white]">
+                    {temp.map((segment) => {
+                      return (
+                        <>
+                          {segment.chatId === toggleCreateNewChatInput ? (
                             <>
-                              {selectAvatar === undefined ? (
-                                <>
-                                  <div
-                                    className="w-[50px] h-[50px]  m-[5px] rounded-full cursor-pointer border[5px] border-white"
-                                    onClick={() => {
-                                      if (selectAvatar === imgid.id) {
-                                        setSelectAvatar();
-                                      } else {
-                                        setSelectAvatar(imgid.id);
-                                      }
-                                    }}
-                                  >
-                                    <img
-                                      loading="lazy"
-                                      src={imgid.id}
-                                      className=" rounded-lg border[2px] border-white "
-                                      style={{ transition: ".5s" }}
-                                    ></img>
-                                  
-                                  </div>
-                                </>
-                              ) : selectAvatar === imgid.id ? (
-                                <>
-                                  <div
-                                    className="w-[50px] h-[50px]  m-[5px] rounded-full cursor-pointer border[5px] border-white"
-                                    onClick={() => {
-                                      if (selectAvatar === imgid.id) {
-                                        setSelectAvatar();
-                                      } else {
-                                        setSelectAvatar(imgid.id);
-                                      }
-                                    }}
-                                  >
-                                    <img
-                                      loading="lazy"
-                                      src={imgid.id}
-                                      className=" rounded-lg border[2px] border-white "
-                                      style={{ transition: ".5s" }}
-                                    ></img>
-                       
-                                  </div>
-                                </>
-                              ) : (
-                                <>
-                                  <div
-                                    className="w-[50px] h-[50px]  m-[5px] rounded-full cursor-pointer border[5px] border-white"
-                                    onClick={() => {
-                                      if (selectAvatar === imgid.id) {
-                                        setSelectAvatar();
-                                      } else {
-                                        setSelectAvatar(imgid.id);
-                                      }
-                                    }}
-                                  >
-                                    <img
-                                      loading="lazy"
-                                      src={imgid.id}
-                                      className=" rounded-lg border[2px] border-white opacity-[.3] hover:opacity-100"
-                                      style={{ transition: ".5s" }}
-                                    ></img>
-                              
-                                  </div>
-                                </>
-                              )}
+                              <div className="group w-full flex justify-center items-center my-[15px]">
+                                <div
+                                  className="px-[15px] rounded-lg cursor-pointer text-white  bg-[#5841d9]  whitespace-nowrap w-full h-[50px]  flex justify-start items-center"
+                                  style={{ transition: ".3s" }}
+                                >
+                                  {segment.chatId}
+                                </div>
+                                <div
+                                  className="ml-[-30px] h-[30px]  flex justify-center items-center w-[30px] opacity-100 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer text-white  hover:text-[#8976f2]"
+                                  onClick={() => {
+                                    deleteSegment(segment.chatId);
+                                    fetchChatSegment();
+                                    // setToggleCreateNewChatInput(temp[0].chatId);
+                                    // getChatHistoryFromFirestore();
+                                    // AddFetchedChatHistoryToReactStore();
+                                  }}
+                                >
+                                  <MdDelete className="text-[20px]  " />
+                                </div>
+                              </div>
                             </>
-                          );
-                        })}
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div
-                        className="w-full h-[0] "
-                        style={{ transition: ".5s" }}
-                      ></div>
-                    </>
-                  )} */}
+                          ) : (
+                            <>
+                              <div className="group w-full flex justify-center items-center my-[15px]">
+                                <div
+                                  className="px-[15px] rounded-lg cursor-pointer text-black hover:text-white bg-[#f8fafc] hover:bg-[#8976f2]  whitespace-nowrap w-[100%] h-[50px] flex justify-start items-center"
+                                  style={{ transition: ".3s" }}
+                                  onClick={() => {
+                                    fetchChatSegment();
+                                    setToggleCreateNewChatInput(segment.chatId);
+                                    setChatHistory([]);
+                                    getChatHistoryFromFirestore();
+                                    AddFetchedChatHistoryToReactStore();
+                                  }}
+                                >
+                                  {segment.chatId}
+                                </div>
+                                <div
+                                  className="ml-[-30px] h-[30px]  flex justify-center items-center w-[30px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer text-white  hover:text-[#8976f2]"
+                                  onClick={() => {
+                                    deleteSegment(segment.chatId);
+                                    fetchChatSegment();
+                                  }}
+                                >
+                                  <MdDelete className="text-[20px]  " />
+                                </div>
+                              </div>
+                            </>
+                          )}
+                        </>
+                      );
+                    })}
+                  </div>
+
                   <div
                     className="w-[calc(100%-20px)] h-[200px]  mx-[10px] py-[10px] flex flex-col justify-center items-center  border-t-[2px] border-[#eff1f4]"
                     style={{ transition: ".5s" }}
                   >
-                    {/* <div className="w-full  h-[40px] mb-[10px]  rounded-xl  px-[4px] flex justify-start items-center cursor-pointer ">
-                      {selectAvatar === undefined ? (
-                        <>
-                          <div
-                            // src={selectAvatar}
-                            className="rounded-full h-full w-[40px] bg-[#5841d9]"
-                            // loading="lazy"
-                          >
-                            <MdAccountCircle className="text-[#aaaaaa] text-[40px] h-full" />
-                          </div>
-                         
-                        </>
-                      ) : (
-                        <>
-                          <img
-                            src={selectAvatar}
-                            className="rounded-full h-full drop-shadow-lg"
-                            loading="lazy"
-                          ></img>
-                        </>
-                      )}
-
-                      <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] drop-shadow-lg ">
-                        ${authUser.email}
-                      </span>
-                    </div> */}
                     <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] ">
                       <IoSettingsOutline className="text-[#5841d9] text-[18px] drop-shadow-lg" />
 
@@ -1696,133 +1776,248 @@ const Body = () => {
                       WALLE
                     </span>
                   </div>
-                  <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
-                    <div className="w-full h-[calc(100%-80px)]  mb-[20px] overflow-y-scroll">
-                      {chatMessage.map((mssg) => {
-                        return (
-                          <>
-                            <div className="w-full flex flex-col ">
-                              <span className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-black ">
-                                <div
-                                  className="  w-full flex p-[20px] border-[1px] border-[#e7e9ee]  rounded-lg"
+                  {chatMessage.length === 0 ? (
+                    <>
+                      {temp.length === 0 ? (
+                        <>
+                          <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
+                            <div className="w-full h-[calc(100%-80px)] flex justify-center items-center  mb-[20px] overflow-y-scroll">
+                              <img
+                                src={logo}
+                                className="h-[300px] opacity-5"
+                              ></img>
+                            </div>
+                            <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
+                              <button
+                                className="outline-none  h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
+                                style={{ zIndex: "3" }}
+                                onClick={SpeechRecognition.startListening}
+                              >
+                                <BiSolidMicrophone
+                                  className="text-[white] "
+                                  style={{ transition: ".3s" }}
+                                />
+                              </button>
+                              <input
+                                placeholder="Create New Chat Segment First"
+                                className="placeholder:text-orange-400 w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                                style={{ transition: ".5s" }}
+                                value={""}
+                              ></input>
+
+                              <div className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg">
+                                <IoMdSend
+                                  className="text-[white] "
+                                  style={{ transition: ".3s" }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
+                            <div className="w-full h-[calc(100%-80px)] flex justify-center items-center  mb-[20px] overflow-y-scroll">
+                              <img
+                                src={logo}
+                                className="h-[300px] opacity-5"
+                              ></img>
+                            </div>
+                            <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
+                              <button
+                                className="outline-none  h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
+                                style={{ zIndex: "3" }}
+                                onClick={SpeechRecognition.startListening}
+                              >
+                                {listening == true ? (
+                                  <>
+                                    <BiSolidMicrophone className="text-[#8976f2]" />
+                                  </>
+                                ) : (
+                                  <>
+                                    <BiSolidMicrophone
+                                      className="text-[white] hover:text-[#5841d9]"
+                                      style={{ transition: ".3s" }}
+                                    />
+                                  </>
+                                )}
+                              </button>
+                              <input
+                                placeholder="Ask Anything"
+                                className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                                style={{ transition: ".5s" }}
+                                value={input}
+                                onKeyDown={(e) => {
+                                  // console.log(e);
+                                  if (e.nativeEvent.key === "Enter") {
+                                    // console.log("enter");
+                                    handleSend();
+                                    setInput("");
+                                  }
+                                }}
+                                onChange={(e) => setInput(e.target.value)}
+                              ></input>
+
+                              <div
+                                className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg"
+                                onClick={() => {
+                                  handleSend();
+                                  setInput("");
+                                }}
+                              >
+                                <IoMdSend
+                                  className="text-[white] hover:text-[#8976f2]"
+                                  style={{ transition: ".3s" }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </>
+                  ) : (
+                    <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
+                      <div className="w-full h-[calc(100%-80px)]  mb-[20px] overflow-y-scroll">
+                        {chatMessage.map((mssg, index) => {
+                          return (
+                            <>
+                              <div className="w-full flex flex-col ">
+                                <span
+                                  className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-black "
                                   style={{ transition: ".5s" }}
                                 >
-                                  <div className="w-[40px] h-[40px] rounded-sm bg-slate-500">
-                                    <img
-                                      src={selectAvatar}
-                                      className="rounded-sm"
-                                      loading="lazy"
-                                    ></img>
+                                  <div className="group  w-full flex p-[19px] border-[2px] border-[#f3f5f8] rounded-lg hover:border-l-[2px] hover:border-l-[#5841d9]">
+                                    <div className="w-[40px] h-[40px] rounded-sm bg-slate-500">
+                                      <img
+                                        src={selectAvatar}
+                                        className="rounded-sm"
+                                        loading="lazy"
+                                      ></img>
+                                    </div>
+                                    <span className="w-[calc(100%-70px)]  overflow-x-hidden ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] ">
+                                      {mssg.user}
+                                    </span>
+                                    <div
+                                      className="w-[30px] h-[40px]   rounded-sm opacity-0 flex justify-end items-center group-hover:opacity-100 transition-opacity duration-300 cursor-pointer "
+                                      onClick={() => {
+                                        deleteSpecificChat(mssg.id);
+                                        toast.success("Chat Deleted");
+                                      }}
+                                    >
+                                      <MdDelete className="text-[20px]" />
+                                    </div>
                                   </div>
-                                  <span className="w-[calc(100%-65px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] drop-shadow-lg ">
-                                    {mssg.user}
-                                  </span>
-                                </div>
-                              </span>
-                              <span className="group px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-black ">
-                                <div
-                                  className="bg-[white]  w-full flex p-[19px] border-l-[2px] border-[white] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
-                                  style={{ transition: ".5s" }}
-                                  // style={{ transition: ".3s" }}
+                                </span>
+                                <span
+                                  className="group px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-black "
+                                  // style={{ transition: ".5s" }}
                                 >
-                                  <img
-                                    src={ai}
-                                    className="w-[40px] h-[40px] rounded-sm bg-slate-500"
-                                  ></img>
-                                  <pre className="w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap drop-shadow-lg ">
-                                    {mssg.assistant.length === 0 ? (
-                                      <>
-                                        <div className="lds-facebook mt-[50px]">
-                                          <div></div>
-                                          <div></div>
-                                          <div></div>
-                                        </div>
-                                      </>
-                                    ) : (
-                                      <>
-                                        <span className="">
-                                          {mssg.assistant.substr(
+                                  <div
+                                    className="bg-[white]  w-full flex p-[19px] border-l-[2px] border-[white] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
+                                    style={{ transition: ".5s" }}
+                                  >
+                                    <img
+                                      src={ai}
+                                      className="w-[40px] h-[40px] rounded-sm bg-slate-500"
+                                    ></img>
+                                    <pre
+                                      className=" w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap "
+                                      // style={{ transition: ".5s" }}
+                                    >
+                                      {mssg.assistant.length === 0 ? (
+                                        <>
+                                          <div className="lds-facebook mt-[50px]">
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                          </div>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <span id={index} className="">
+                                            {mssg.assistant.substr(
+                                              2,
+                                              mssg.assistant.length - 1
+                                            )}
+                                          </span>
+                                        </>
+                                      )}
+                                    </pre>
+                                    <div
+                                      className="w-[30px] h-[40px]   rounded-sm opacity-0 flex justify-end items-center group-hover:opacity-100 transition-opacity duration-300 cursor-pointer "
+                                      // style={{ transition: ".3s" }}
+                                      onClick={() => {
+                                        // CopyToClipboard(index);
+                                        navigator.clipboard.writeText(
+                                          mssg.assistant.substr(
                                             2,
                                             mssg.assistant.length - 1
-                                          )}
-                                        </span>
-                                      </>
-                                    )}
-                                  </pre>
-                                  <div
-                                    className="w-[30px] h-[40px]   rounded-sm opacity-0 flex justify-end items-center group-hover:opacity-100 transition-opacity duration-300"
-                                    // style={{ transition: ".3s" }}
-                                    onClick={() => {
-                                      // CopyToClipboard(index);
-                                      navigator.clipboard.writeText(
-                                        mssg.assistant.substr(
-                                          2,
-                                          mssg.assistant.length - 1
-                                        )
-                                      );
-                                      toast.success("Copied to Clipboard");
-                                      // deleteSingleChat(index);
-                                    }}
-                                  >
-                                    <HiOutlineClipboard className="text-[20px]" />
+                                          )
+                                        );
+                                        toast.success("Copied to Clipboard");
+                                        // deleteSingleChat(index);
+                                      }}
+                                    >
+                                      <HiOutlineClipboard className="text-[20px]" />
+                                    </div>
+                                    <div ref={scrollToLast}></div>
                                   </div>
-                                  <div ref={scrollToLast}></div>
-                                </div>
-                              </span>
-                            </div>
-                          </>
-                        );
-                      })}
-                    </div>
-                    <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
-                      <button
-                        className="outline-none  h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
-                        style={{ zIndex: "3" }}
-                        onClick={SpeechRecognition.startListening}
-                      >
-                        {listening == true ? (
-                          <>
-                            <BiSolidMicrophone className="text-[#8976f2] drop-shadow-lg" />
-                          </>
-                        ) : (
-                          <>
-                            <BiSolidMicrophone
-                              className="text-[#5841d9] hover:text-[#8976f2] drop-shadow-lg"
-                              style={{ transition: ".3s" }}
-                            />
-                          </>
-                        )}
-                      </button>
-                      <input
-                        placeholder="Ask Anything"
-                        className="w-full h-full px-[60px] rounded-lg outline-none bg-[white] text-[black] flex justify-center items-center font-[nunitosans] "
-                        style={{ transition: ".5s" }}
-                        value={input}
-                        onKeyDown={(e) => {
-                          // console.log(e);
-                          if (e.nativeEvent.key === "Enter") {
-                            // console.log("enter");
+                                </span>
+                              </div>
+                            </>
+                          );
+                        })}
+                      </div>
+                      <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
+                        <button
+                          className="outline-none  h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
+                          style={{ zIndex: "3" }}
+                          onClick={SpeechRecognition.startListening}
+                        >
+                          {listening == true ? (
+                            <>
+                              <BiSolidMicrophone className="text-[#8976f2]" />
+                            </>
+                          ) : (
+                            <>
+                              <BiSolidMicrophone
+                                className="text-[#5841d9] hover:text-[#8976f2]"
+                                style={{ transition: ".3s" }}
+                              />
+                            </>
+                          )}
+                        </button>
+                        <input
+                          placeholder="Ask Anything"
+                          className="w-full h-full px-[60px] rounded-lg outline-none bg-[#white] text-[black] flex justify-center items-center font-[nunitosans] "
+                          style={{ transition: ".5s" }}
+                          value={input}
+                          onKeyDown={(e) => {
+                            // console.log(e);
+                            if (e.nativeEvent.key === "Enter") {
+                              // console.log("enter");
+                              handleSend();
+                              setInput("");
+                            }
+                          }}
+                          onChange={(e) => setInput(e.target.value)}
+                        ></input>
+
+                        <div
+                          className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg"
+                          onClick={() => {
                             handleSend();
                             setInput("");
-                          }
-                        }}
-                        onChange={(e) => setInput(e.target.value)}
-                      ></input>
-
-                      <div
-                        className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg"
-                        onClick={() => {
-                          handleSend();
-                          setInput("");
-                        }}
-                      >
-                        <IoMdSend
-                          className="text-[#5841d9] hover:text-[#8976f2]"
-                          style={{ transition: ".3s" }}
-                        />
+                          }}
+                        >
+                          <IoMdSend
+                            className="text-[#5841d9] hover:text-[#8976f2]"
+                            style={{ transition: ".3s" }}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </>
             ) : (
@@ -1847,6 +2042,41 @@ const Body = () => {
                     >
                       <FiSidebar className="text-black text-[18px] " />
                     </div>
+                  </div>
+                  {/* ----------------------------- Chat Segment ---------------------------- */}
+                  <div
+                    className="w-[calc(100%-20px)] px-[0] h-[calc(100vh-270px)] py-[10px] overflow-y-scroll text-[white]"
+                    style={{ transition: ".5s" }}
+                  >
+                    {temp.map((segment) => {
+                      return (
+                        <>
+                          {segment.chatId === toggleCreateNewChatInput ? (
+                            <>
+                              <div className="group w-full flex justify-center items-center my-[15px]">
+                                <div
+                                  className="px-[15px] rounded-lg cursor-pointer  bg-[#5841d9]  whitespace-nowrap w-full h-[50px]  flex justify-start items-center"
+                                  style={{ transition: ".3s" }}
+                                >
+                                  {segment.chatId}
+                                </div>
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <div className="group w-full flex justify-center items-center my-[15px]">
+                                <div
+                                  className="px-[15px] rounded-lg cursor-pointer  bg-[#f8fafc] text-black  whitespace-nowrap w-full h-[50px] flex justify-start items-center"
+                                  style={{ transition: ".3s" }}
+                                >
+                                  {segment.chatId}
+                                </div>
+                              </div>
+                            </>
+                          )}
+                        </>
+                      );
+                    })}
                   </div>
                   {/* <div
                     onClick={() => setAvatar(!avatar)}
@@ -2023,127 +2253,248 @@ const Body = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
-                    <div className="w-full h-[calc(100%-80px)]  mb-[20px] overflow-y-scroll">
-                      {chatMessage.map((mssg) => {
-                        return (
-                          <>
-                            <div className="w-full flex flex-col ">
-                              <span className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-black ">
-                                <div className="  w-full flex p-[20px]  border-[1px] border-[#eff1f4]   rounded-lg">
-                                  <div className="w-[40px] h-[40px] rounded-sm bg-slate-500 ">
-                                    <img
-                                      src={selectAvatar}
-                                      className="rounded-sm"
-                                      loading="lazy"
-                                    ></img>
-                                  </div>
-                                  <span className="w-[calc(100%-65px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] drop-shadow-lg ">
-                                    {mssg.user}
-                                  </span>
-                                </div>
-                              </span>
-                              <span className="group px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-black ">
-                                <div
-                                  className="bg-[white]  w-full flex p-[19px] border-l-[2px] border-[white] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
+                  {chatMessage.length === 0 ? (
+                    <>
+                      {temp.length === 0 ? (
+                        <>
+                          <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
+                            <div className="w-full h-[calc(100%-80px)] flex justify-center items-center  mb-[20px] overflow-y-scroll">
+                              <img
+                                src={logo}
+                                className="h-[300px] opacity-5"
+                              ></img>
+                            </div>
+                            <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
+                              <button
+                                className="outline-none  h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
+                                style={{ zIndex: "3" }}
+                                onClick={SpeechRecognition.startListening}
+                              >
+                                <BiSolidMicrophone
+                                  className="text-[white] "
                                   style={{ transition: ".3s" }}
+                                />
+                              </button>
+                              <input
+                                placeholder="Create New Chat Segment First"
+                                className="placeholder:text-orange-400 w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                                style={{ transition: ".5s" }}
+                                value={""}
+                              ></input>
+
+                              <div className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg">
+                                <IoMdSend
+                                  className="text-[white] "
+                                  style={{ transition: ".3s" }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
+                            <div className="w-full h-[calc(100%-80px)] flex justify-center items-center  mb-[20px] overflow-y-scroll">
+                              <img
+                                src={logo}
+                                className="h-[300px] opacity-5"
+                              ></img>
+                            </div>
+                            <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
+                              <button
+                                className="outline-none  h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
+                                style={{ zIndex: "3" }}
+                                onClick={SpeechRecognition.startListening}
+                              >
+                                {listening == true ? (
+                                  <>
+                                    <BiSolidMicrophone className="text-[#8976f2]" />
+                                  </>
+                                ) : (
+                                  <>
+                                    <BiSolidMicrophone
+                                      className="text-[white] hover:text-[#5841d9]"
+                                      style={{ transition: ".3s" }}
+                                    />
+                                  </>
+                                )}
+                              </button>
+                              <input
+                                placeholder="Ask Anything"
+                                className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                                style={{ transition: ".5s" }}
+                                value={input}
+                                onKeyDown={(e) => {
+                                  // console.log(e);
+                                  if (e.nativeEvent.key === "Enter") {
+                                    // console.log("enter");
+                                    handleSend();
+                                    setInput("");
+                                  }
+                                }}
+                                onChange={(e) => setInput(e.target.value)}
+                              ></input>
+
+                              <div
+                                className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg"
+                                onClick={() => {
+                                  handleSend();
+                                  setInput("");
+                                }}
+                              >
+                                <IoMdSend
+                                  className="text-[white] hover:text-[#8976f2]"
+                                  style={{ transition: ".3s" }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </>
+                  ) : (
+                    <div className="w-full  h-[calc(100%-70px)] pb-[20px]  flex flex-col justify-start items-center">
+                      <div className="w-full h-[calc(100%-80px)]  mb-[20px] overflow-y-scroll">
+                        {chatMessage.map((mssg, index) => {
+                          return (
+                            <>
+                              <div className="w-full flex flex-col ">
+                                <span
+                                  className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-black "
+                                  style={{ transition: ".5s" }}
                                 >
-                                  <img
-                                    src={ai}
-                                    className="w-[40px] h-[40px] rounded-sm bg-slate-500"
-                                  ></img>
-                                  <pre className="w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap  drop-shadow-lg">
-                                    {mssg.assistant.length === 0 ? (
-                                      <>
-                                        <div className="lds-facebook mt-[50px]">
-                                          <div></div>
-                                          <div></div>
-                                          <div></div>
-                                        </div>
-                                      </>
-                                    ) : (
-                                      <>
-                                        <span className="">
-                                          {mssg.assistant.substr(
+                                  <div className="group  w-full flex p-[19px] border-[2px] border-[#f3f5f8] rounded-lg hover:border-l-[2px] hover:border-l-[#5841d9]">
+                                    <div className="w-[40px] h-[40px] rounded-sm bg-slate-500">
+                                      <img
+                                        src={selectAvatar}
+                                        className="rounded-sm"
+                                        loading="lazy"
+                                      ></img>
+                                    </div>
+                                    <span className="w-[calc(100%-70px)]  overflow-x-hidden ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] ">
+                                      {mssg.user}
+                                    </span>
+                                    <div
+                                      className="w-[30px] h-[40px]   rounded-sm opacity-0 flex justify-end items-center group-hover:opacity-100 transition-opacity duration-300 cursor-pointer "
+                                      onClick={() => {
+                                        deleteSpecificChat(mssg.id);
+                                        toast.success("Chat Deleted");
+                                      }}
+                                    >
+                                      <MdDelete className="text-[20px]" />
+                                    </div>
+                                  </div>
+                                </span>
+                                <span
+                                  className="group px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-black "
+                                  // style={{ transition: ".5s" }}
+                                >
+                                  <div
+                                    className="bg-[white]  w-full flex p-[19px] border-l-[2px] border-[white] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
+                                    style={{ transition: ".5s" }}
+                                  >
+                                    <img
+                                      src={ai}
+                                      className="w-[40px] h-[40px] rounded-sm bg-slate-500"
+                                    ></img>
+                                    <pre
+                                      className=" w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap "
+                                      // style={{ transition: ".5s" }}
+                                    >
+                                      {mssg.assistant.length === 0 ? (
+                                        <>
+                                          <div className="lds-facebook mt-[50px]">
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                          </div>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <span id={index} className="">
+                                            {mssg.assistant.substr(
+                                              2,
+                                              mssg.assistant.length - 1
+                                            )}
+                                          </span>
+                                        </>
+                                      )}
+                                    </pre>
+                                    <div
+                                      className="w-[30px] h-[40px]   rounded-sm opacity-0 flex justify-end items-center group-hover:opacity-100 transition-opacity duration-300 cursor-pointer "
+                                      // style={{ transition: ".3s" }}
+                                      onClick={() => {
+                                        // CopyToClipboard(index);
+                                        navigator.clipboard.writeText(
+                                          mssg.assistant.substr(
                                             2,
                                             mssg.assistant.length - 1
-                                          )}
-                                        </span>
-                                      </>
-                                    )}
-                                  </pre>
-                                  <div
-                                    className="w-[30px] h-[40px]   rounded-sm opacity-0 flex justify-end items-center group-hover:opacity-100 transition-opacity duration-300"
-                                    // style={{ transition: ".3s" }}
-                                    onClick={() => {
-                                      // CopyToClipboard(index);
-                                      navigator.clipboard.writeText(
-                                        mssg.assistant.substr(
-                                          2,
-                                          mssg.assistant.length - 1
-                                        )
-                                      );
-                                      toast.success("Copied to Clipboard");
-                                      // deleteSingleChat(index);
-                                    }}
-                                  >
-                                    <HiOutlineClipboard className="text-[20px]" />
+                                          )
+                                        );
+                                        toast.success("Copied to Clipboard");
+                                        // deleteSingleChat(index);
+                                      }}
+                                    >
+                                      <HiOutlineClipboard className="text-[20px]" />
+                                    </div>
+                                    <div ref={scrollToLast}></div>
                                   </div>
-                                  <div ref={scrollToLast}></div>
-                                </div>
-                              </span>
-                            </div>
-                          </>
-                        );
-                      })}
-                    </div>
-                    <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
-                      <button
-                        className="outline-none   h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
-                        style={{ zIndex: "3" }}
-                        onClick={SpeechRecognition.startListening}
-                      >
-                        {listening == true ? (
-                          <>
-                            <BiSolidMicrophone className="text-[#8976f2] drop-shadow-lg" />
-                          </>
-                        ) : (
-                          <>
-                            <BiSolidMicrophone
-                              className="text-[#5841d9] hover:text-[#8976f2] drop-shadow-lg"
-                              style={{ transition: ".3s" }}
-                            />
-                          </>
-                        )}
-                      </button>
-                      <input
-                        placeholder="Ask Anything"
-                        className="w-full h-full px-[60px] rounded-lg outline-none bg-[white] text-[black] flex justify-center items-center font-[nunitosans] "
-                        value={input}
-                        onKeyDown={(e) => {
-                          if (e.nativeEvent.key === "Enter") {
-                            // console.log("enter");
+                                </span>
+                              </div>
+                            </>
+                          );
+                        })}
+                      </div>
+                      <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
+                        <button
+                          className="outline-none  h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
+                          style={{ zIndex: "3" }}
+                          onClick={SpeechRecognition.startListening}
+                        >
+                          {listening == true ? (
+                            <>
+                              <BiSolidMicrophone className="text-[#8976f2]" />
+                            </>
+                          ) : (
+                            <>
+                              <BiSolidMicrophone
+                                className="text-[#5841d9] hover:text-[#8976f2]"
+                                style={{ transition: ".3s" }}
+                              />
+                            </>
+                          )}
+                        </button>
+                        <input
+                          placeholder="Ask Anything"
+                          className="w-full h-full px-[60px] rounded-lg outline-none bg-[#white] text-[black] flex justify-center items-center font-[nunitosans] "
+                          style={{ transition: ".5s" }}
+                          value={input}
+                          onKeyDown={(e) => {
+                            // console.log(e);
+                            if (e.nativeEvent.key === "Enter") {
+                              // console.log("enter");
+                              handleSend();
+                              setInput("");
+                            }
+                          }}
+                          onChange={(e) => setInput(e.target.value)}
+                        ></input>
+
+                        <div
+                          className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[#5841d9] drop-shadow-lg"
+                          onClick={() => {
                             handleSend();
                             setInput("");
-                          }
-                        }}
-                        onChange={(e) => setInput(e.target.value)}
-                      ></input>
-
-                      <div
-                        className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg"
-                        onClick={() => {
-                          handleSend();
-                          setInput("");
-                        }}
-                      >
-                        <IoMdSend
-                          className="text-[#5841d9] hover:text-[#8976f2]"
-                          style={{ transition: ".3s" }}
-                        />
+                          }}
+                        >
+                          <IoMdSend
+                            className="text-[white]] hover:text-[#8976f2]"
+                            style={{ transition: ".3s" }}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </>
             )}
