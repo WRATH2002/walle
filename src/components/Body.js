@@ -387,8 +387,8 @@ const Body = () => {
     } else {
       dispatch(addMessage({ user: input, id: id, assistant: tempInput }));
     }
-    // const res = await sendMessageToOpenAI(input);
-    const res = "Hello world my name is himadri purkait";
+    const res = await sendMessageToOpenAI(input);
+    // const res = "Hello world my name is himadri purkait";
     console.log(res);
     setResult(res);
     setTempResult(res);
@@ -632,10 +632,12 @@ const Body = () => {
                             <>
                               <div className="group w-full flex justify-center items-center my-[15px]">
                                 <div
-                                  className="px-[15px] rounded-lg cursor-pointer  bg-[#5841d9]  whitespace-nowrap w-full h-[50px]  flex justify-start items-center"
+                                  className="px-[15px] pr-[27px] rounded-lg cursor-pointer  bg-[#5841d9]  whitespace-nowrap w-full h-[50px]  flex justify-start items-center"
                                   style={{ transition: ".3s" }}
                                 >
-                                  {segment.chatId}
+                                  <span className="w-full text-ellipsis overflow-hidden ">
+                                    {segment.chatId}
+                                  </span>
                                 </div>
                                 <div
                                   className="ml-[-30px] h-[30px]  flex justify-center items-center w-[30px] opacity-100 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer text-white hover:text-[#8976f2]"
@@ -655,7 +657,7 @@ const Body = () => {
                             <>
                               <div className="group w-full flex justify-center items-center my-[15px]">
                                 <div
-                                  className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2]  whitespace-nowrap w-[100%] h-[50px] flex justify-start items-center"
+                                  className="px-[15px] pr-[27px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2]  whitespace-nowrap w-[100%] h-[50px] flex justify-start items-center"
                                   style={{ transition: ".3s" }}
                                   onClick={() => {
                                     fetchChatSegment();
@@ -665,7 +667,9 @@ const Body = () => {
                                     AddFetchedChatHistoryToReactStore();
                                   }}
                                 >
-                                  {segment.chatId}
+                                  <span className="w-full text-ellipsis overflow-hidden ">
+                                    {segment.chatId}
+                                  </span>
                                 </div>
                                 <div
                                   className="ml-[-30px] h-[30px]  flex justify-center items-center w-[30px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer text-white hover:text-[#8976f2]"
@@ -1078,10 +1082,12 @@ const Body = () => {
                             <>
                               <div className="group w-full flex justify-center items-center my-[15px]">
                                 <div
-                                  className="px-[15px] rounded-lg cursor-pointer  bg-[#5841d9]  whitespace-nowrap w-full h-[50px]  flex justify-start items-center"
+                                  className="px-[15px] pr-[27px] rounded-lg cursor-pointer  bg-[#5841d9]  whitespace-nowrap w-full h-[50px]  flex justify-start items-center"
                                   style={{ transition: ".3s" }}
                                 >
-                                  {segment.chatId}
+                                  <span className="w-full text-ellipsis overflow-hidden ">
+                                    {segment.chatId}
+                                  </span>
                                 </div>
                               </div>
                             </>
@@ -1089,10 +1095,12 @@ const Body = () => {
                             <>
                               <div className="group w-full flex justify-center items-center my-[15px]">
                                 <div
-                                  className="px-[15px] rounded-lg cursor-pointer  bg-[#1c1f37]  whitespace-nowrap w-full h-[50px] flex justify-start items-center"
+                                  className="px-[15px] pr-[27px] rounded-lg cursor-pointer  bg-[#1c1f37]  whitespace-nowrap w-full h-[50px] flex justify-start items-center"
                                   style={{ transition: ".3s" }}
                                 >
-                                  {segment.chatId}
+                                  <span className="w-full text-ellipsis overflow-hidden ">
+                                    {segment.chatId}
+                                  </span>
                                 </div>
                               </div>
                             </>
@@ -1618,7 +1626,10 @@ const Body = () => {
                     </div>
                   </div>
                   {/* ------------------------------- Chat Segment ----------------------------- */}
-                  <div className="w-[calc(100%-20px)] px-[15px] h-[calc(100vh-270px)] py-[10px] overflow-y-scroll text-[white]">
+                  <div
+                    id="chatSegmentLight"
+                    className="w-[calc(100%-20px)] px-[15px] h-[calc(100vh-270px)] py-[10px] overflow-y-scroll text-[white]"
+                  >
                     {temp.map((segment) => {
                       return (
                         <>
@@ -1626,10 +1637,12 @@ const Body = () => {
                             <>
                               <div className="group w-full flex justify-center items-center my-[15px]">
                                 <div
-                                  className="px-[15px] rounded-lg cursor-pointer text-white  bg-[#5841d9]  whitespace-nowrap w-full h-[50px]  flex justify-start items-center"
+                                  className="px-[15px] pr-[27px] rounded-lg cursor-pointer text-white  bg-[#5841d9]  whitespace-nowrap w-full h-[50px]  flex justify-start items-center"
                                   style={{ transition: ".3s" }}
                                 >
-                                  {segment.chatId}
+                                  <span className="w-full text-ellipsis overflow-hidden">
+                                    {segment.chatId}
+                                  </span>
                                 </div>
                                 <div
                                   className="ml-[-30px] h-[30px]  flex justify-center items-center w-[30px] opacity-100 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer text-white  hover:text-[#8976f2]"
@@ -1649,7 +1662,8 @@ const Body = () => {
                             <>
                               <div className="group w-full flex justify-center items-center my-[15px]">
                                 <div
-                                  className="px-[15px] rounded-lg cursor-pointer text-black hover:text-white bg-[#f8fafc] hover:bg-[#8976f2]  whitespace-nowrap w-[100%] h-[50px] flex justify-start items-center"
+                                  id="he"
+                                  className="px-[15px] pr-[27px] rounded-lg cursor-pointer text-black hover:text-white bg-[#f8fafc] hover:bg-[#8976f2]  whitespace-nowrap w-[100%] h-[50px] flex justify-start items-center"
                                   style={{ transition: ".3s" }}
                                   onClick={() => {
                                     fetchChatSegment();
@@ -1659,7 +1673,9 @@ const Body = () => {
                                     AddFetchedChatHistoryToReactStore();
                                   }}
                                 >
-                                  {segment.chatId}
+                                  <span className="w-full text-ellipsis overflow-hidden ">
+                                    {segment.chatId}
+                                  </span>
                                 </div>
                                 <div
                                   className="ml-[-30px] h-[30px]  flex justify-center items-center w-[30px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer text-white  hover:text-[#8976f2]"
@@ -1794,20 +1810,20 @@ const Body = () => {
                                 onClick={SpeechRecognition.startListening}
                               >
                                 <BiSolidMicrophone
-                                  className="text-[white] "
+                                  className="text-[#5841d9] "
                                   style={{ transition: ".3s" }}
                                 />
                               </button>
                               <input
                                 placeholder="Create New Chat Segment First"
-                                className="placeholder:text-orange-400 w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                                className="placeholder:text-orange-400 w-full h-full px-[60px] rounded-lg outline-none bg-[#fff] text-[black] flex justify-center items-center font-[nunitosans] "
                                 style={{ transition: ".5s" }}
                                 value={""}
                               ></input>
 
                               <div className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg">
                                 <IoMdSend
-                                  className="text-[white] "
+                                  className="text-[#5841d9] "
                                   style={{ transition: ".3s" }}
                                 />
                               </div>
@@ -1836,7 +1852,7 @@ const Body = () => {
                                 ) : (
                                   <>
                                     <BiSolidMicrophone
-                                      className="text-[white] hover:text-[#5841d9]"
+                                      className="text-[#5841d9] hover:text-[#8976f2]"
                                       style={{ transition: ".3s" }}
                                     />
                                   </>
@@ -1844,7 +1860,7 @@ const Body = () => {
                               </button>
                               <input
                                 placeholder="Ask Anything"
-                                className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                                className="w-full h-full px-[60px] rounded-lg outline-none bg-[#fff] text-[black] flex justify-center items-center font-[nunitosans] "
                                 style={{ transition: ".5s" }}
                                 value={input}
                                 onKeyDown={(e) => {
@@ -1866,7 +1882,7 @@ const Body = () => {
                                 }}
                               >
                                 <IoMdSend
-                                  className="text-[white] hover:text-[#8976f2]"
+                                  className="text-[#5841d9] hover:text-[#8976f2]"
                                   style={{ transition: ".3s" }}
                                 />
                               </div>
@@ -2045,6 +2061,7 @@ const Body = () => {
                   </div>
                   {/* ----------------------------- Chat Segment ---------------------------- */}
                   <div
+                    id="chatSegmentLightClose"
                     className="w-[calc(100%-20px)] px-[0] h-[calc(100vh-270px)] py-[10px] overflow-y-scroll text-[white]"
                     style={{ transition: ".5s" }}
                   >
@@ -2058,7 +2075,9 @@ const Body = () => {
                                   className="px-[15px] rounded-lg cursor-pointer  bg-[#5841d9]  whitespace-nowrap w-full h-[50px]  flex justify-start items-center"
                                   style={{ transition: ".3s" }}
                                 >
-                                  {segment.chatId}
+                                  <span className="w-full text-ellipsis overflow-hidden ">
+                                    {segment.chatId}
+                                  </span>
                                 </div>
                               </div>
                             </>
@@ -2069,7 +2088,9 @@ const Body = () => {
                                   className="px-[15px] rounded-lg cursor-pointer  bg-[#f8fafc] text-black  whitespace-nowrap w-full h-[50px] flex justify-start items-center"
                                   style={{ transition: ".3s" }}
                                 >
-                                  {segment.chatId}
+                                  <span className="w-full text-ellipsis overflow-hidden ">
+                                    {segment.chatId}
+                                  </span>
                                 </div>
                               </div>
                             </>
@@ -2271,20 +2292,20 @@ const Body = () => {
                                 onClick={SpeechRecognition.startListening}
                               >
                                 <BiSolidMicrophone
-                                  className="text-[white] "
+                                  className="text-[#5841d9] "
                                   style={{ transition: ".3s" }}
                                 />
                               </button>
                               <input
                                 placeholder="Create New Chat Segment First"
-                                className="placeholder:text-orange-400 w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                                className="placeholder:text-orange-400 w-full h-full px-[60px] rounded-lg outline-none bg-[#fff] text-[black] flex justify-center items-center font-[nunitosans] "
                                 style={{ transition: ".5s" }}
                                 value={""}
                               ></input>
 
                               <div className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg">
                                 <IoMdSend
-                                  className="text-[white] "
+                                  className="text-[#5841d9] "
                                   style={{ transition: ".3s" }}
                                 />
                               </div>
@@ -2313,7 +2334,7 @@ const Body = () => {
                                 ) : (
                                   <>
                                     <BiSolidMicrophone
-                                      className="text-[white] hover:text-[#5841d9]"
+                                      className="text-[#5841d9] hover:text-[#8976f2]"
                                       style={{ transition: ".3s" }}
                                     />
                                   </>
@@ -2321,7 +2342,7 @@ const Body = () => {
                               </button>
                               <input
                                 placeholder="Ask Anything"
-                                className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                                className="w-full h-full px-[60px] rounded-lg outline-none bg-[#fff] text-[black] flex justify-center items-center font-[nunitosans] "
                                 style={{ transition: ".5s" }}
                                 value={input}
                                 onKeyDown={(e) => {
@@ -2343,7 +2364,7 @@ const Body = () => {
                                 }}
                               >
                                 <IoMdSend
-                                  className="text-[white] hover:text-[#8976f2]"
+                                  className="text-[#5841d9] hover:text-[#8976f2]"
                                   style={{ transition: ".3s" }}
                                 />
                               </div>

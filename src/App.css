@@ -14,6 +14,7 @@
 /* Track */
 ::-webkit-scrollbar-track {
   background: #141627;
+  transition: 0.5s;
   width: 2px;
   border-radius: 50px;
   margin: 0px 550px;
@@ -30,6 +31,26 @@
   background: #555;
 }
 
+#chatSegmentLight::-webkit-scrollbar-track {
+  background: #ffffff;
+  width: 2px;
+  border-radius: 50px;
+  margin: 0px 550px;
+  transition: 0.5s;
+  /* padding-left: 300px; */
+}
+#chatSegmentLightClose::-webkit-scrollbar-track {
+  background: #ffffff;
+  width: 2px;
+  border-radius: 50px;
+  margin: 0px 550px;
+  transition: 0.5s;
+  /* padding-left: 300px; */
+}
+#chatSegmentLight::-webkit-scrollbar-thumb {
+  background: #5841d9;
+  border-radius: 10px;
+}
 @font-face {
   font-family: wakanda;
   src: url(./assets/font/WAKANDA\ PANTHER.ttf);
@@ -248,3 +269,15 @@
     clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
   }
 }
+
+/* ------------------------- */
+
+/* #he > span {
+
+  white-space: nowrap;
+  transform: translateX(0);
+  transition: 1s;
+}
+#she:hover > span {
+  transform: translateX(calc(200px - 100%));
+} */
