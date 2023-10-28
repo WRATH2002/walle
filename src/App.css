@@ -13,7 +13,7 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #141627;
+  background: transparent;
   transition: 0.5s;
   width: 2px;
   border-radius: 50px;
@@ -32,7 +32,7 @@
 }
 
 #chatSegmentLight::-webkit-scrollbar-track {
-  background: #ffffff;
+  background: transparent;
   width: 2px;
   border-radius: 50px;
   margin: 0px 550px;
@@ -40,7 +40,7 @@
   /* padding-left: 300px; */
 }
 #chatSegmentLightClose::-webkit-scrollbar-track {
-  background: #ffffff;
+  background: transparent;
   width: 2px;
   border-radius: 50px;
   margin: 0px 550px;

@@ -91,6 +91,7 @@ const Body = () => {
   const [id, setId] = useState(1);
   const [isSidebar, setIsSidebar] = useState(true);
   const [tempResult, setTempResult] = useState("");
+  const [chatSegmentInput, setChatSegmentInput] = useState("");
   // -------------------------------------------------------Transcript Initialization------
   const {
     transcript,
@@ -591,12 +592,18 @@ const Body = () => {
                             // onClick={() =>
                             //   setToggleCreateNewChat(!toggleCreateNewChat)
                             // }
-                            value={toggleCreateNewChatInput}
-                            onChange={(e) =>
-                              setToggleCreateNewChatInput(e.target.value)
-                            }
+                            placeholder="Chat Name"
+                            value={chatSegmentInput}
+                            onChange={(e) => {
+                              setChatSegmentInput(e.target.value);
+                              if (e.target.value !== "") {
+                                setToggleCreateNewChatInput(e.target.value);
+                              } else {
+                              }
+                            }}
                             onKeyDown={(e) => {
                               if (e.nativeEvent.key === "Enter") {
+                                // setToggleCreateNewChatInput(chatSegmentInput)
                                 console.log("Enter");
                                 fetchChatSegment();
                                 createNewFirestoreChatDocument();
@@ -609,6 +616,7 @@ const Body = () => {
                             <RxCross2
                               className="text-white  text-[20px] bg-[#1c1f37] "
                               onClick={() => {
+                                setChatSegmentInput("");
                                 setToggleCreateNewChat(!toggleCreateNewChat);
                               }}
                             />
@@ -618,7 +626,10 @@ const Body = () => {
                     </div>
                     <div
                       className="w-[50px] h-full  rounded-xl  flex justify-center items-center cursor-pointer "
-                      onClick={() => setIsSidebar(!isSidebar)}
+                      onClick={() => {
+                        setIsSidebar(!isSidebar);
+                        setAvatar(false);
+                      }}
                     >
                       <FiSidebar className="text-white text-[18px]" />
                     </div>
@@ -658,7 +669,7 @@ const Body = () => {
                               <div className="group w-full flex justify-center items-center my-[15px]">
                                 <div
                                   className="px-[15px] pr-[27px] rounded-lg cursor-pointer  bg-[#1c1f37] hover:bg-[#8976f2]  whitespace-nowrap w-[100%] h-[50px] flex justify-start items-center"
-                                  style={{ transition: ".3s" }}
+                                  style={{ transition: ".5s" }}
                                   onClick={() => {
                                     fetchChatSegment();
                                     setToggleCreateNewChatInput(segment.chatId);
@@ -713,14 +724,185 @@ const Body = () => {
                         Himadri Purkait
                       </span>
                     </div> */}
-                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] ">
+                    {/* <div
+                    onClick={() => setAvatar(!avatar)}
+                    className="text-white cursor-pointer font-[nunitosans] "
+                  >
+                    Select Avatar
+                  </div> */}
+
+                    {/* ---------------------------------- */}
+                    <div
+                      className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] "
+                      onClick={() => setAvatar(!avatar)}
+                    >
                       <IoSettingsOutline className="text-white text-[18px]" />
 
                       <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
                         Settings
                       </span>
                     </div>
-                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer  my-[4px]">
+                    <div className="w-full h-[192px]  overflow-y-scroll">
+                      {avatar === false ? (
+                        <>
+                          <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer  my-[4px]">
+                            <div className="w-[calc(100%-40px)] flex">
+                              <MdDarkMode className="text-white text-[18px]" />
+
+                              <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                                Dark Mode
+                              </span>
+                            </div>
+                            {toggleMode === 2 ? (
+                              <>
+                                <div
+                                  className="w-[40px] h-[24px] flex  items-center rounded-full bg-[#252a43]"
+                                  onClick={() => changeDarkModeThree()}
+                                >
+                                  <div
+                                    className="w-[16px] h-[16px] ml-[20px] bg-[#5841d9] rounded-full"
+                                    style={{ transition: ".5s" }}
+                                  ></div>
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <div
+                                  className="w-[40px] h-[24px] flex  items-center rounded-full bg-[#e4e6ec]"
+                                  onClick={() => changeDarkModeThree()}
+                                >
+                                  <div
+                                    className="w-[16px] h-[16px] ml-[4px] bg-[white] rounded-full"
+                                    style={{ transition: ".5s" }}
+                                    // onClick={() => setToggleMode(!toggleMode)}
+                                  ></div>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                          <div
+                            className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] "
+                            onClick={userSignOut}
+                          >
+                            <FiLogOut className="text-white text-[18px]" />
+
+                            <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                              Logout
+                            </span>
+                          </div>
+                          <div
+                            className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] "
+                            onClick={() => {
+                              if (chatMessage.length > 0) {
+                                toast.success("Chats Deleted Successfully");
+                              } else {
+                                toast.error("No Chats to Delete");
+                              }
+                              checkChatlength();
+                              DeleteChatHistoryFromFirebase();
+
+                              getChatHistoryFromFirestore();
+                              AddFetchedChatHistoryToReactStore();
+                            }}
+                          >
+                            <BsChatSquareText className="text-white text-[18px]" />
+
+                            <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                              Delete Chats
+                            </span>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          {" "}
+                          {avatar === true ? (
+                            <>
+                              <div
+                                className="w-full py-[10px]  flex flex-wrap justify-center"
+                                style={{ transition: ".5s" }}
+                              >
+                                {IMG_ID.map((imgid) => {
+                                  return (
+                                    <>
+                                      {selectAvatar === undefined ? (
+                                        <>
+                                          <div
+                                            className="w-[40px] h-[40px]  m-[5px] rounded-full cursor-pointer border[5px] border-white"
+                                            onClick={() => {
+                                              if (selectAvatar === imgid.id) {
+                                                setSelectAvatar();
+                                              } else {
+                                                setSelectAvatar(imgid.id);
+                                              }
+                                            }}
+                                          >
+                                            <img
+                                              loading="lazy"
+                                              src={imgid.id}
+                                              className=" rounded-lg border[2px] border-white "
+                                              style={{ transition: ".5s" }}
+                                            ></img>
+                                          </div>
+                                        </>
+                                      ) : selectAvatar === imgid.id ? (
+                                        <>
+                                          <div
+                                            className="w-[40px] h-[40px]  m-[5px] rounded-full cursor-pointer border[5px] border-white"
+                                            onClick={() => {
+                                              if (selectAvatar === imgid.id) {
+                                                setSelectAvatar();
+                                              } else {
+                                                setSelectAvatar(imgid.id);
+                                              }
+                                            }}
+                                          >
+                                            <img
+                                              loading="lazy"
+                                              src={imgid.id}
+                                              className=" rounded-lg border[2px] border-white "
+                                              style={{ transition: ".5s" }}
+                                            ></img>
+                                          </div>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <div
+                                            className="w-[40px] h-[40px]  m-[5px] rounded-full cursor-pointer border[5px] border-white"
+                                            onClick={() => {
+                                              if (selectAvatar === imgid.id) {
+                                                setSelectAvatar();
+                                              } else {
+                                                setSelectAvatar(imgid.id);
+                                              }
+                                            }}
+                                          >
+                                            <img
+                                              loading="lazy"
+                                              src={imgid.id}
+                                              className=" rounded-lg border[2px] border-white opacity-[.3] hover:opacity-100"
+                                              style={{ transition: ".5s" }}
+                                            ></img>
+                                          </div>
+                                        </>
+                                      )}
+                                    </>
+                                  );
+                                })}
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <div
+                                className="w-full h-[0] "
+                                style={{ transition: ".5s" }}
+                              ></div>
+                            </>
+                          )}
+                        </>
+                      )}
+                    </div>
+
+                    {/* <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer  my-[4px]">
                       <div className="w-[calc(100%-40px)] flex">
                         <MdDarkMode className="text-white text-[18px]" />
 
@@ -785,7 +967,7 @@ const Body = () => {
                       <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
                         Delete Chats
                       </span>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div
@@ -909,11 +1091,11 @@ const Body = () => {
                           return (
                             <>
                               <div className="w-full flex flex-col ">
-                                <span
-                                  className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-white "
-                                  style={{ transition: ".5s" }}
-                                >
-                                  <div className="group  w-full flex p-[19px] border-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-l-[#5841d9]">
+                                <span className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-white ">
+                                  <div
+                                    className="group  w-full flex p-[19px] border-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-l-[#5841d9]"
+                                    style={{ transition: ".5s" }}
+                                  >
                                     <div className="w-[40px] h-[40px] rounded-sm bg-slate-500">
                                       <img
                                         src={selectAvatar}
@@ -1130,40 +1312,42 @@ const Body = () => {
                         Settings
                       </span>
                     </div>
-                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] ">
-                      <MdDarkMode className="text-white text-[18px]" />
+                    <div className="w-full h-[192px]  overflow-y-scroll">
+                      <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] ">
+                        <MdDarkMode className="text-white text-[18px]" />
 
-                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
-                        Dark Mode
-                      </span>
-                    </div>
-                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] ">
-                      <FiLogOut className="text-white text-[18px]" />
+                        <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                          Dark Mode
+                        </span>
+                      </div>
+                      <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] ">
+                        <FiLogOut className="text-white text-[18px]" />
 
-                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
-                        Logout
-                      </span>
-                    </div>
-                    <div
-                      className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] "
-                      onClick={() => {
-                        if (chatMessage.length > 0) {
-                          toast.success("Chats Deleted Successfully");
-                        } else {
-                          toast.error("No Chats to Delete");
-                        }
-                        checkChatlength();
-                        DeleteChatHistoryFromFirebase();
+                        <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                          Logout
+                        </span>
+                      </div>
+                      <div
+                        className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] "
+                        onClick={() => {
+                          if (chatMessage.length > 0) {
+                            toast.success("Chats Deleted Successfully");
+                          } else {
+                            toast.error("No Chats to Delete");
+                          }
+                          checkChatlength();
+                          DeleteChatHistoryFromFirebase();
 
-                        getChatHistoryFromFirestore();
-                        AddFetchedChatHistoryToReactStore();
-                      }}
-                    >
-                      <BsChatSquareText className="text-white text-[18px]" />
+                          getChatHistoryFromFirestore();
+                          AddFetchedChatHistoryToReactStore();
+                        }}
+                      >
+                        <BsChatSquareText className="text-white text-[18px]" />
 
-                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
-                        Delete Chats
-                      </span>
+                        <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                          Delete Chats
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1593,12 +1777,18 @@ const Body = () => {
                             // onClick={() =>
                             //   setToggleCreateNewChat(!toggleCreateNewChat)
                             // }
-                            value={toggleCreateNewChatInput}
-                            onChange={(e) =>
-                              setToggleCreateNewChatInput(e.target.value)
-                            }
+                            placeholder="Chat Name"
+                            value={chatSegmentInput}
+                            onChange={(e) => {
+                              setChatSegmentInput(e.target.value);
+                              if (e.target.value !== "") {
+                                setToggleCreateNewChatInput(e.target.value);
+                              } else {
+                              }
+                            }}
                             onKeyDown={(e) => {
                               if (e.nativeEvent.key === "Enter") {
+                                // setToggleCreateNewChatInput(chatSegmentInput)
                                 console.log("Enter");
                                 fetchChatSegment();
                                 createNewFirestoreChatDocument();
@@ -1609,8 +1799,9 @@ const Body = () => {
                           ></input>
                           <div className="w-[30px] flex justify-center items-center ml-[-30px] h-[50px]">
                             <RxCross2
-                              className="text-black  text-[20px] bg-[#f8fafc] "
+                              className="text-black  text-[20px] bg-transparent "
                               onClick={() => {
+                                setChatSegmentInput("");
                                 setToggleCreateNewChat(!toggleCreateNewChat);
                               }}
                             />
@@ -1620,7 +1811,10 @@ const Body = () => {
                     </div>
                     <div
                       className="w-[50px] h-full  rounded-xl  flex justify-center items-center cursor-pointer "
-                      onClick={() => setIsSidebar(!isSidebar)}
+                      onClick={() => {
+                        setAvatar(false);
+                        setIsSidebar(!isSidebar);
+                      }}
                     >
                       <FiSidebar className="text-black text-[18px] drop-shadow-lg" />
                     </div>
@@ -1664,7 +1858,7 @@ const Body = () => {
                                 <div
                                   id="he"
                                   className="px-[15px] pr-[27px] rounded-lg cursor-pointer text-black hover:text-white bg-[#f8fafc] hover:bg-[#8976f2]  whitespace-nowrap w-[100%] h-[50px] flex justify-start items-center"
-                                  style={{ transition: ".3s" }}
+                                  style={{ transition: ".5s" }}
                                   onClick={() => {
                                     fetchChatSegment();
                                     setToggleCreateNewChatInput(segment.chatId);
@@ -1698,79 +1892,174 @@ const Body = () => {
                     className="w-[calc(100%-20px)] h-[200px]  mx-[10px] py-[10px] flex flex-col justify-center items-center  border-t-[2px] border-[#eff1f4]"
                     style={{ transition: ".5s" }}
                   >
-                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] ">
-                      <IoSettingsOutline className="text-[#5841d9] text-[18px] drop-shadow-lg" />
+                    <div
+                      className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] "
+                      onClick={() => setAvatar(!avatar)}
+                    >
+                      <IoSettingsOutline className="text-[black] text-[18px] drop-shadow-lg" />
 
                       <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] drop-shadow-lg ">
                         Settings
                       </span>
                     </div>
-                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] ">
-                      <div className="w-[calc(100%-40px)] flex">
-                        <MdDarkMode className="text-[#5841d9] text-[18px] drop-shadow-lg" />
-
-                        <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] drop-shadow-lg ">
-                          Dark Mode
-                        </span>
-                      </div>
-                      {toggleMode === 2 ? (
+                    <div className="w-full h-[192px]  overflow-y-scroll">
+                      {avatar === false ? (
                         <>
+                          <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer  my-[4px]">
+                            <div className="w-[calc(100%-40px)] flex">
+                              <MdDarkMode className="text-[black] text-[18px]" />
+
+                              <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                                Dark Mode
+                              </span>
+                            </div>
+                            {toggleMode === 2 ? (
+                              <>
+                                <div
+                                  className="w-[40px] h-[24px] flex  items-center rounded-full bg-[#252a43]"
+                                  onClick={() => changeDarkModeThree()}
+                                >
+                                  <div
+                                    className="w-[16px] h-[16px] ml-[20px] bg-[#5841d9] rounded-full"
+                                    style={{ transition: ".5s" }}
+                                  ></div>
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <div
+                                  className="w-[40px] h-[24px] flex  items-center rounded-full bg-[#e4e6ec]"
+                                  onClick={() => changeDarkModeThree()}
+                                >
+                                  <div
+                                    className="w-[16px] h-[16px] ml-[4px] bg-[white] rounded-full"
+                                    style={{ transition: ".5s" }}
+                                    // onClick={() => setToggleMode(!toggleMode)}
+                                  ></div>
+                                </div>
+                              </>
+                            )}
+                          </div>
                           <div
-                            className="w-[40px] h-[24px] flex  items-center rounded-full bg-[#252a43] "
-                            onClick={() => changeDarkModeThree()}
+                            className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] "
+                            onClick={userSignOut}
                           >
-                            <div
-                              className="w-[16px] h-[16px] ml-[20px] bg-[#5841d9] rounded-full drop-shadow-lg"
-                              style={{ transition: ".5s" }}
-                            ></div>
+                            <FiLogOut className="text-black text-[18px]" />
+
+                            <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                              Logout
+                            </span>
+                          </div>
+                          <div
+                            className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] "
+                            onClick={() => {
+                              if (chatMessage.length > 0) {
+                                toast.success("Chats Deleted Successfully");
+                              } else {
+                                toast.error("No Chats to Delete");
+                              }
+                              checkChatlength();
+                              DeleteChatHistoryFromFirebase();
+
+                              getChatHistoryFromFirestore();
+                              AddFetchedChatHistoryToReactStore();
+                            }}
+                          >
+                            <BsChatSquareText className="text-black text-[18px]" />
+
+                            <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                              Delete Chats
+                            </span>
                           </div>
                         </>
                       ) : (
                         <>
-                          <div
-                            className="w-[40px] h-[24px] flex  items-center rounded-full bg-[#e4e6ec] "
-                            onClick={() => changeDarkModeThree()}
-                          >
-                            <div
-                              className="w-[16px] h-[16px] ml-[4px] bg-[white] rounded-full drop-shadow-lg"
-                              style={{ transition: ".5s" }}
-                              // onClick={() => setToggleMode(!toggleMode)}
-                            ></div>
-                          </div>
+                          {" "}
+                          {avatar === true ? (
+                            <>
+                              <div
+                                className="w-full py-[10px]  flex flex-wrap justify-center"
+                                style={{ transition: ".5s" }}
+                              >
+                                {IMG_ID.map((imgid) => {
+                                  return (
+                                    <>
+                                      {selectAvatar === undefined ? (
+                                        <>
+                                          <div
+                                            className="w-[40px] h-[40px]  m-[5px] rounded-full cursor-pointer border[5px] border-white"
+                                            onClick={() => {
+                                              if (selectAvatar === imgid.id) {
+                                                setSelectAvatar();
+                                              } else {
+                                                setSelectAvatar(imgid.id);
+                                              }
+                                            }}
+                                          >
+                                            <img
+                                              loading="lazy"
+                                              src={imgid.id}
+                                              className=" rounded-lg border[2px] border-white "
+                                              style={{ transition: ".5s" }}
+                                            ></img>
+                                          </div>
+                                        </>
+                                      ) : selectAvatar === imgid.id ? (
+                                        <>
+                                          <div
+                                            className="w-[40px] h-[40px]  m-[5px] rounded-full cursor-pointer border[5px] border-white"
+                                            onClick={() => {
+                                              if (selectAvatar === imgid.id) {
+                                                setSelectAvatar();
+                                              } else {
+                                                setSelectAvatar(imgid.id);
+                                              }
+                                            }}
+                                          >
+                                            <img
+                                              loading="lazy"
+                                              src={imgid.id}
+                                              className=" rounded-lg border[2px] border-white "
+                                              style={{ transition: ".5s" }}
+                                            ></img>
+                                          </div>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <div
+                                            className="w-[40px] h-[40px]  m-[5px] rounded-full cursor-pointer border[5px] border-white"
+                                            onClick={() => {
+                                              if (selectAvatar === imgid.id) {
+                                                setSelectAvatar();
+                                              } else {
+                                                setSelectAvatar(imgid.id);
+                                              }
+                                            }}
+                                          >
+                                            <img
+                                              loading="lazy"
+                                              src={imgid.id}
+                                              className=" rounded-lg border[2px] border-white opacity-[.3] hover:opacity-100"
+                                              style={{ transition: ".5s" }}
+                                            ></img>
+                                          </div>
+                                        </>
+                                      )}
+                                    </>
+                                  );
+                                })}
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <div
+                                className="w-full h-[0] "
+                                style={{ transition: ".5s" }}
+                              ></div>
+                            </>
+                          )}
                         </>
                       )}
-                    </div>
-
-                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] ">
-                      <FiLogOut className="text-[#5841d9] text-[18px] drop-shadow-lg" />
-
-                      <span
-                        className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] drop-shadow-lg "
-                        onClick={userSignOut}
-                      >
-                        Logout
-                      </span>
-                    </div>
-                    <div
-                      className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] "
-                      onClick={() => {
-                        if (chatMessage.length > 0) {
-                          toast.success("Chats Deleted Successfully");
-                        } else {
-                          toast.error("No Chats to Delete");
-                        }
-                        checkChatlength();
-                        DeleteChatHistoryFromFirebase();
-
-                        getChatHistoryFromFirestore();
-                        AddFetchedChatHistoryToReactStore();
-                      }}
-                    >
-                      <BsChatSquareText className="text-[#5841d9] text-[18px]" />
-
-                      <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
-                        Delete Chats
-                      </span>
                     </div>
                     {/* <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start mt-[15px] items-center cursor-pointer ">
                       <BsLinkedin className="text-[#5841d9] text-[18px] drop-shadow-lg" />{" "}
@@ -1900,9 +2189,12 @@ const Body = () => {
                               <div className="w-full flex flex-col ">
                                 <span
                                   className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-black "
-                                  style={{ transition: ".5s" }}
+                                  // style={{ transition: ".5s" }}
                                 >
-                                  <div className="group  w-full flex p-[19px] border-[2px] border-[#f3f5f8] rounded-lg hover:border-l-[2px] hover:border-l-[#5841d9]">
+                                  <div
+                                    className="group  w-full flex p-[19px] border-[2px] border-[#f3f5f8] rounded-lg hover:border-l-[2px] hover:border-l-[#5841d9]"
+                                    style={{ transition: ".5s" }}
+                                  >
                                     <div className="w-[40px] h-[40px] rounded-sm bg-slate-500">
                                       <img
                                         src={selectAvatar}
@@ -2199,58 +2491,49 @@ const Body = () => {
                     </>
                   )} */}
                   <div className="w-[calc(100%-20px)] h-[200px]  mx-[10px] py-[10px] flex flex-col justify-center items-center  border-t-[2px] border-[#eff1f4]">
-                    <div className="w-full  h-[40px] mb-[10px]  rounded-xl  px-[4px] flex justify-start items-center cursor-pointer ">
-                      {/* <img
-                        src={selectAvatar}
-                        className="rounded-full h-full"
-                        loading="lazy"
-                      ></img>
-
-                      <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] ">
-                        Himadri Purkait
-                      </span> */}
-                    </div>
                     <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer  my-[4px] ">
-                      <IoSettingsOutline className="text-[#5841d9] drop-shadow-lg text-[18px]" />
+                      <IoSettingsOutline className="text-[black] drop-shadow-lg text-[18px]" />
 
                       <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
                         Settings
                       </span>
                     </div>
-                    <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px]  ">
-                      <MdDarkMode className="text-[#5841d9] drop-shadow-lg text-[18px]" />
+                    <div className="w-full h-[192px]  overflow-y-scroll">
+                      <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px]  ">
+                        <MdDarkMode className="text-[black] drop-shadow-lg text-[18px]" />
 
-                      <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
-                        Dark Mode
-                      </span>
-                    </div>
-                    <div className="w-full h-[40px]    rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px]  ">
-                      <FiLogOut className="text-[#5841d9] drop-shadow-lg text-[18px]" />
+                        <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                          Dark Mode
+                        </span>
+                      </div>
+                      <div className="w-full h-[40px]    rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px]  ">
+                        <FiLogOut className="text-[black] drop-shadow-lg text-[18px]" />
 
-                      <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
-                        Logout
-                      </span>
-                    </div>
-                    <div
-                      className="w-full h-[40px] text-black  rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] "
-                      onClick={() => {
-                        if (chatMessage.length > 0) {
-                          toast.success("Chats Deleted Successfully");
-                        } else {
-                          toast.error("No Chats to Delete");
-                        }
-                        checkChatlength();
-                        DeleteChatHistoryFromFirebase();
+                        <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                          Logout
+                        </span>
+                      </div>
+                      <div
+                        className="w-full h-[40px] text-black  rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] "
+                        onClick={() => {
+                          if (chatMessage.length > 0) {
+                            toast.success("Chats Deleted Successfully");
+                          } else {
+                            toast.error("No Chats to Delete");
+                          }
+                          checkChatlength();
+                          DeleteChatHistoryFromFirebase();
 
-                        getChatHistoryFromFirestore();
-                        AddFetchedChatHistoryToReactStore();
-                      }}
-                    >
-                      <BsChatSquareText className="text-[#5841d9] text-[18px]" />
+                          getChatHistoryFromFirestore();
+                          AddFetchedChatHistoryToReactStore();
+                        }}
+                      >
+                        <BsChatSquareText className="text-[black] text-[18px]" />
 
-                      <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
-                        Delete Chats
-                      </span>
+                        <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                          Delete Chats
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
