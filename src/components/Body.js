@@ -72,7 +72,7 @@ import "prismjs/components/prism-python";
 import "prismjs/components/prism-ruby";
 import "prismjs/components/prism-java";
 import "prismjs/components/prism-css";
-import "prismjs/themes/prism-vsc-dark-plus.css";
+import "../assets/style/prism-vsc-dark-plus.css";
 // import "prismjs/themes/prism-monokai.css";
 const IMG_ID = [
   { id: one },
