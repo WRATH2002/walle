@@ -75,7 +75,7 @@ const Signup = () => {
         console.log(userCredential.user.email);
         console.log(userCredential);
         // toast.success("Sign Up Successful");
-        // createUserCollection(userCredential.user);
+        createUserCollection(userCredential.user);
         // .db.collection("users")
         // .doc(userCredential.user.uid)
         // .set({

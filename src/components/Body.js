@@ -62,6 +62,18 @@ import { db } from "../firebase";
 import firebase from "../firebase";
 import toast, { Toaster } from "react-hot-toast";
 // -------------------------------------------------------Avatar Image Id Array-----
+import Prism from "prismjs";
+import "prismjs/components/prism-jsx";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-css";
+import "prismjs/components/prism-markup";
+import "prismjs/components/prism-python";
+import "prismjs/components/prism-python";
+import "prismjs/components/prism-ruby";
+import "prismjs/components/prism-java";
+import "prismjs/components/prism-css";
+import "prismjs/themes/prism-vsc-dark-plus.css";
+// import "prismjs/themes/prism-monokai.css";
 const IMG_ID = [
   { id: one },
   { id: two },
@@ -77,6 +89,19 @@ const IMG_ID = [
   { id: twelve },
   { id: thirteen },
 ];
+
+// function escapeHtml(text) {
+//   const map = {
+//     "&": "&amp;",
+//     "<": "&lt;",
+//     ">": "&gt;",
+//     '"': "&quot;",
+//     "'": "&#039;",
+//   };
+//   return text.replace(/[&<>"']/g, function (m) {
+//     return map[m];
+//   });
+// }
 
 const Body = () => {
   const [input, setInput] = useState("");
@@ -135,9 +160,6 @@ const Body = () => {
     // FetchLatestdata();
     storeToFirestore();
 
-    setTempResult("");
-    getChatHistoryFromFirestore();
-    AddFetchedChatHistoryToReactStore();
     chatMessage = "";
   }, [id]);
 
@@ -148,22 +170,6 @@ const Body = () => {
     AddFetchedChatHistoryToReactStore();
   }, [chatHistory]);
 
-  // useEffect(() => {
-  //   // storeToFirestore();
-  //   // storeToFirestore();
-  //   getChatHistoryFromFirestore();
-  //   // AddFetchedChatHistoryToReactStore();
-  // }, [chatMessage]);
-  // useEffect(() => {
-  //   // storeToFirestore();
-  //   // storeToFirestore();
-  //   // getChatHistoryFromFirestore();
-  //   AddFetchedChatHistoryToReactStore();
-  // }, [chatMessage]);
-  // ------------------------------------------------------- -------
-  // useEffect(() => {
-  //   storeToFirestore();
-  // });
   // -------------------------------------------------------Functiomn to Toggle DarkMode-------
   function changeDarkModeThree() {
     if (darkmode === 1) {
@@ -201,7 +207,7 @@ const Body = () => {
   }
   // -------------------------------------------------------Function to Dispatch Chat History from Firestore to react Store------
   function AddFetchedChatHistoryToReactStore() {
-    console.log("chathistory in add function");
+    console.log("saving chat history to React Redux : data -->");
     console.log(chatHistory);
     dispatch(addMessageNew());
     chatHistory.map((chat, index) => {
@@ -221,8 +227,7 @@ const Body = () => {
   }
   // -------------------------------------------------------Function to Store ChatHistory to Firestore-------
   function storeToFirestore() {
-    console.log(" storefunction");
-
+    console.log("Function to store data to Firestore: Data -->");
     console.log(chatMessage);
 
     if (chatMessage.length != 0) {
@@ -261,6 +266,10 @@ const Body = () => {
         });
       }
     }
+
+    setTempResult("");
+    getChatHistoryFromFirestore();
+    AddFetchedChatHistoryToReactStore();
   }
 
   function fetchChatSegment() {
@@ -379,28 +388,52 @@ const Body = () => {
   //   storeToFirestore();
   // };
   // -------------------------------------------------------Function to Generate answer to Given Query-----
+  const {
+    GoogleGenerativeAI,
+    HarmCategory,
+    HarmBlockThreshold,
+  } = require("@google/generative-ai");
+  const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+
+  const genAI = new GoogleGenerativeAI(apiKey);
+
+  const model = genAI.getGenerativeModel({
+    model: "gemini-1.5-pro-exp-0801",
+  });
+
+  const generationConfig = {
+    temperature: 1,
+    topP: 0.95,
+    topK: 64,
+    maxOutputTokens: 8192,
+    responseMimeType: "text/plain",
+  };
+
+  async function run(inputt) {
+    const chatSession = model.startChat({
+      generationConfig,
+      history: prevChatHistory(),
+    });
+
+    const result = await chatSession.sendMessage(inputt);
+    console.log("Gemini Generated Answer");
+    console.log(result.response.text());
+    setResult(result.response.text());
+    setTempResult(result.response.text());
+  }
+
   const handleSend = async () => {
-    // var hello = tempInput;
-    // sendMessageToOpenAI(hello);
-    // const tempId = chatMessage[chatMessage.length - 1].id;
-    // setId(parseInt(tempId) + 1);
     if (input === "") {
+      console.log("The prompt is empty");
     } else {
       dispatch(addMessage({ user: input, id: id, assistant: tempInput }));
     }
-    const res = await sendMessageToOpenAI(input);
-    // const res = "Hello world my name is himadri purkait";
-    console.log(res);
-    setResult(res);
-    setTempResult(res);
-
-    // console.log(result);
-
-    // dispatch(addMessage({ user: input, id: id, assistant: input }));
-    // while (result.length == 0) {}
+    run(input);
   };
   // -------------------------------------------------------Function to Add Generated Answer to React Store------
   function setAns() {
+    console.log("Answer set to React Redux");
+    console.log(result);
     dispatch(addAnswer({ id, result }));
     var changeId = parseInt(id);
     changeId = changeId + 1;
@@ -414,22 +447,12 @@ const Body = () => {
   };
   // -------------------------------------------------------Function to Copy to Clipboard------
   function CopyToClipboard(index) {
-    // Get the text field
     var copyText = document.getElementById("2");
     console.log(copyText);
-
-    // Select the text field
-    // copyText.select();
-    // For mobile devices
     const area = document.createElement("textarea");
     area.value = copyText.innerText;
     area.setSelectionRange(0, 99999);
-    // area.select();
-    // Copy the text inside the text field
     navigator.clipboard.writeText(area.value);
-
-    // Alert the copied text
-    // alert("Copied the text: " + copyText.value);
   }
 
   function createNewFirestoreChatDocument() {
@@ -501,14 +524,6 @@ const Body = () => {
   }
   function deleteSegment(segmentId) {
     toast.success("Deleted Successfully");
-    //     toast.promise(
-    //       success,
-    //    {
-    //      loading: 'Saving...',
-    //      success: "Settings saved!",
-    //      error: "Could not save",
-    //    }
-    //  );
     const user = firebase.auth().currentUser;
     const useRef = db
       .collection("users")
@@ -551,6 +566,99 @@ const Body = () => {
       });
     }
   }
+
+  // ------------------------------------------------------------------------- Function to format the text and dangerously set to the pre tag
+  function escapeHtml(text) {
+    const map = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;",
+    };
+    return text.replace(/[&<>"']/g, function (m) {
+      return map[m];
+    });
+  }
+
+  function formatText(text) {
+    text = text.replace(/```(.*?)```/gs, (match, p1) => {
+      if (p1.trim() === "") {
+        return "";
+      }
+
+      const lines = p1.trim().split("\n");
+      const language = lines[0].trim().toLowerCase(); // Lowercase for consistency
+      const codeLines = lines.slice(1);
+
+      // Determine minimum indentation
+      const minIndentation = Math.min(
+        ...codeLines
+          .filter((line) => line.trim() !== "")
+          .map((line) => {
+            const match = line.match(/^\s*/);
+            return match ? match[0].length : 0;
+          })
+      );
+
+      // Remove minimum indentation
+      const code = codeLines
+        .map((line) => line.slice(minIndentation))
+        .join("\n");
+
+      return `
+      <div style="width: 100%; height: auto; white-space: pre-wrap; background-color: #1e1e1e; color: white; border-radius: 16px; display: flex; flex-direction: column; justify-content: start; align-items: start;    padding: 0px 0px 15px 0px;">
+        <div style="width: 100%; height: 40px; background-color: #000000; color: white; display: flex; justify-content: space-between; align-items: center; padding: 0px 15px; border-radius: 16px 16px 0px 0px">
+          <span style="color: #acacac">${language}</span>
+          <button style="width: auto; height: auto; white-space: nowrap; color: white;">copy</button>
+        </div>
+        <pre style="padding: 15px; width: 100%; overflow-x: scroll"><code class="language-${language}">${escapeHtml(
+        code
+      )}</code></pre>
+      </div>
+    `;
+    });
+
+    // Inline code formatting
+    text = text.replace(
+      /`([^`]+)`/g,
+      (match, p1) => `<code>${escapeHtml(p1)}</code>`
+    );
+
+    // Bold text formatting
+    text = text.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+
+    // Bullet point replacement
+    text = text.replace(/\*(?!\*|$)/g, "•");
+
+    // Header formatting
+    text = text.replace(/##(.*?)(?=\n|$)/g, "<b>$1</b>");
+
+    // URL formatting
+    text = text.replace(
+      /(https:\/\/[^\s]+)/g,
+      '<a href="$1" class="bold" target="_blank">$1</a>'
+    );
+
+    return text;
+  }
+
+  useEffect(() => {
+    Prism.highlightAll();
+  });
+
+  // useEffect(() => {
+  function prevChatHistory() {
+    var array = [];
+    if (chatMessage.length != 0) {
+      chatMessage.map((data) => {
+        array.push({ role: "user", parts: [{ text: data.user }] });
+        array.push({ role: "model", parts: [{ text: data.assistant }] });
+      });
+    }
+    return array;
+  }
+  // }, [chatMessage]);
 
   return (
     <>
@@ -1096,10 +1204,10 @@ const Body = () => {
                                     className="group  w-full flex p-[19px] border-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-l-[#5841d9]"
                                     style={{ transition: ".5s" }}
                                   >
-                                    <div className="w-[40px] h-[40px] rounded-sm bg-slate-500">
+                                    <div className="w-[40px] h-[40px] rounded-lg bg-slate-500">
                                       <img
                                         src={selectAvatar}
-                                        className="rounded-sm"
+                                        className="rounded-lg"
                                         loading="lazy"
                                       ></img>
                                     </div>
@@ -1125,10 +1233,30 @@ const Body = () => {
                                     className="bg-[#1c1f37]  w-full flex p-[19px] border-l-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
                                     style={{ transition: ".5s" }}
                                   >
-                                    <img
-                                      src={ai}
-                                      className="w-[40px] h-[40px] rounded-sm bg-slate-500"
-                                    ></img>
+                                    <div
+                                      // src={ai}
+                                      className="w-[40px] h-[40px] rounded-lg bg-[#101116] text-white flex justify-center items-center "
+                                    >
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-bot-message-square"
+                                      >
+                                        <path d="M12 6V2H8" />
+                                        <path d="m8 18-4 4V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2Z" />
+                                        <path d="M2 12h2" />
+                                        <path d="M9 11v2" />
+                                        <path d="M15 11v2" />
+                                        <path d="M20 12h2" />
+                                      </svg>
+                                    </div>
                                     <pre
                                       className=" w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap "
                                       // style={{ transition: ".5s" }}
@@ -1143,11 +1271,16 @@ const Body = () => {
                                         </>
                                       ) : (
                                         <>
-                                          <span id={index} className="">
-                                            {mssg.assistant.substr(
-                                              2,
-                                              mssg.assistant.length - 1
-                                            )}
+                                          <span
+                                            id={index}
+                                            className=""
+                                            dangerouslySetInnerHTML={{
+                                              __html: formatText(
+                                                mssg.assistant
+                                              ),
+                                            }}
+                                          >
+                                            {/* {mssg.assistant} */}
                                           </span>
                                         </>
                                       )}
@@ -1482,10 +1615,10 @@ const Body = () => {
                                   style={{ transition: ".5s" }}
                                 >
                                   <div className="group  w-full flex p-[19px] border-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-l-[#5841d9]">
-                                    <div className="w-[40px] h-[40px] rounded-sm bg-slate-500">
+                                    <div className="w-[40px] h-[40px] rounded-lg bg-slate-500">
                                       <img
                                         src={selectAvatar}
-                                        className="rounded-sm"
+                                        className="rounded-lg"
                                         loading="lazy"
                                       ></img>
                                     </div>
@@ -1511,10 +1644,30 @@ const Body = () => {
                                     className="bg-[#1c1f37]  w-full flex p-[19px] border-l-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
                                     style={{ transition: ".5s" }}
                                   >
-                                    <img
-                                      src={ai}
-                                      className="w-[40px] h-[40px] rounded-sm bg-slate-500"
-                                    ></img>
+                                    <div
+                                      // src={ai}
+                                      className="w-[40px] h-[40px] rounded-lg bg-[#101116] text-white flex justify-center items-center "
+                                    >
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-bot-message-square"
+                                      >
+                                        <path d="M12 6V2H8" />
+                                        <path d="m8 18-4 4V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2Z" />
+                                        <path d="M2 12h2" />
+                                        <path d="M9 11v2" />
+                                        <path d="M15 11v2" />
+                                        <path d="M20 12h2" />
+                                      </svg>
+                                    </div>
                                     <pre
                                       className=" w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap "
                                       // style={{ transition: ".5s" }}
@@ -1529,11 +1682,16 @@ const Body = () => {
                                         </>
                                       ) : (
                                         <>
-                                          <span id={index} className="">
-                                            {mssg.assistant.substr(
-                                              2,
-                                              mssg.assistant.length - 1
-                                            )}
+                                          <span
+                                            id={index}
+                                            className=""
+                                            dangerouslySetInnerHTML={{
+                                              __html: formatText(
+                                                mssg.assistant
+                                              ),
+                                            }}
+                                          >
+                                            {/* {mssg.assistant} */}
                                           </span>
                                         </>
                                       )}
@@ -1624,7 +1782,7 @@ const Body = () => {
                                   <div className="w-[40px] h-[40px] rounded-sm bg-slate-500 ">
                                     <img
                                       src={selectAvatar}
-                                      className="rounded-sm"
+                                      className="rounded-lg"
                                       loading="lazy"
                                     ></img>
                                   </div>
@@ -1640,7 +1798,7 @@ const Body = () => {
                                 >
                                   <img
                                     src={ai}
-                                    className="w-[40px] h-[40px] rounded-sm bg-slate-500"
+                                    className="w-[40px] h-[40px] rounded-lg bg-slate-500"
                                   ></img>
                                   <pre className="w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap ">
                                     {mssg.assistant.length === 0 ? (
@@ -2195,10 +2353,10 @@ const Body = () => {
                                     className="group  w-full flex p-[19px] border-[2px] border-[#f3f5f8] rounded-lg hover:border-l-[2px] hover:border-l-[#5841d9]"
                                     style={{ transition: ".5s" }}
                                   >
-                                    <div className="w-[40px] h-[40px] rounded-sm bg-slate-500">
+                                    <div className="w-[40px] h-[40px] rounded-lg bg-slate-500">
                                       <img
                                         src={selectAvatar}
-                                        className="rounded-sm"
+                                        className="rounded-lg"
                                         loading="lazy"
                                       ></img>
                                     </div>
@@ -2224,10 +2382,30 @@ const Body = () => {
                                     className="bg-[white]  w-full flex p-[19px] border-l-[2px] border-[white] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
                                     style={{ transition: ".5s" }}
                                   >
-                                    <img
-                                      src={ai}
-                                      className="w-[40px] h-[40px] rounded-sm bg-slate-500"
-                                    ></img>
+                                    <div
+                                      // src={ai}
+                                      className="w-[40px] h-[40px] rounded-lg bg-[#101116] text-white flex justify-center items-center "
+                                    >
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-bot-message-square"
+                                      >
+                                        <path d="M12 6V2H8" />
+                                        <path d="m8 18-4 4V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2Z" />
+                                        <path d="M2 12h2" />
+                                        <path d="M9 11v2" />
+                                        <path d="M15 11v2" />
+                                        <path d="M20 12h2" />
+                                      </svg>
+                                    </div>
                                     <pre
                                       className=" w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap "
                                       // style={{ transition: ".5s" }}
@@ -2242,11 +2420,16 @@ const Body = () => {
                                         </>
                                       ) : (
                                         <>
-                                          <span id={index} className="">
-                                            {mssg.assistant.substr(
-                                              2,
-                                              mssg.assistant.length - 1
-                                            )}
+                                          <span
+                                            id={index}
+                                            className=""
+                                            dangerouslySetInnerHTML={{
+                                              __html: formatText(
+                                                mssg.assistant
+                                              ),
+                                            }}
+                                          >
+                                            {/* {mssg.assistant} */}
                                           </span>
                                         </>
                                       )}
@@ -2668,10 +2851,10 @@ const Body = () => {
                                   style={{ transition: ".5s" }}
                                 >
                                   <div className="group  w-full flex p-[19px] border-[2px] border-[#f3f5f8] rounded-lg hover:border-l-[2px] hover:border-l-[#5841d9]">
-                                    <div className="w-[40px] h-[40px] rounded-sm bg-slate-500">
+                                    <div className="w-[40px] h-[40px] rounded-lg bg-slate-500">
                                       <img
                                         src={selectAvatar}
-                                        className="rounded-sm"
+                                        className="rounded-lg"
                                         loading="lazy"
                                       ></img>
                                     </div>
@@ -2697,10 +2880,30 @@ const Body = () => {
                                     className="bg-[white]  w-full flex p-[19px] border-l-[2px] border-[white] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
                                     style={{ transition: ".5s" }}
                                   >
-                                    <img
-                                      src={ai}
-                                      className="w-[40px] h-[40px] rounded-sm bg-slate-500"
-                                    ></img>
+                                    <div
+                                      // src={ai}
+                                      className="w-[40px] h-[40px] rounded-lg bg-[#101116] text-white flex justify-center items-center "
+                                    >
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-bot-message-square"
+                                      >
+                                        <path d="M12 6V2H8" />
+                                        <path d="m8 18-4 4V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2Z" />
+                                        <path d="M2 12h2" />
+                                        <path d="M9 11v2" />
+                                        <path d="M15 11v2" />
+                                        <path d="M20 12h2" />
+                                      </svg>
+                                    </div>
                                     <pre
                                       className=" w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap "
                                       // style={{ transition: ".5s" }}
@@ -2715,11 +2918,16 @@ const Body = () => {
                                         </>
                                       ) : (
                                         <>
-                                          <span id={index} className="">
-                                            {mssg.assistant.substr(
-                                              2,
-                                              mssg.assistant.length - 1
-                                            )}
+                                          <span
+                                            id={index}
+                                            className=""
+                                            dangerouslySetInnerHTML={{
+                                              __html: formatText(
+                                                mssg.assistant
+                                              ),
+                                            }}
+                                          >
+                                            {/* {mssg.assistant} */}
                                           </span>
                                         </>
                                       )}

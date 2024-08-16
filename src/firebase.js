@@ -26,72 +26,9 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
 
-// Initialize Firebase Authentication and get a reference to the service
-// const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
 const db = firebase.firestore();
-
-// export function createUserCollection(user) {
-//   db.collection("users").doc(user.uid).set({
-//     uid: user.uid,
-//     // name: user.displayName,
-//     email: user.email,
-//   });
-// }
-
-// export const addTodo = async (user) => {
-//   // user.preventDefault();
-
-//   try {
-//     const docRef = await addDoc(collection(db, "user.uid"), {
-//       uid: user.uid,
-//       name: user.displayName,
-//       email: user.email,
-//     });
-//     console.log("Document written with ID: ", docRef.id);
-//   } catch (e) {
-//     console.error("Error adding document: ", e);
-//   }
-// };
-
-// // process.env.
-// const colRef = collection(db, "books");
-
-// getDocs(colRef)
-//   .then((snapshot) => {
-//     console.log(snapshot.docs);
-//     let books = [];
-//     snapshot.docs.forEach((doc) => {
-//       books.push({ ...doc.data(), id: doc.id });
-//     });
-//     console.log(books);
-//   })
-//   .catch((err) => console.log(err.message));
-// // try {
-// //   const docRef = await addDoc(collection(db, "users"), {
-// //     first: "Ada",
-// //     last: "Lovelace",
-// //     born: 1815,
-// //   });
-// //   console.log("Document written with ID: ", docRef.id);
-// // } catch (e) {
-// //   console.error("Error adding document: ", e);
-// // }
-
-// const db = firebase.firestore();
-// db.collection("users")
-//   .add({
-//     first: "Ada",
-//     last: "Lovelace",
-//     born: 1815,
-//   })
-//   .then((docRef) => {
-//     console.log("Document written with ID: ", docRef.id);
-//   })
-//   .catch((error) => {
-//     console.error("Error adding document: ", error);
-//   });
 
 export default firebase;
 export { db };
