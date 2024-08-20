@@ -689,7 +689,7 @@ const Body = () => {
                             }}
                           >
                             <BiPlus className="  mx-[15px] text-white text-[20px]" />
-                            <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] ">
+                            <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[book] ">
                               New Chat
                             </span>
                           </div>
@@ -717,7 +717,7 @@ const Body = () => {
                                 createNewFirestoreChatDocument();
                               }
                             }}
-                            className="ml-[15px] w-full text-[white] bg-[#1c1f37] rounded-lg h-[50px] overflow-hidden whitespace-nowrap font-[nunitosans] outline-none px-[15px] pr-[35px]"
+                            className="ml-[15px] w-full text-[white] bg-[#1c1f37] rounded-lg h-[50px] overflow-hidden whitespace-nowrap font-[book] outline-none px-[15px] pr-[35px]"
                             autoFocus
                           ></input>
                           <div className="w-[30px] flex justify-center items-center ml-[-30px] h-[50px]">
@@ -733,13 +733,29 @@ const Body = () => {
                       )}
                     </div>
                     <div
-                      className="w-[50px] h-full  rounded-xl  flex justify-center items-center cursor-pointer "
+                      className="w-[50px] h-full  rounded-xl  flex justify-center items-center cursor-pointer text-white"
                       onClick={() => {
                         setIsSidebar(!isSidebar);
                         setAvatar(false);
                       }}
                     >
-                      <FiSidebar className="text-white text-[18px]" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-minimize"
+                      >
+                        <path d="M8 3v3a2 2 0 0 1-2 2H3" />
+                        <path d="M21 8h-3a2 2 0 0 1-2-2V3" />
+                        <path d="M3 16h3a2 2 0 0 1 2 2v3" />
+                        <path d="M16 21v-3a2 2 0 0 1 2-2h3" />
+                      </svg>
                     </div>
                   </div>
                   {/* ------------------------------- Chat Segment ------------------------------- */}
@@ -828,36 +844,63 @@ const Body = () => {
                         </>
                       )}
 
-                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] ">
+                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[book] ">
                         Himadri Purkait
                       </span>
                     </div> */}
                     {/* <div
                     onClick={() => setAvatar(!avatar)}
-                    className="text-white cursor-pointer font-[nunitosans] "
+                    className="text-white cursor-pointer font-[book] "
                   >
                     Select Avatar
                   </div> */}
 
                     {/* ---------------------------------- */}
                     <div
-                      className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] "
+                      className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] text-[white] "
                       onClick={() => setAvatar(!avatar)}
                     >
-                      <IoSettingsOutline className="text-white text-[18px]" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-bolt"
+                      >
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                        <circle cx="12" cy="12" r="4" />
+                      </svg>
 
-                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[book] text-[14px] ">
                         Settings
                       </span>
                     </div>
-                    <div className="w-full h-[192px]  overflow-y-scroll">
+                    <div className="w-full h-[192px]  overflow-y-scroll text-[white]">
                       {avatar === false ? (
                         <>
                           <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer  my-[4px]">
                             <div className="w-[calc(100%-40px)] flex">
-                              <MdDarkMode className="text-white text-[18px]" />
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-moon"
+                              >
+                                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                              </svg>
 
-                              <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                              <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[book] text-[14px] ">
                                 Dark Mode
                               </span>
                             </div>
@@ -892,9 +935,24 @@ const Body = () => {
                             className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] "
                             onClick={userSignOut}
                           >
-                            <FiLogOut className="text-white text-[18px]" />
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="18"
+                              height="18"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="lucide lucide-log-out"
+                            >
+                              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                              <polyline points="16 17 21 12 16 7" />
+                              <line x1="21" x2="9" y1="12" y2="12" />
+                            </svg>
 
-                            <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                            <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[book] text-[14px] ">
                               Logout
                             </span>
                           </div>
@@ -913,9 +971,23 @@ const Body = () => {
                               AddFetchedChatHistoryToReactStore();
                             }}
                           >
-                            <BsChatSquareText className="text-white text-[18px]" />
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="18"
+                              height="18"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="lucide lucide-message-square-dot"
+                            >
+                              <path d="M11.7 3H5a2 2 0 0 0-2 2v16l4-4h12a2 2 0 0 0 2-2v-2.7" />
+                              <circle cx="18" cy="6" r="3" />
+                            </svg>
 
-                            <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                            <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[book] text-[14px] ">
                               Delete Chats
                             </span>
                           </div>
@@ -1014,7 +1086,7 @@ const Body = () => {
                       <div className="w-[calc(100%-40px)] flex">
                         <MdDarkMode className="text-white text-[18px]" />
 
-                        <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                        <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[book] text-[14px] ">
                           Dark Mode
                         </span>
                       </div>
@@ -1051,7 +1123,7 @@ const Body = () => {
                     >
                       <FiLogOut className="text-white text-[18px]" />
 
-                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[book] text-[14px] ">
                         Logout
                       </span>
                     </div>
@@ -1072,7 +1144,7 @@ const Body = () => {
                     >
                       <BsChatSquareText className="text-white text-[18px]" />
 
-                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[book] text-[14px] ">
                         Delete Chats
                       </span>
                     </div> */}
@@ -1087,7 +1159,7 @@ const Body = () => {
                     style={{ transition: ".5s" }}
                   >
                     <img src={logo} className="h-[40px]"></img>
-                    <span className="ml-[15px] text-[25px] font-[nunitosans]">
+                    <span className="ml-[15px] text-[25px] font-[azonix]">
                       WALLE
                     </span>
                   </div>
@@ -1117,16 +1189,27 @@ const Body = () => {
                               </button>
                               <input
                                 placeholder="Create New Chat Segment First"
-                                className="placeholder:text-orange-400 w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                                className="placeholder:text-orange-400 w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[book] "
                                 style={{ transition: ".5s" }}
                                 value={""}
                               ></input>
 
                               <div className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg">
-                                <IoMdSend
-                                  className="text-[white] "
-                                  style={{ transition: ".3s" }}
-                                />
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  class="lucide lucide-arrow-up"
+                                >
+                                  <path d="m5 12 7-7 7 7" />
+                                  <path d="M12 19V5" />
+                                </svg>
                               </div>
                             </div>
                           </div>
@@ -1142,26 +1225,56 @@ const Body = () => {
                             </div>
                             <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
                               <button
-                                className="outline-none  h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
+                                className="outline-none text-white h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
                                 style={{ zIndex: "3" }}
                                 onClick={SpeechRecognition.startListening}
                               >
                                 {listening == true ? (
                                   <>
-                                    <BiSolidMicrophone className="text-[#8976f2]" />
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="18"
+                                      height="18"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="2"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      class="lucide lucide-audio-lines"
+                                    >
+                                      <path d="M2 10v3" />
+                                      <path d="M6 6v11" />
+                                      <path d="M10 3v18" />
+                                      <path d="M14 8v7" />
+                                      <path d="M18 5v13" />
+                                      <path d="M22 10v3" />
+                                    </svg>
                                   </>
                                 ) : (
                                   <>
-                                    <BiSolidMicrophone
-                                      className="text-[white] hover:text-[#5841d9]"
-                                      style={{ transition: ".3s" }}
-                                    />
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="18"
+                                      height="18"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="2"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      class="lucide lucide-mic"
+                                    >
+                                      <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                                      <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                                      <line x1="12" x2="12" y1="19" y2="22" />
+                                    </svg>
                                   </>
                                 )}
                               </button>
                               <input
                                 placeholder="Ask Anything"
-                                className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                                className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[book] "
                                 style={{ transition: ".5s" }}
                                 value={input}
                                 onKeyDown={(e) => {
@@ -1182,10 +1295,21 @@ const Body = () => {
                                   setInput("");
                                 }}
                               >
-                                <IoMdSend
-                                  className="text-[white] hover:text-[#8976f2]"
-                                  style={{ transition: ".3s" }}
-                                />
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  class="lucide lucide-arrow-up"
+                                >
+                                  <path d="m5 12 7-7 7 7" />
+                                  <path d="M12 19V5" />
+                                </svg>
                               </div>
                             </div>
                           </div>
@@ -1201,7 +1325,7 @@ const Body = () => {
                               <div className="w-full flex flex-col ">
                                 <span className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-white ">
                                   <div
-                                    className="group  w-full flex p-[19px] border-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-l-[#5841d9]"
+                                    className="group  w-full flex p-[19px] border-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-l-transparent"
                                     style={{ transition: ".5s" }}
                                   >
                                     <div className="w-[40px] h-[40px] rounded-lg bg-slate-500">
@@ -1211,7 +1335,7 @@ const Body = () => {
                                         loading="lazy"
                                       ></img>
                                     </div>
-                                    <span className="w-[calc(100%-70px)]  overflow-x-hidden ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] ">
+                                    <span className="w-[calc(100%-70px)]  overflow-x-hidden ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[book] ">
                                       {mssg.user}
                                     </span>
                                     <div
@@ -1230,7 +1354,7 @@ const Body = () => {
                                   // style={{ transition: ".5s" }}
                                 >
                                   <div
-                                    className="bg-[#1c1f37]  w-full flex p-[19px] border-l-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
+                                    className="bg-[#1c1f37]  w-full flex p-[19px] border-l-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-transparent "
                                     style={{ transition: ".5s" }}
                                   >
                                     <div
@@ -1258,7 +1382,7 @@ const Body = () => {
                                       </svg>
                                     </div>
                                     <pre
-                                      className=" w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap "
+                                      className=" w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[book] whitespace-pre-wrap "
                                       // style={{ transition: ".5s" }}
                                     >
                                       {mssg.assistant.length === 0 ? (
@@ -1312,26 +1436,56 @@ const Body = () => {
                       </div>
                       <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
                         <button
-                          className="outline-none  h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
+                          className="outline-none  h-[60px] w-[60px] text-white flex justify-center items-center text-[23px] mr-[-60px] "
                           style={{ zIndex: "3" }}
                           onClick={SpeechRecognition.startListening}
                         >
                           {listening == true ? (
                             <>
-                              <BiSolidMicrophone className="text-[#8976f2]" />
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-audio-lines"
+                              >
+                                <path d="M2 10v3" />
+                                <path d="M6 6v11" />
+                                <path d="M10 3v18" />
+                                <path d="M14 8v7" />
+                                <path d="M18 5v13" />
+                                <path d="M22 10v3" />
+                              </svg>
                             </>
                           ) : (
                             <>
-                              <BiSolidMicrophone
-                                className="text-[white] hover:text-[#5841d9]"
-                                style={{ transition: ".3s" }}
-                              />
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-mic"
+                              >
+                                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                                <line x1="12" x2="12" y1="19" y2="22" />
+                              </svg>
                             </>
                           )}
                         </button>
                         <input
                           placeholder="Ask Anything"
-                          className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                          className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[book] "
                           style={{ transition: ".5s" }}
                           value={input}
                           onKeyDown={(e) => {
@@ -1352,10 +1506,21 @@ const Body = () => {
                             setInput("");
                           }}
                         >
-                          <IoMdSend
-                            className="text-[white]] hover:text-[#8976f2]"
-                            style={{ transition: ".3s" }}
-                          />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-arrow-up"
+                          >
+                            <path d="m5 12 7-7 7 7" />
+                            <path d="M12 19V5" />
+                          </svg>
                         </div>
                       </div>
                     </div>
@@ -1374,15 +1539,31 @@ const Body = () => {
                   >
                     <div className="w-[100%] mr-[10px] h-full   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer">
                       <BiPlus className="text-white text-[20px] mr-[15px]" />
-                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] ">
+                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[book] ">
                         New Chat
                       </span>
                     </div>
                     <div
-                      className="w-[0] h-full  rounded-xl  flex justify-center items-center cursor-pointer "
+                      className="w-[0] h-full  rounded-xl  flex justify-center items-center cursor-pointer text-white "
                       onClick={() => setIsSidebar(!isSidebar)}
                     >
-                      <FiSidebar className="text-white text-[18px]" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-minimize"
+                      >
+                        <path d="M8 3v3a2 2 0 0 1-2 2H3" />
+                        <path d="M21 8h-3a2 2 0 0 1-2-2V3" />
+                        <path d="M3 16h3a2 2 0 0 1 2 2v3" />
+                        <path d="M16 21v-3a2 2 0 0 1 2-2h3" />
+                      </svg>
                     </div>
                   </div>
                   {/* ----------------------------- Chat Segment ---------------------------- */}
@@ -1434,29 +1615,71 @@ const Body = () => {
                         loading="lazy"
                       ></img>
 
-                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] ">
+                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[book] ">
                         Himadri Purkait
                       </span>
                     </div> */}
                     <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] ">
-                      <IoSettingsOutline className="text-white text-[18px]" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-bolt"
+                      >
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                        <circle cx="12" cy="12" r="4" />
+                      </svg>
 
-                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                      <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[book] text-[14px] ">
                         Settings
                       </span>
                     </div>
                     <div className="w-full h-[192px]  overflow-y-scroll">
                       <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] ">
-                        <MdDarkMode className="text-white text-[18px]" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-moon"
+                        >
+                          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                        </svg>
 
-                        <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                        <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[book] text-[14px] ">
                           Dark Mode
                         </span>
                       </div>
                       <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] ">
-                        <FiLogOut className="text-white text-[18px]" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-log-out"
+                        >
+                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                          <polyline points="16 17 21 12 16 7" />
+                          <line x1="21" x2="9" y1="12" y2="12" />
+                        </svg>
 
-                        <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                        <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[book] text-[14px] ">
                           Logout
                         </span>
                       </div>
@@ -1475,9 +1698,23 @@ const Body = () => {
                           AddFetchedChatHistoryToReactStore();
                         }}
                       >
-                        <BsChatSquareText className="text-white text-[18px]" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-message-square-dot"
+                        >
+                          <path d="M11.7 3H5a2 2 0 0 0-2 2v16l4-4h12a2 2 0 0 0 2-2v-2.7" />
+                          <circle cx="18" cy="6" r="3" />
+                        </svg>
 
-                        <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                        <span className="ml-[15px] text-[white] overflow-hidden whitespace-nowrap font-[book] text-[14px] ">
                           Delete Chats
                         </span>
                       </div>
@@ -1490,16 +1727,33 @@ const Body = () => {
                 >
                   <div className="h-[70px] w-full bg-[#141627] text-white flex justify-center items-center font-[wakanda] font-semibold">
                     <div
-                      className="w-[50px] h-[50px] ml-[10px] rounded-xl  flex justify-center items-center cursor-pointer"
+                      className="w-[50px] h-[50px] ml-[10px] rounded-xl  flex justify-center items-center cursor-pointer text-white"
                       style={{ transition: ".5s", zIndex: "4" }}
                       onClick={() => setIsSidebar(!isSidebar)}
                     >
-                      <FiSidebar className="text-white text-[18px]" />
+                      {" "}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-maximize"
+                      >
+                        <path d="M8 3H5a2 2 0 0 0-2 2v3" />
+                        <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+                        <path d="M3 16v3a2 2 0 0 0 2 2h3" />
+                        <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+                      </svg>
                     </div>
 
                     <div className="h-[70px] ml-[-60px] w-full bg-[#141627] text-white flex justify-center items-center  font-semibold">
                       <img src={logo} className="h-[40px]"></img>
-                      <span className="ml-[15px] text-[25px] font-[nunitosans]">
+                      <span className="ml-[15px] text-[25px] font-[azonix]">
                         WALLE
                       </span>
                     </div>
@@ -1528,16 +1782,27 @@ const Body = () => {
                               </button>
                               <input
                                 placeholder="Create New Chat Segment First"
-                                className="placeholder:text-orange-400 w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                                className="placeholder:text-orange-400 w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[book] "
                                 style={{ transition: ".5s" }}
                                 value={""}
                               ></input>
 
                               <div className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg">
-                                <IoMdSend
-                                  className="text-[white] "
-                                  style={{ transition: ".3s" }}
-                                />
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  class="lucide lucide-arrow-up"
+                                >
+                                  <path d="m5 12 7-7 7 7" />
+                                  <path d="M12 19V5" />
+                                </svg>
                               </div>
                             </div>
                           </div>
@@ -1553,26 +1818,56 @@ const Body = () => {
                             </div>
                             <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
                               <button
-                                className="outline-none  h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
+                                className="outline-none  h-[60px] w-[60px] text-white flex justify-center items-center text-[23px] mr-[-60px] "
                                 style={{ zIndex: "3" }}
                                 onClick={SpeechRecognition.startListening}
                               >
                                 {listening == true ? (
                                   <>
-                                    <BiSolidMicrophone className="text-[#8976f2]" />
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="18"
+                                      height="18"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="2"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      class="lucide lucide-audio-lines"
+                                    >
+                                      <path d="M2 10v3" />
+                                      <path d="M6 6v11" />
+                                      <path d="M10 3v18" />
+                                      <path d="M14 8v7" />
+                                      <path d="M18 5v13" />
+                                      <path d="M22 10v3" />
+                                    </svg>
                                   </>
                                 ) : (
                                   <>
-                                    <BiSolidMicrophone
-                                      className="text-[white] hover:text-[#5841d9]"
-                                      style={{ transition: ".3s" }}
-                                    />
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="18"
+                                      height="18"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="2"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      class="lucide lucide-mic"
+                                    >
+                                      <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                                      <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                                      <line x1="12" x2="12" y1="19" y2="22" />
+                                    </svg>
                                   </>
                                 )}
                               </button>
                               <input
                                 placeholder="Ask Anything"
-                                className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                                className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[book] "
                                 style={{ transition: ".5s" }}
                                 value={input}
                                 onKeyDown={(e) => {
@@ -1593,10 +1888,21 @@ const Body = () => {
                                   setInput("");
                                 }}
                               >
-                                <IoMdSend
-                                  className="text-[white] hover:text-[#8976f2]"
-                                  style={{ transition: ".3s" }}
-                                />
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  class="lucide lucide-arrow-up"
+                                >
+                                  <path d="m5 12 7-7 7 7" />
+                                  <path d="M12 19V5" />
+                                </svg>
                               </div>
                             </div>
                           </div>
@@ -1614,7 +1920,7 @@ const Body = () => {
                                   className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-white "
                                   style={{ transition: ".5s" }}
                                 >
-                                  <div className="group  w-full flex p-[19px] border-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-l-[#5841d9]">
+                                  <div className="group  w-full flex p-[19px] border-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-l-transparent">
                                     <div className="w-[40px] h-[40px] rounded-lg bg-slate-500">
                                       <img
                                         src={selectAvatar}
@@ -1622,7 +1928,7 @@ const Body = () => {
                                         loading="lazy"
                                       ></img>
                                     </div>
-                                    <span className="w-[calc(100%-70px)]  overflow-x-hidden ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] ">
+                                    <span className="w-[calc(100%-70px)]  overflow-x-hidden ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[book] ">
                                       {mssg.user}
                                     </span>
                                     <div
@@ -1641,7 +1947,7 @@ const Body = () => {
                                   // style={{ transition: ".5s" }}
                                 >
                                   <div
-                                    className="bg-[#1c1f37]  w-full flex p-[19px] border-l-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
+                                    className="bg-[#1c1f37]  w-full flex p-[19px] border-l-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-transparent "
                                     style={{ transition: ".5s" }}
                                   >
                                     <div
@@ -1669,7 +1975,7 @@ const Body = () => {
                                       </svg>
                                     </div>
                                     <pre
-                                      className=" w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap "
+                                      className=" w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[book] whitespace-pre-wrap "
                                       // style={{ transition: ".5s" }}
                                     >
                                       {mssg.assistant.length === 0 ? (
@@ -1723,26 +2029,56 @@ const Body = () => {
                       </div>
                       <div className="w-full h-[60px] flex justify-center items-center px-[20px] lg:px-[10%]  md:px-[10%]  ">
                         <button
-                          className="outline-none  h-[60px] w-[60px] flex justify-center items-center text-[23px] mr-[-60px] "
+                          className="outline-none  h-[60px] w-[60px] text-white flex justify-center items-center text-[23px] mr-[-60px] "
                           style={{ zIndex: "3" }}
                           onClick={SpeechRecognition.startListening}
                         >
                           {listening == true ? (
                             <>
-                              <BiSolidMicrophone className="text-[#8976f2]" />
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-audio-lines"
+                              >
+                                <path d="M2 10v3" />
+                                <path d="M6 6v11" />
+                                <path d="M10 3v18" />
+                                <path d="M14 8v7" />
+                                <path d="M18 5v13" />
+                                <path d="M22 10v3" />
+                              </svg>
                             </>
                           ) : (
                             <>
-                              <BiSolidMicrophone
-                                className="text-[white] hover:text-[#5841d9]"
-                                style={{ transition: ".3s" }}
-                              />
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-mic"
+                              >
+                                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                                <line x1="12" x2="12" y1="19" y2="22" />
+                              </svg>
                             </>
                           )}
                         </button>
                         <input
                           placeholder="Ask Anything"
-                          className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                          className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[book] "
                           style={{ transition: ".5s" }}
                           value={input}
                           onKeyDown={(e) => {
@@ -1763,10 +2099,21 @@ const Body = () => {
                             setInput("");
                           }}
                         >
-                          <IoMdSend
-                            className="text-[white]] hover:text-[#8976f2]"
-                            style={{ transition: ".3s" }}
-                          />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-arrow-up"
+                          >
+                            <path d="m5 12 7-7 7 7" />
+                            <path d="M12 19V5" />
+                          </svg>
                         </div>
                       </div>
                     </div>
@@ -1786,21 +2133,21 @@ const Body = () => {
                                       loading="lazy"
                                     ></img>
                                   </div>
-                                  <span className="w-[calc(100%-65px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] ">
+                                  <span className="w-[calc(100%-65px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[book] ">
                                     {mssg.user}
                                   </span>
                                 </div>
                               </span>
                               <span className="group px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-white ">
                                 <div
-                                  className="bg-[#1c1f37]  w-full flex p-[19px] border-l-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
+                                  className="bg-[#1c1f37]  w-full flex p-[19px] border-l-[2px] border-[#1c1f37] rounded-lg hover:border-l-[2px] hover:border-transparent "
                                   style={{ transition: ".3s" }}
                                 >
                                   <img
                                     src={ai}
                                     className="w-[40px] h-[40px] rounded-lg bg-slate-500"
                                   ></img>
-                                  <pre className="w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap ">
+                                  <pre className="w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[book] whitespace-pre-wrap ">
                                     {mssg.assistant.length === 0 ? (
                                       <>
                                         <div className="lds-facebook mt-[50px]">
@@ -1866,7 +2213,7 @@ const Body = () => {
                       </button>
                       <input
                         placeholder="Ask Anything"
-                        className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[nunitosans] "
+                        className="w-full h-full px-[60px] rounded-lg outline-none bg-[#1c1f37] text-[white] flex justify-center items-center font-[book] "
                         value={input}
                         onKeyDown={(e) => {
                           if (e.nativeEvent.key === "Enter") {
@@ -1924,7 +2271,7 @@ const Body = () => {
                             }}
                           >
                             <BiPlus className="  mx-[15px] text-black text-[20px]" />
-                            <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] ">
+                            <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[book] ">
                               New Chat
                             </span>
                           </div>
@@ -1952,7 +2299,7 @@ const Body = () => {
                                 createNewFirestoreChatDocument();
                               }
                             }}
-                            className="ml-[15px] w-full text-[black] bg-[#f8fafc] rounded-lg h-[50px] overflow-hidden whitespace-nowrap font-[nunitosans] outline-none px-[15px] pr-[35px]"
+                            className="ml-[15px] w-full text-[black] bg-[#f8fafc] rounded-lg h-[50px] overflow-hidden whitespace-nowrap font-[book] outline-none px-[15px] pr-[35px]"
                             autoFocus
                           ></input>
                           <div className="w-[30px] flex justify-center items-center ml-[-30px] h-[50px]">
@@ -1974,7 +2321,23 @@ const Body = () => {
                         setIsSidebar(!isSidebar);
                       }}
                     >
-                      <FiSidebar className="text-black text-[18px] drop-shadow-lg" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-minimize"
+                      >
+                        <path d="M8 3v3a2 2 0 0 1-2 2H3" />
+                        <path d="M21 8h-3a2 2 0 0 1-2-2V3" />
+                        <path d="M3 16h3a2 2 0 0 1 2 2v3" />
+                        <path d="M16 21v-3a2 2 0 0 1 2-2h3" />
+                      </svg>
                     </div>
                   </div>
                   {/* ------------------------------- Chat Segment ----------------------------- */}
@@ -2054,9 +2417,23 @@ const Body = () => {
                       className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] "
                       onClick={() => setAvatar(!avatar)}
                     >
-                      <IoSettingsOutline className="text-[black] text-[18px] drop-shadow-lg" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-bolt"
+                      >
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                        <circle cx="12" cy="12" r="4" />
+                      </svg>
 
-                      <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] drop-shadow-lg ">
+                      <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[book] text-[14px] drop-shadow-lg ">
                         Settings
                       </span>
                     </div>
@@ -2065,9 +2442,22 @@ const Body = () => {
                         <>
                           <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer  my-[4px]">
                             <div className="w-[calc(100%-40px)] flex">
-                              <MdDarkMode className="text-[black] text-[18px]" />
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-moon"
+                              >
+                                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                              </svg>
 
-                              <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                              <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[book] text-[14px] ">
                                 Dark Mode
                               </span>
                             </div>
@@ -2102,9 +2492,24 @@ const Body = () => {
                             className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px] "
                             onClick={userSignOut}
                           >
-                            <FiLogOut className="text-black text-[18px]" />
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="18"
+                              height="18"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="lucide lucide-log-out"
+                            >
+                              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                              <polyline points="16 17 21 12 16 7" />
+                              <line x1="21" x2="9" y1="12" y2="12" />
+                            </svg>
 
-                            <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                            <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[book] text-[14px] ">
                               Logout
                             </span>
                           </div>
@@ -2123,9 +2528,23 @@ const Body = () => {
                               AddFetchedChatHistoryToReactStore();
                             }}
                           >
-                            <BsChatSquareText className="text-black text-[18px]" />
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="18"
+                              height="18"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="lucide lucide-message-square-dot"
+                            >
+                              <path d="M11.7 3H5a2 2 0 0 0-2 2v16l4-4h12a2 2 0 0 0 2-2v-2.7" />
+                              <circle cx="18" cy="6" r="3" />
+                            </svg>
 
-                            <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                            <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[book] text-[14px] ">
                               Delete Chats
                             </span>
                           </div>
@@ -2235,7 +2654,7 @@ const Body = () => {
                     // style={{ transition: ".5s" }}
                   >
                     <img src={logo} className="h-[40px] drop-shadow-lg"></img>
-                    <span className="ml-[15px]  text-[25px] font-[nunitosans] drop-shadow-lg">
+                    <span className="ml-[15px]  text-[25px] font-[azonix] drop-shadow-lg">
                       WALLE
                     </span>
                   </div>
@@ -2263,16 +2682,27 @@ const Body = () => {
                               </button>
                               <input
                                 placeholder="Create New Chat Segment First"
-                                className="placeholder:text-orange-400 w-full h-full px-[60px] rounded-lg outline-none bg-[#fff] text-[black] flex justify-center items-center font-[nunitosans] "
+                                className="placeholder:text-orange-400 w-full h-full px-[60px] rounded-lg outline-none bg-[#fff] text-[black] flex justify-center items-center font-[book] "
                                 style={{ transition: ".5s" }}
                                 value={""}
                               ></input>
 
-                              <div className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg">
-                                <IoMdSend
-                                  className="text-[#5841d9] "
-                                  style={{ transition: ".3s" }}
-                                />
+                              <div className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[#000000] drop-shadow-lg">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  class="lucide lucide-arrow-up"
+                                >
+                                  <path d="m5 12 7-7 7 7" />
+                                  <path d="M12 19V5" />
+                                </svg>
                               </div>
                             </div>
                           </div>
@@ -2294,20 +2724,50 @@ const Body = () => {
                               >
                                 {listening == true ? (
                                   <>
-                                    <BiSolidMicrophone className="text-[#8976f2]" />
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="18"
+                                      height="18"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="2"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      class="lucide lucide-audio-lines"
+                                    >
+                                      <path d="M2 10v3" />
+                                      <path d="M6 6v11" />
+                                      <path d="M10 3v18" />
+                                      <path d="M14 8v7" />
+                                      <path d="M18 5v13" />
+                                      <path d="M22 10v3" />
+                                    </svg>
                                   </>
                                 ) : (
                                   <>
-                                    <BiSolidMicrophone
-                                      className="text-[#5841d9] hover:text-[#8976f2]"
-                                      style={{ transition: ".3s" }}
-                                    />
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="18"
+                                      height="18"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="2"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      class="lucide lucide-mic"
+                                    >
+                                      <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                                      <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                                      <line x1="12" x2="12" y1="19" y2="22" />
+                                    </svg>
                                   </>
                                 )}
                               </button>
                               <input
                                 placeholder="Ask Anything"
-                                className="w-full h-full px-[60px] rounded-lg outline-none bg-[#fff] text-[black] flex justify-center items-center font-[nunitosans] "
+                                className="w-full h-full px-[60px] rounded-lg outline-none bg-[#fff] text-[black] flex justify-center items-center font-[book] "
                                 style={{ transition: ".5s" }}
                                 value={input}
                                 onKeyDown={(e) => {
@@ -2322,16 +2782,27 @@ const Body = () => {
                               ></input>
 
                               <div
-                                className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg"
+                                className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[#000000] drop-shadow-lg"
                                 onClick={() => {
                                   handleSend();
                                   setInput("");
                                 }}
                               >
-                                <IoMdSend
-                                  className="text-[#5841d9] hover:text-[#8976f2]"
-                                  style={{ transition: ".3s" }}
-                                />
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  class="lucide lucide-arrow-up"
+                                >
+                                  <path d="m5 12 7-7 7 7" />
+                                  <path d="M12 19V5" />
+                                </svg>
                               </div>
                             </div>
                           </div>
@@ -2350,7 +2821,7 @@ const Body = () => {
                                   // style={{ transition: ".5s" }}
                                 >
                                   <div
-                                    className="group  w-full flex p-[19px] border-[2px] border-[#f3f5f8] rounded-lg hover:border-l-[2px] hover:border-l-[#5841d9]"
+                                    className="group  w-full flex p-[19px] border-[2px] border-[#f3f5f8] rounded-lg hover:border-l-[2px] hover:border-l-transparent"
                                     style={{ transition: ".5s" }}
                                   >
                                     <div className="w-[40px] h-[40px] rounded-lg bg-slate-500">
@@ -2360,7 +2831,7 @@ const Body = () => {
                                         loading="lazy"
                                       ></img>
                                     </div>
-                                    <span className="w-[calc(100%-70px)]  overflow-x-hidden ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] ">
+                                    <span className="w-[calc(100%-70px)]  overflow-x-hidden ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[book] ">
                                       {mssg.user}
                                     </span>
                                     <div
@@ -2379,7 +2850,7 @@ const Body = () => {
                                   // style={{ transition: ".5s" }}
                                 >
                                   <div
-                                    className="bg-[white]  w-full flex p-[19px] border-l-[2px] border-[white] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
+                                    className="bg-[white]  w-full flex p-[19px] border-l-[2px] border-[white] rounded-lg hover:border-l-[2px] hover:border-transparent "
                                     style={{ transition: ".5s" }}
                                   >
                                     <div
@@ -2407,7 +2878,7 @@ const Body = () => {
                                       </svg>
                                     </div>
                                     <pre
-                                      className=" w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap "
+                                      className=" w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[book] whitespace-pre-wrap "
                                       // style={{ transition: ".5s" }}
                                     >
                                       {mssg.assistant.length === 0 ? (
@@ -2467,20 +2938,50 @@ const Body = () => {
                         >
                           {listening == true ? (
                             <>
-                              <BiSolidMicrophone className="text-[#8976f2]" />
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-audio-lines"
+                              >
+                                <path d="M2 10v3" />
+                                <path d="M6 6v11" />
+                                <path d="M10 3v18" />
+                                <path d="M14 8v7" />
+                                <path d="M18 5v13" />
+                                <path d="M22 10v3" />
+                              </svg>
                             </>
                           ) : (
                             <>
-                              <BiSolidMicrophone
-                                className="text-[#5841d9] hover:text-[#8976f2]"
-                                style={{ transition: ".3s" }}
-                              />
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-mic"
+                              >
+                                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                                <line x1="12" x2="12" y1="19" y2="22" />
+                              </svg>
                             </>
                           )}
                         </button>
                         <input
                           placeholder="Ask Anything"
-                          className="w-full h-full px-[60px] rounded-lg outline-none bg-[#white] text-[black] flex justify-center items-center font-[nunitosans] "
+                          className="w-full h-full px-[60px] rounded-lg outline-none bg-[#white] text-[black] flex justify-center items-center font-[book] "
                           style={{ transition: ".5s" }}
                           value={input}
                           onKeyDown={(e) => {
@@ -2495,16 +2996,27 @@ const Body = () => {
                         ></input>
 
                         <div
-                          className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg"
+                          className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[#000000] drop-shadow-lg"
                           onClick={() => {
                             handleSend();
                             setInput("");
                           }}
                         >
-                          <IoMdSend
-                            className="text-[#5841d9] hover:text-[#8976f2]"
-                            style={{ transition: ".3s" }}
-                          />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-arrow-up"
+                          >
+                            <path d="m5 12 7-7 7 7" />
+                            <path d="M12 19V5" />
+                          </svg>
                         </div>
                       </div>
                     </div>
@@ -2523,7 +3035,7 @@ const Body = () => {
                   >
                     <div className="w-[calc(100%-60px)] mr-[10px] h-full   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer">
                       <BiPlus className="text-black text-[20px] " />
-                      <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans]  ">
+                      <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[book]  ">
                         New Chat
                       </span>
                     </div>
@@ -2531,7 +3043,23 @@ const Body = () => {
                       className="w-[0] h-full  rounded-xl  flex justify-center items-center cursor-pointer "
                       onClick={() => setIsSidebar(!isSidebar)}
                     >
-                      <FiSidebar className="text-black text-[18px] " />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-minimize"
+                      >
+                        <path d="M8 3v3a2 2 0 0 1-2 2H3" />
+                        <path d="M21 8h-3a2 2 0 0 1-2-2V3" />
+                        <path d="M3 16h3a2 2 0 0 1 2 2v3" />
+                        <path d="M16 21v-3a2 2 0 0 1 2-2h3" />
+                      </svg>
                     </div>
                   </div>
                   {/* ----------------------------- Chat Segment ---------------------------- */}
@@ -2577,7 +3105,7 @@ const Body = () => {
                   {/* <div
                     onClick={() => setAvatar(!avatar)}
                     style={{ transition: ".5s" }}
-                    className="w-0  p-[0]  text-black cursor-pointer overflow-hidden font-[nunitosans] flex justify-start items-center
+                    className="w-0  p-[0]  text-black cursor-pointer overflow-hidden font-[book] flex justify-start items-center
                     "
                   >
                     <span className="w-0 overflow-hidden">Select Avatar</span>
@@ -2675,24 +3203,66 @@ const Body = () => {
                   )} */}
                   <div className="w-[calc(100%-20px)] h-[200px]  mx-[10px] py-[10px] flex flex-col justify-center items-center  border-t-[2px] border-[#eff1f4]">
                     <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer  my-[4px] ">
-                      <IoSettingsOutline className="text-[black] drop-shadow-lg text-[18px]" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-bolt"
+                      >
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                        <circle cx="12" cy="12" r="4" />
+                      </svg>
 
-                      <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                      <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[book] text-[14px] ">
                         Settings
                       </span>
                     </div>
                     <div className="w-full h-[192px]  overflow-y-scroll">
                       <div className="w-full h-[40px]   rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px]  ">
-                        <MdDarkMode className="text-[black] drop-shadow-lg text-[18px]" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-moon"
+                        >
+                          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                        </svg>
 
-                        <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                        <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[book] text-[14px] ">
                           Dark Mode
                         </span>
                       </div>
                       <div className="w-full h-[40px]    rounded-xl  px-[15px] flex justify-start items-center cursor-pointer my-[4px]  ">
-                        <FiLogOut className="text-[black] drop-shadow-lg text-[18px]" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-log-out"
+                        >
+                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                          <polyline points="16 17 21 12 16 7" />
+                          <line x1="21" x2="9" y1="12" y2="12" />
+                        </svg>
 
-                        <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                        <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[book] text-[14px] ">
                           Logout
                         </span>
                       </div>
@@ -2711,9 +3281,23 @@ const Body = () => {
                           AddFetchedChatHistoryToReactStore();
                         }}
                       >
-                        <BsChatSquareText className="text-[black] text-[18px]" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-message-square-dot"
+                        >
+                          <path d="M11.7 3H5a2 2 0 0 0-2 2v16l4-4h12a2 2 0 0 0 2-2v-2.7" />
+                          <circle cx="18" cy="6" r="3" />
+                        </svg>
 
-                        <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[nunitosans] text-[14px] ">
+                        <span className="ml-[15px] text-[black] overflow-hidden whitespace-nowrap font-[book] text-[14px] ">
                           Delete Chats
                         </span>
                       </div>
@@ -2724,18 +3308,34 @@ const Body = () => {
                   className=" h-[100vh] w-[100%] flex items-center flex-col"
                   style={{ transition: ".5s" }}
                 >
-                  <div className="h-[70px] w-full bg-[white] text-white flex justify-center items-center font-[wakanda] font-semibold">
+                  <div className="h-[70px] w-full bg-[white]  flex justify-center items-center font-[wakanda] font-semibold">
                     <div
-                      className="w-[50px] h-[50px] ml-[10px] rounded-xl  flex justify-center items-center cursor-pointer"
+                      className="w-[50px] h-[50px] ml-[10px] rounded-xl  flex justify-center items-center cursor-pointer z-50"
                       style={{ transition: ".5s" }}
                       onClick={() => setIsSidebar(!isSidebar)}
                     >
-                      <FiSidebar className="text-black text-[18px] drop-shadow-lg" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-maximize"
+                      >
+                        <path d="M8 3H5a2 2 0 0 0-2 2v3" />
+                        <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+                        <path d="M3 16v3a2 2 0 0 0 2 2h3" />
+                        <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+                      </svg>
                     </div>
 
                     <div className="ml-[-60px] h-[70px] w-full bg-[white] text-black flex justify-center items-center  font-semibold">
                       <img src={logo} className="h-[40px] drop-shadow-lg"></img>
-                      <span className="ml-[15px] text-[25px] font-[nunitosans] drop-shadow-lg">
+                      <span className="ml-[15px] text-[25px] font-[azonix] drop-shadow-lg">
                         WALLE
                       </span>
                     </div>
@@ -2764,16 +3364,27 @@ const Body = () => {
                               </button>
                               <input
                                 placeholder="Create New Chat Segment First"
-                                className="placeholder:text-orange-400 w-full h-full px-[60px] rounded-lg outline-none bg-[#fff] text-[black] flex justify-center items-center font-[nunitosans] "
+                                className="placeholder:text-orange-400 w-full h-full px-[60px] rounded-lg outline-none bg-[#fff] text-[black] flex justify-center items-center font-[book] "
                                 style={{ transition: ".5s" }}
                                 value={""}
                               ></input>
 
-                              <div className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg">
-                                <IoMdSend
-                                  className="text-[#5841d9] "
-                                  style={{ transition: ".3s" }}
-                                />
+                              <div className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[#000000] drop-shadow-lg">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  class="lucide lucide-arrow-up"
+                                >
+                                  <path d="m5 12 7-7 7 7" />
+                                  <path d="M12 19V5" />
+                                </svg>
                               </div>
                             </div>
                           </div>
@@ -2795,20 +3406,50 @@ const Body = () => {
                               >
                                 {listening == true ? (
                                   <>
-                                    <BiSolidMicrophone className="text-[#8976f2]" />
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="18"
+                                      height="18"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="2"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      class="lucide lucide-audio-lines"
+                                    >
+                                      <path d="M2 10v3" />
+                                      <path d="M6 6v11" />
+                                      <path d="M10 3v18" />
+                                      <path d="M14 8v7" />
+                                      <path d="M18 5v13" />
+                                      <path d="M22 10v3" />
+                                    </svg>
                                   </>
                                 ) : (
                                   <>
-                                    <BiSolidMicrophone
-                                      className="text-[#5841d9] hover:text-[#8976f2]"
-                                      style={{ transition: ".3s" }}
-                                    />
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="18"
+                                      height="18"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="2"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      class="lucide lucide-mic"
+                                    >
+                                      <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                                      <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                                      <line x1="12" x2="12" y1="19" y2="22" />
+                                    </svg>
                                   </>
                                 )}
                               </button>
                               <input
                                 placeholder="Ask Anything"
-                                className="w-full h-full px-[60px] rounded-lg outline-none bg-[#fff] text-[black] flex justify-center items-center font-[nunitosans] "
+                                className="w-full h-full px-[60px] rounded-lg outline-none bg-[#fff] text-[black] flex justify-center items-center font-[book] "
                                 style={{ transition: ".5s" }}
                                 value={input}
                                 onKeyDown={(e) => {
@@ -2823,16 +3464,27 @@ const Body = () => {
                               ></input>
 
                               <div
-                                className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[white] drop-shadow-lg"
+                                className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[#000000] drop-shadow-lg"
                                 onClick={() => {
                                   handleSend();
                                   setInput("");
                                 }}
                               >
-                                <IoMdSend
-                                  className="text-[#5841d9] hover:text-[#8976f2]"
-                                  style={{ transition: ".3s" }}
-                                />
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  class="lucide lucide-arrow-up"
+                                >
+                                  <path d="m5 12 7-7 7 7" />
+                                  <path d="M12 19V5" />
+                                </svg>
                               </div>
                             </div>
                           </div>
@@ -2850,7 +3502,7 @@ const Body = () => {
                                   className="px-[20px] lg:px-[10%]  md:px-[10%]  py-[15px] flex  items-start w-full text-black "
                                   style={{ transition: ".5s" }}
                                 >
-                                  <div className="group  w-full flex p-[19px] border-[2px] border-[#f3f5f8] rounded-lg hover:border-l-[2px] hover:border-l-[#5841d9]">
+                                  <div className="group  w-full flex p-[19px] border-[2px] border-[#f3f5f8] rounded-lg hover:border-l-[2px] hover:border-l-transparent">
                                     <div className="w-[40px] h-[40px] rounded-lg bg-slate-500">
                                       <img
                                         src={selectAvatar}
@@ -2858,7 +3510,7 @@ const Body = () => {
                                         loading="lazy"
                                       ></img>
                                     </div>
-                                    <span className="w-[calc(100%-70px)]  overflow-x-hidden ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] ">
+                                    <span className="w-[calc(100%-70px)]  overflow-x-hidden ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[book] ">
                                       {mssg.user}
                                     </span>
                                     <div
@@ -2877,7 +3529,7 @@ const Body = () => {
                                   // style={{ transition: ".5s" }}
                                 >
                                   <div
-                                    className="bg-[white]  w-full flex p-[19px] border-l-[2px] border-[white] rounded-lg hover:border-l-[2px] hover:border-[#5841d9] "
+                                    className="bg-[white]  w-full flex p-[19px] border-l-[2px] border-[white] rounded-lg hover:border-l-[2px] hover:border-transparent "
                                     style={{ transition: ".5s" }}
                                   >
                                     <div
@@ -2905,7 +3557,7 @@ const Body = () => {
                                       </svg>
                                     </div>
                                     <pre
-                                      className=" w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[nunitosans] whitespace-pre-wrap "
+                                      className=" w-[calc(100%-70px)] ml-[16px] text-[15px] tracking-[1px] leading-[25px] font-[book] whitespace-pre-wrap "
                                       // style={{ transition: ".5s" }}
                                     >
                                       {mssg.assistant.length === 0 ? (
@@ -2965,20 +3617,50 @@ const Body = () => {
                         >
                           {listening == true ? (
                             <>
-                              <BiSolidMicrophone className="text-[#8976f2]" />
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-audio-lines"
+                              >
+                                <path d="M2 10v3" />
+                                <path d="M6 6v11" />
+                                <path d="M10 3v18" />
+                                <path d="M14 8v7" />
+                                <path d="M18 5v13" />
+                                <path d="M22 10v3" />
+                              </svg>
                             </>
                           ) : (
                             <>
-                              <BiSolidMicrophone
-                                className="text-[#5841d9] hover:text-[#8976f2]"
-                                style={{ transition: ".3s" }}
-                              />
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-mic"
+                              >
+                                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                                <line x1="12" x2="12" y1="19" y2="22" />
+                              </svg>
                             </>
                           )}
                         </button>
                         <input
                           placeholder="Ask Anything"
-                          className="w-full h-full px-[60px] rounded-lg outline-none bg-[#white] text-[black] flex justify-center items-center font-[nunitosans] "
+                          className="w-full h-full px-[60px] rounded-lg outline-none bg-[#white] text-[black] flex justify-center items-center font-[book] "
                           style={{ transition: ".5s" }}
                           value={input}
                           onKeyDown={(e) => {
@@ -2993,16 +3675,27 @@ const Body = () => {
                         ></input>
 
                         <div
-                          className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[#5841d9] drop-shadow-lg"
+                          className="mx-[0] h-full w-[60px] flex justify-center items-center  text-[23px] ml-[-59px] cursor-pointer  text-[#000000] drop-shadow-lg"
                           onClick={() => {
                             handleSend();
                             setInput("");
                           }}
                         >
-                          <IoMdSend
-                            className="text-[white]] hover:text-[#8976f2]"
-                            style={{ transition: ".3s" }}
-                          />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width=""
+                            height=""
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-arrow-up"
+                          >
+                            <path d="m5 12 7-7 7 7" />
+                            <path d="M12 19V5" />
+                          </svg>
                         </div>
                       </div>
                     </div>

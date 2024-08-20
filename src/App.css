@@ -61,6 +61,23 @@
   src: url(./assets/font/Onest-VariableFont_wght.ttf);
 }
 
+@font-face {
+  font-family: satoshiT;
+  src: url(./assets/font/Satoshi-Medium.otf);
+}
+@font-face {
+  font-family: satoshi;
+  src: url(./assets/font/Satoshi-Regular.otf);
+}
+@font-face {
+  font-family: book;
+  src: url(./assets/font/Marmelat\ Book.otf);
+}
+@font-face {
+  font-family: azonix;
+  src: url(./assets/font/Azonix.otf);
+}
+
 .lds-ellipsis {
   display: inline-block;
   position: relative;
