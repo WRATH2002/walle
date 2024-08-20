@@ -4,7 +4,7 @@
 
 Wall E is an AI chatbot application that allows users to interact with an intelligent assistant, asking questions and receiving answers in real time. Built with modern web technologies, Wall E offers a seamless chat experience with customizable features.
 
-**Live Demo** --> https://walleio.netlify.app/
+**Live Demo** --> https://walleio.vercel.app/
 
 # Tech Stack
 
